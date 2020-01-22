@@ -5,6 +5,21 @@ const panel = require('./components/panel.js')
 
 module.exports = mediaListView
 
+function getSettingsInfo(trackInfo) {
+  let settingsString = ''
+  if(trackInfo.kind && trackInfo.settings) {
+    if (trackInfo.kind === 'video'){
+      if(trackInfo.settings.width) {
+        settingsString += trackInfo.settings.width + 'x' + trackInfo.settings.height
+      }
+      if(trackInfo.settings.frameRate) {
+          settingsString += ', ' + trackInfo.settings.frameRate + 'fps'
+      }
+    }
+  }
+  return settingsString
+}
+
 function mediaListView (state, emit) {
   return html`
     <div class="pa3 dib" style="width:100%">
@@ -24,6 +39,7 @@ function mediaListView (state, emit) {
           <tbody>
           ${state.media.all.map((id) => {
             var media = state.media.byId[id]
+            console.log('MEDIA', media)
             var className = id === state.ui.inspector.trackId ? 'bg-gray pointer' : 'dim pointer'
             // console.log(id, state.ui.inspector.trackId)
             return html`
@@ -36,7 +52,7 @@ function mediaListView (state, emit) {
                 <td class="pa1" style="width:20%;height:20px">${state.peers.byId[media.peerId].nickname}</td>
                 <td class="pa1" style="width:20%;height:20px">${media.name}</td>
                 <td class="pa1" style="width:20%;height:20px">${media.track.kind}</td>
-                <td class="pa1" style="width:40%;height:20px;font-size:8px">${media.track.id}</td>
+                <td class="pa1" style="width:40%;height:20px">${getSettingsInfo(media)}</td>
               </tr>
             `
           })}

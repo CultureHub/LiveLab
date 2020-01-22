@@ -17,7 +17,7 @@ module.exports = inspectorComponent
 
 function inspectorComponent (state, emit) {
   var media = state.media.byId[state.ui.inspector.trackId]
-  return  html`<div class="overflow-scroll pa0">
+  return  html`<div class="overflow-scroll pa0 w-100" style="word-wrap: break-word;">
     ${media.track.kind==='video' ? Video({
       htmlProps: {
         class: 'h4 w4'
@@ -26,6 +26,9 @@ function inspectorComponent (state, emit) {
       track: (state.ui.inspector.trackId in state.media.byId)  ? state.media.byId[state.ui.inspector.trackId].track : null,
       id: (state.ui.inspector.trackId in state.media.byId) ?  state.media.byId[state.ui.inspector.trackId].track.id : null
     }) : null }
+
+    ${Object.keys(media.settings).map((setting) => html`<div><span class="b">${setting}:</span> ${media.settings[setting]}</div>`)}
+
   ${ media.peerId ===  state.user.uuid ? html`<div class="f6 fr ma2 link ph3 pv2 mb2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('peers:hangupTrack', state.ui.inspector.trackId))}>Hangup</div>` : null }
 
   </div>`
