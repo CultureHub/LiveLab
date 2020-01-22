@@ -49,6 +49,10 @@ function devicesModel (state, bus) {
       previewTracks: {
         audio: null,
         video: null
+      },
+      trackInfo: {
+        audio: {},
+        video: {}
       }
     }
   }, state.devices)
@@ -98,6 +102,8 @@ function devicesModel (state, bus) {
                   state.devices.default.previewTracks[kind].stop()
                 }
                 state.devices.default.previewTracks[kind] = track
+                state.devices.default.trackInfo[kind] = track.getSettings()
+                console.log('DEVICES', state.devices)
               })
             } else {
               //to do: do something with error!
@@ -285,6 +291,8 @@ function devicesModel (state, bus) {
         callback(err, null)
         // TO DO: do something about error
       } else {
+        window.localStream = stream
+      //  console.log(window.localStream)
         callback(null, stream)
       }
       bus.emit('render')

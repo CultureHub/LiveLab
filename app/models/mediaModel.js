@@ -50,7 +50,9 @@ function mediaModel (state, bus) {
   })
 
   bus.on('media:addTrack', function (opts) {
-    state.media.byId[opts.track.id] = xtend({}, opts)
+    state.media.byId[opts.track.id] = xtend({}, opts, { settings: Object.assign({}, opts.track.getSettings())})
+
+    //console.log('adding track', state.media.byId[opts.track.id])
     // if default communication stream, set name to default
     if (opts.isDefault) {
       state.media.byId[opts.track.id].name = 'default'
@@ -94,7 +96,7 @@ function mediaModel (state, bus) {
     var existingTrack = null
     if (state.peers.byId[peerId] && state.peers.byId[peerId].tracks.length > 0) {
       var tracks = state.peers.byId[peerId].tracks
-      console.log(' comparing : ', tracks, constraints)
+    //  console.log(' comparing : ', tracks, constraints)
       tracks.forEach(function (trackId) {
         var track = state.media.byId[trackId]
       //  console.log("1:", JSON.stringify(constraints))

@@ -61,6 +61,9 @@ class Window {
       self.win.document.body.style.margin = "0px"
       self.win.document.body.appendChild(self.video)
 
+      window.vid = self.video
+
+      console.log('loaded video', self.video, self.video.videoWidth)
 
 
   //  }

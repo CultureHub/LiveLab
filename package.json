@@ -18,7 +18,7 @@
     "show",
     "control"
   ],
-  "author": "Olivia Jack", 
+  "author": "Olivia Jack",
   "license": "ISC",
   "devDependencies": {
     "browserify": "^16.5.0",

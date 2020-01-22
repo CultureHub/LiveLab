@@ -182,8 +182,6 @@ function userModel (state, bus) {
         delete infoObj[trackId].track
       })
       //for testing purposes, automatically set inspector info
-
-
       updateLocalInfo(id, {
         peer: xtend({}, userInfo),
         tracks: infoObj
@@ -251,7 +249,7 @@ function userModel (state, bus) {
         track: track,
         trackId: track.id,
         peerId: state.user.uuid, // should be user peerId ?
-        constraints: {}, //local default constrains
+      //  constraints: {}, //local default constrains
         isDefault: true,
         kind: track.kind
       })
@@ -263,7 +261,7 @@ function userModel (state, bus) {
         track: track,
         trackId: track.id,
         peerId: state.user.uuid, // should be user peerId ?
-        constraints: {}, //local default constrains
+      //  constraints: {}, //local default constrains
         isDefault: true,
         kind: track.kind
       })

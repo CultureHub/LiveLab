@@ -70,6 +70,7 @@ function loginView (state, emit) {
               emit('devices:setDefaultVideo', value)
             }
           })}
+          <div>${state.devices.default.trackInfo.video.width}x${state.devices.default.trackInfo.video.height}, ${state.devices.default.trackInfo.video.frameRate}fps</div>
           <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('user:join'))}>Join</div>
           <div> ${state.user.statusMessage} </div>
         </div>
