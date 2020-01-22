@@ -12,6 +12,8 @@ const osc = require('./components/osc.js')
 const AddBroadcast = require('./addBroadcast.js')
 const ConfigureOsc = require('./configureOscForwarding')
 const AddOscBroadcast = require('./addOscBroadcast')
+const inspector = require('./inspector.js')
+
 //Tong Modify - adding bandwidth link
 const bandWidth = require('./components/bandwidthAdjust.js')
 //Tong Modify - adding bandwidth link
@@ -61,9 +63,11 @@ function workspaceView (state, emit) {
             },
             contents: mediaList(state, emit),
             closable: false,
-            header:   "Shared Media"
+            header:   html`<span> Shared Media </span> <div class="f6 fr link ph3 pv2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('devices:toggleAddBroadcast', true))}>+ Add Media Broadcast</div>`
+
           }
         )}
+        ${inspector(state,emit)}
         ${panel(
           {
                htmlProps: {

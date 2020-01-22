@@ -39,7 +39,6 @@ function mediaListView (state, emit) {
           <tbody>
           ${state.media.all.map((id) => {
             var media = state.media.byId[id]
-            console.log('MEDIA', media)
             var className = id === state.ui.inspector.trackId ? 'bg-gray pointer' : 'dim pointer'
             // console.log(id, state.ui.inspector.trackId)
             return html`
@@ -60,8 +59,7 @@ function mediaListView (state, emit) {
           </tbody>
       </table>
       </div>
-        <div class="f6 fr ma2 link ph3 pv2 mb2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('devices:toggleAddBroadcast', true))}>+ Add Media Broadcast</div>
-        ${state.ui.inspector.trackId !== null ? inspector(state,emit) : ''}
+      <!--  <div class="f6 fr ma2 link ph3 pv2 mb2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('devices:toggleAddBroadcast', true))}>+ Add Media Broadcast</div>-->
     </div>
     `
 }

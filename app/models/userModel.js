@@ -65,28 +65,36 @@ function userModel (state, bus) {
 
   bus.on('user:setInspectMedia', function(trackId){
     var track = state.media.byId[trackId]
-    console.log("inspecting ", trackId, state.media.byId[trackId], multiPeer.peers[state.media.byId[trackId].peerId])
+    console.log("inspecting ", trackId, state.ui.inspector.trackId)
 
-    if(track.peerId===state.user.uuid) {
-      // if track is local, if there is a peer connection, show stats for whatever peer connectionr
-      // to do: show information about peers shared with, etc
-      if(Object.keys(multiPeer.peers).length > 0){
-        bus.emit('ui:updateInspectorTrack', {
-          trackId: trackId,
-          pc: multiPeer.peers[Object.keys(multiPeer.peers)[0]]._pc
-        })
-      } else {
-        bus.emit('ui:updateInspectorTrack', {
-          trackId: trackId,
-          pc: null
-        })
-      }
+
+    if(trackId === state.ui.inspector.trackId)   {
+      bus.emit('ui:updateInspectorTrack',{
+        trackId: null,
+        pc: null
+      })
     } else {
-      if(track.peerId in multiPeer.peers){
-        bus.emit('ui:updateInspectorTrack', {
-          pc: multiPeer.peers[track.peerId]._pc,
-          trackId: trackId
-        })
+      if(track.peerId===state.user.uuid) {
+        // if track is local, if there is a peer connection, show stats for whatever peer connectionr
+        // to do: show information about peers shared with, etc
+        if(Object.keys(multiPeer.peers).length > 0){
+          bus.emit('ui:updateInspectorTrack', {
+            trackId: trackId,
+            pc: multiPeer.peers[Object.keys(multiPeer.peers)[0]]._pc
+          })
+        } else {
+          bus.emit('ui:updateInspectorTrack', {
+            trackId: trackId,
+            pc: null
+          })
+        }
+      } else {
+        if(track.peerId in multiPeer.peers){
+          bus.emit('ui:updateInspectorTrack', {
+            pc: multiPeer.peers[track.peerId]._pc,
+            trackId: trackId
+          })
+        }
       }
     }
 
