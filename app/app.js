@@ -62,6 +62,7 @@ app.use(require('./models/showModel.js'))
 // routing is different in nwjs vs browser version...include both routes to cover bases
 app.route('/public/index.html', require('./views/main.js'))
 app.route('', require('./views/main.js'))
+app.route('/LiveLab', require('./views/main.js'))
 
 app.mount('body div')
 
