@@ -26,6 +26,12 @@ var MultiPeer = function (options) {
 
   // emit 'join' event to signalling server
   this.signaller.emit('join', this._room, this._userData)
+
+  var self = this
+  window.onunload = function(){
+    Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
+  //  return 'Are you sure you want to leave?';
+  };
 }
 // inherits from events module in order to trigger events
 inherits(MultiPeer, events)
@@ -138,6 +144,8 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', id)
   }.bind(this, _id))
 
+  p.on('error', function (err) {console.log('SIMPLE PEER ERROR', err) }.bind(this))
+
   p.on('data', function (id, data) {
     console.log('data', id)
 
@@ -168,7 +176,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
               // calculate bitrate
               const bitrate = 8 * (bytes - this.peersLastResult[id].get(report.id).bytesSent) /
                 (now - this.peersLastResult[id].get(report.id).timestamp);
-                //this line below console log current bitrate 
+                //this line below console log current bitrate
                 //console.log("local bitrate: "+ bitrate)
               this.peersBitrate[id] = bitrate
               document.getElementById('bitrate').innerHTML = 'Current Local Bitrate: '+bitrate+' bps'

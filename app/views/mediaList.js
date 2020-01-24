@@ -30,7 +30,7 @@ function mediaListView (state, emit) {
           <th style="width:20%">PEER</th>
           <th style="width:20%">NAME</th>
           <th style="width:20%">KIND</th>
-          <th style="width:40%">ID</th>
+          <th style="width:40%">INFO</th>
         </tr>
       </thead>
       </table>

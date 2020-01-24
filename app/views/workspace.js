@@ -63,8 +63,14 @@ function workspaceView (state, emit) {
             },
             contents: mediaList(state, emit),
             closable: false,
-            header:   html`<span> Shared Media: ${state.user.room}</span> <div class="f6 fr link ph3 pv2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('devices:toggleAddBroadcast', true))}>+ Add Media Broadcast</div>`
-
+            header:   html`<span> Shared Media: ${state.user.room}</span>
+            <i
+              style="margin-left:3px"
+              class="fas fa-plus-circle dim pointer fr"
+              onclick=${() => emit('devices:toggleAddBroadcast', true)}
+              title="Add Media Broadcast"
+            >
+            </i>`
           }
         )}
         ${inspector(state,emit)}
