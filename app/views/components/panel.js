@@ -29,8 +29,18 @@ function Panel (opts) {
     return html`
           <div ${inputProps}>
             <div class="bg-gray pa2">
-              ${opts.closable ===true ? html`<span class="fr f4 fw4 pointer" onclick=${opts.onClose}> x </span>` : null }
-              <h3 class="f6 fw4 pa0 ma0"> ${opts.header} </h3>
+              ${opts.closable ===true ? html`
+                <!-- <span class="fr f4 fw4 pointer" onclick=${opts.onClose}> x </span> -->
+                ${opts.closable ===true ? html`
+                  <i
+                          class="fas fa-times fr f4 dim pointer"
+                          aria-hidden="true"
+                          onclick=${opts.onClose} >
+                  </i>
+                  ` : null }
+                ` : null }
+              <h3 class="f6 pa0 ma0"> ${opts.header} </h3>
+
             </div>
             ${opts.contents}
           </div>

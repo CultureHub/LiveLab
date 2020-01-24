@@ -20,7 +20,7 @@ module.exports = inspectorComponent
 function inspectorComponent (state, emit) {
   if(state.ui.inspector.trackId !== null){
     var media = state.media.byId[state.ui.inspector.trackId]
-    var title = html`<span class="i">Track Info: ${state.peers.byId[media.peerId].nickname} ${media.name} ${media.track.kind} </span> `
+    var title = html`<span class="i">Track Info: ${state.peers.byId[media.peerId].nickname}-${media.name}-${media.track.kind} </span> `
     var innerContents =  html`<div class="pa2 w-100" style="word-wrap: break-word;font-size:11px">
       ${media.track.kind==='video' ? Video({
         htmlProps: {
@@ -43,7 +43,8 @@ function inspectorComponent (state, emit) {
         },
         contents: innerContents,
         closable: true,
-        header:   title
+        header:   title,
+        onClose: () => { emit('user:setInspectMedia', state.ui.inspector.trackId) }
       }
     )
   } else {

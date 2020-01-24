@@ -23,7 +23,7 @@ function getSettingsInfo(trackInfo) {
 function mediaListView (state, emit) {
   return html`
     <div class="pa3 dib" style="width:100%">
-    <h3>Current Room Name: <b>${state.user.room}</b></h3>
+    <!---<h3>Current Room Name: <b>${state.user.room}</b></h3>--->
     <table style="width:100%" cellspacing="0" cellpadding="0" >
       <thead>
         <tr>

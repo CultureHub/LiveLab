@@ -56,7 +56,7 @@ class Window {
       self.video.setAttribute('allowFullScreen', true)
       self.video.style.width = "100%"
       self.video.style.height = "100%"
-      self.video.style.objectFit = "fill"
+      //self.video.style.objectFit = "fill"
       self.win.document.body.style.padding = "0px"
       self.win.document.body.style.margin = "0px"
       self.win.document.body.appendChild(self.video)
