@@ -129,7 +129,7 @@ function devicesModel (state, bus) {
               }
               state.devices.default.previewTracks[kind] = track
               state.devices.default.trackInfo[kind] = track.getSettings()
-              console.log('DEVICES', state.devices)
+            //  console.log('DEVICES', state.devices)
             })
           } else {
             //to do: do something with error!
@@ -142,7 +142,7 @@ function devicesModel (state, bus) {
   }
 
 
-  bus.on('devices:addNewMediaToBroadcast', function () {
+  bus.on('devices:addNewMediaToBroadcast', function ({isDefault = false} = {}) {
   //  if(state.devices.addBroadcast.kind == "screen"){
       var previewTracks = state.devices.default.previewTracks
       var tracks = []
@@ -159,7 +159,7 @@ function devicesModel (state, bus) {
       //  trackId: stream.id,
         streamId: stream.id,
         peerId: state.user.uuid,
-        isDefault: false,
+        isDefault: isDefault,
         name: 'testAddingStream'
       })
     //  bus.emit('user:updateBroadcastStream')
@@ -244,7 +244,7 @@ function devicesModel (state, bus) {
 //
 
 function getConstraintsFromSettings(settings, callback) {
-  console.log('FORMATING CONSTRAINTS', settings)
+//  console.log('FORMATING CONSTRAINTS', settings)
   var allConstraints = {}
   var userConstraints = {}
   if(settings.deviceId===null) {
@@ -280,7 +280,7 @@ function getConstraintsFromSettings(settings, callback) {
     } else {
       allConstraints.audio = false
     }
-    console.log('CONSTRAINTS', allConstraints)
+//    console.log('CONSTRAINTS', allConstraints)
     callback(null, allConstraints)
   }
 }

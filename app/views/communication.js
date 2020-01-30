@@ -27,8 +27,10 @@ function communicationView (state, emit) {
     var peerIndex = state.peers.all[index]
 
     if (peerIndex) {
-      var trackId = state.peers.byId[peerIndex].defaultTracks.video
-      var audioId = state.peers.byId[peerIndex].defaultTracks.audio
+      // var trackId = state.peers.byId[peerIndex].defaultTracks.video
+      // var audioId = state.peers.byId[peerIndex].defaultTracks.audio
+      var defaultStream = state.peers.byId[peerIndex].defaultStream
+      console.log('DEFAULT STREAM',  defaultStream, state.peers.byId[peerIndex])
       return html`
       <div class="fl w-50 pa1">
         ${Video({
@@ -36,8 +38,9 @@ function communicationView (state, emit) {
             class: 'h-50 w-100'
           },
           index: 'communication-' + index,
-          track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
-          id: (trackId in state.media.byId) ?  state.media.byId[trackId].track.id : null
+        //  track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
+          stream: (defaultStream in state.media.byId)  ? state.media.byId[defaultStream].stream : null,
+          id: (defaultStream in state.media.byId) ?  state.media.byId[defaultStream].stream.id : null
         })}
 
 

@@ -40,7 +40,7 @@ function peersModel (state, bus) {
       defaultStream: null
     }, state.peers.byId[peer.peerId], peer)
 
-    console.log('NEW  PEER INFO', peer, state.peers.byId)
+    //console.log('NEW  PEER INFO', peer, state.peers.byId)
     bus.emit('ui:addPeer', {
       peerId: peer.peerId
     })
@@ -52,12 +52,12 @@ function peersModel (state, bus) {
   })
 
   bus.on('peers:addStreamToPeer', function (opts) {
-  //  console.log('Track TO PEER', state.peers, opts)
+    console.log('STREAM TO PEER', state.peers, opts)
 
     state.peers.byId[opts.peerId].streams.push(opts.streamId)
     // if track is default communication track, add to peer defaultTracks
     if (opts.isDefault) {
-      state.peers.byId[opts.peerId].defaultStream = opts.stream
+      state.peers.byId[opts.peerId].defaultStream = opts.streamId
     }
     // console.log("peersTracks", state.peers.byId[opts.peerId].tracks)
     bus.emit('render')

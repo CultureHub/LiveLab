@@ -16,7 +16,11 @@ const VideoContainer = component(function element (ctx, props) {
   var _htmlProps = xtend(defaultHtmlProps, props.htmlProps)
   var el = html`<video ${_htmlProps}></video>`
   ctx.el = el
-  if (props.id && props.track) addTrackToElement(props.track, el)
+  if(props.stream) {
+    addStreamToElement(props.stream, el)
+  } else if (props.id && props.track) {
+    addTrackToElement(props.track, el)
+  }
   return el
 })
 
@@ -47,6 +51,14 @@ function addTrackToElement (track, element) {
   var tracks = []
   tracks.push(track)
   var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
+  element.srcObject = stream
+}
+
+function addStreamToElement (stream, element) {
+  // console.log('adding ', track, element)
+  // var tracks = []
+  // tracks.push(track)
+  // var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
   element.srcObject = stream
 }
 

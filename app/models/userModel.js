@@ -155,7 +155,7 @@ function userModel (state, bus) {
       })
       bus.emit
       bus.emit('peers:setAllPeers', peersInfo)*/
-      bus.emit('devices:addNewMediaToBroadcast')
+      bus.emit('devices:addNewMediaToBroadcast', { isDefault: true})
       bus.emit('render')
     })
 
@@ -319,7 +319,7 @@ function updateLocalInfo(id){
       streams: streamInfo,
       osc: state.osc.local
     }
-    console.log("SHARING USER INFO", updateObj)
+  //  console.log("SHARING USER INFO", updateObj)
     if (id) {
       multiPeer.sendToPeer(id, JSON.stringify({ type: 'updatePeerInfo', message: updateObj }))
     } else {
