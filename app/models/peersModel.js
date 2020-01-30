@@ -31,12 +31,13 @@ function peersModel (state, bus) {
   bus.on('peers:updatePeer', function (peer) {
     state.peers.byId[peer.peerId] = xtend({
       peerId: peer.peerId,
-      tracks: [],
+      streams: [],
       nickname: null,
-      defaultTracks: {
-        audio: null,
-        video: null
-      }
+      // defaultTracks: {
+      //   audio: null,
+      //   video: null
+      // }
+      defaultStream: null
     }, state.peers.byId[peer.peerId], peer)
 
     console.log('NEW  PEER INFO', peer, state.peers.byId)
@@ -50,17 +51,29 @@ function peersModel (state, bus) {
     bus.emit('render')
   })
 
-  bus.on('peers:addTrackToPeer', function (opts) {
+  bus.on('peers:addStreamToPeer', function (opts) {
   //  console.log('Track TO PEER', state.peers, opts)
 
-    state.peers.byId[opts.peerId].tracks.push(opts.trackId)
+    state.peers.byId[opts.peerId].streams.push(opts.streamId)
     // if track is default communication track, add to peer defaultTracks
     if (opts.isDefault) {
-      state.peers.byId[opts.peerId].defaultTracks[opts.kind] = opts.trackId
+      state.peers.byId[opts.peerId].defaultStream = opts.stream
     }
     // console.log("peersTracks", state.peers.byId[opts.peerId].tracks)
     bus.emit('render')
   })
+
+  // bus.on('peers:addTrackToPeer', function (opts) {
+  // //  console.log('Track TO PEER', state.peers, opts)
+  //
+  //   state.peers.byId[opts.peerId].tracks.push(opts.trackId)
+  //   // if track is default communication track, add to peer defaultTracks
+  //   if (opts.isDefault) {
+  //     state.peers.byId[opts.peerId].defaultTracks[opts.kind] = opts.trackId
+  //   }
+  //   // console.log("peersTracks", state.peers.byId[opts.peerId].tracks)
+  //   bus.emit('render')
+  // })
 
   bus.on('peers:hangupTrack', function (trackId) {
     var index = state.peers.byId[state.user.uuid].tracks.indexOf(trackId)
@@ -72,8 +85,11 @@ function peersModel (state, bus) {
 
   bus.on('peers:removePeer', function (peerId) {
     // remove all tracks associated with this peer
-    state.peers.byId[peerId].tracks.forEach(function (trackId) {
-      bus.emit('media:removeTrack', trackId)
+    // state.peers.byId[peerId].tracks.forEach(function (trackId) {
+    //   bus.emit('media:removeTrack', trackId)
+    // })
+    state.peers.byId[peerId].streams.forEach(function (streamId) {
+      bus.emit('media:removeStream', streamId)
     })
     state.peers.byId[peerId].tracks = []
     var index = state.peers.all.indexOf(peerId)

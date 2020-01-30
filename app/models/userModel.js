@@ -65,7 +65,7 @@ function userModel (state, bus) {
 
   bus.on('user:setInspectMedia', function(trackId){
     var track = state.media.byId[trackId]
-    console.log("inspecting ", trackId, state.ui.inspector.trackId)
+  //  console.log("inspecting ", trackId, state.ui.inspector.trackId)
 
 
     if(trackId === state.ui.inspector.trackId)   {
@@ -131,7 +131,7 @@ function userModel (state, bus) {
     multiPeer = new MultiPeer({
       room: state.user.room,
       server: state.user.server,
-      stream: getLocalCommunicationStream(),
+  //    stream: getLocalCommunicationStream(),
       userData: {
         uuid: state.user.uuid,
         nickname: state.user.nickname
@@ -153,15 +153,22 @@ function userModel (state, bus) {
         if (peer === state.user.uuid) peerInfo.nickname = state.user.nickname
         return peerInfo
       })
+      bus.emit
       bus.emit('peers:setAllPeers', peersInfo)*/
+      bus.emit('devices:addNewMediaToBroadcast')
       bus.emit('render')
     })
 
     //received new media stream from remote peer
     multiPeer.on('stream', function (peerId, stream) {
-      console.log("STREAM", peerId)
+    //  console.log("STREAM", peerId)
       state.user.statusMessage += 'Received media from peer ' + peerId + '\n'
-      bus.emit('media:addTracksFromStream', {
+      // bus.emit('media:addTracksFromStream', {
+      //   peerId: peerId,
+      //   stream: stream,
+      //   isDefault: true
+      // })
+      bus.emit('media:addStream', {
         peerId: peerId,
         stream: stream,
         isDefault: true
@@ -172,7 +179,7 @@ function userModel (state, bus) {
       bus.emit('peers:removePeer', id)
     })
     multiPeer.on('new peer', function (data) {
-     console.log("NEW REMOTE PEER", data)
+    // console.log("NEW REMOTE PEER", data)
       bus.emit('peers:updatePeer', {
         peerId: data.id
       })
@@ -180,19 +187,24 @@ function userModel (state, bus) {
 
     //when first connected to remote peer, send user information
     multiPeer.on('connect', function (id) {
-      console.log("CONNECT", id)
+    //  console.log("CONNECT", id)
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
       bus.emit('peers:updatePeer', {peerId: id})
       var userInfo = state.peers.byId[state.user.uuid]
       var infoObj = {}
-      userInfo.tracks.forEach((trackId) => {
-        infoObj[trackId] = xtend({}, state.media.byId[trackId])
-        delete infoObj[trackId].track
+      // userInfo.tracks.forEach((trackId) => {
+      //   infoObj[trackId] = xtend({}, state.media.byId[trackId])
+      //   delete infoObj[trackId].track
+      // })
+
+      userInfo.streams.forEach((streamId) => {
+        infoObj[streamId] = xtend({}, state.media.byId[streamId])
+        delete infoObj[streamId].stream
       })
       //for testing purposes, automatically set inspector info
       updateLocalInfo(id, {
         peer: xtend({}, userInfo),
-        tracks: infoObj
+        streams: infoObj
       })
       bus.emit('render')
     })
@@ -204,7 +216,7 @@ function userModel (state, bus) {
         if (data.data){
           if (data.data.type === 'updatePeerInfo') {
             if('peer' in data.data.message) bus.emit('peers:updatePeer', data.data.message.peer)
-            if('tracks' in data.data.message) bus.emit('media:updateTrackInfo', data.data.message.tracks)
+            if('streams' in data.data.message) bus.emit('media:updateStreamInfo', data.data.message.streams)
             if('osc' in data.data.message) bus.emit('osc:updateRemoteOscInfo', {
               osc: data.data.message.osc,
               peerId: data.id
@@ -228,17 +240,28 @@ function userModel (state, bus) {
     bus.emit('render')
   })
 
-
-
-  bus.on('user:updateBroadcastStream', function(){
+   bus.on('user:addStream', function(stream){
     if(multiPeer !== null) {
-      var stream = getCombinedLocalStream()
-      console.log("UPDATED STREAM", stream.getTracks())
-      multiPeer.stream = stream
-      multiPeer.reinitAll()
+    //  var stream = getCombinedLocalStream()
+  //    console.log("UPDATED STREAM", stream.getTracks())
+    //  multiPeer.stream = stream
+    //  multiPeer.reinitAll()
+      multiPeer.addStream(stream)
+      updateLocalInfo()
+      bus.emit('render')
     }
-    bus.emit('render')
   })
+
+  // bus.on('user:updateBroadcastStream', function(){
+  //   if(multiPeer !== null) {
+  //     var stream = getCombinedLocalStream()
+  //     console.log("UPDATED STREAM", stream.getTracks())
+  //   //  multiPeer.stream = stream
+  //   //  multiPeer.reinitAll()
+  //     multiPeer.addStream(stream)
+  //   }
+  //   bus.emit('render')
+  // })
 
   bus.on('user:sendChatMessage', function(msg){
      multiPeer.sendToAll(JSON.stringify({type: 'chatMessage', message: msg}))
@@ -248,70 +271,74 @@ function userModel (state, bus) {
      multiPeer.sendToAll(msg)
    })
 
-  function getLocalCommunicationStream () {
-    var tracks = []
-    if (state.devices.default.previewTracks.audio !== null) {
-      tracks.push(state.devices.default.previewTracks.audio)
-      var track = state.devices.default.previewTracks.audio
-      bus.emit('media:addTrack', {
-        track: track,
-        trackId: track.id,
-        peerId: state.user.uuid, // should be user peerId ?
-      //  constraints: {}, //local default constrains
-        isDefault: true,
-        kind: track.kind
-      })
-    }
-    if (state.devices.default.previewTracks.video !== null) {
-      tracks.push(state.devices.default.previewTracks.video)
-      var track = state.devices.default.previewTracks.video
-      bus.emit('media:addTrack', {
-        track: track,
-        trackId: track.id,
-        peerId: state.user.uuid, // should be user peerId ?
-      //  constraints: {}, //local default constrains
-        isDefault: true,
-        kind: track.kind
-      })
-    }
-    return new MediaStream(tracks)
-  }
+  // function getLocalCommunicationStream () {
+  //   var tracks = []
+  //   if (state.devices.default.previewTracks.audio !== null) {
+  //   //  tracks.push(state.devices.default.previewTracks.audio)
+  //   //  var track = state.devices.default.previewTracks.audio
+  //      var track = state.devices.default.previewTracks.audio.clone()
+  //     bus.emit('media:addTrack', {
+  //       track: track,
+  //       trackId: track.id,
+  //       peerId: state.user.uuid, // should be user peerId ?
+  //     //  constraints: {}, //local default constrains
+  //       isDefault: true,
+  //       kind: track.kind
+  //     })
+  //     tracks.push(track)
+  //   }
+  //   if (state.devices.default.previewTracks.video !== null) {
+  //   //  tracks.push(state.devices.default.previewTracks.video)
+  //   //  var track = state.devices.default.previewTracks.video
+  //      var track = state.devices.default.previewTracks.video.clone()
+  //     bus.emit('media:addTrack', {
+  //       track: track,
+  //       trackId: track.id,
+  //       peerId: state.user.uuid, // should be user peerId ?
+  //     //  constraints: {}, //local default constrains
+  //       isDefault: true,
+  //       kind: track.kind
+  //     })
+  //     tracks.push(track)
+  //   }
+  //   return new MediaStream(tracks)
+  // }
 
 //share local updates to track or user information with peers
 // to do: (maybe?) only update track info that has changed
 function updateLocalInfo(id){
   if(multiPeer){
     var userInfo = state.peers.byId[state.user.uuid]
-    var trackInfo = {}
-    userInfo.tracks.forEach((trackId) => {
-      trackInfo[trackId] = xtend({}, state.media.byId[trackId])
-      delete trackInfo[trackId].track
+    var streamInfo = {}
+    userInfo.streams.forEach((streamId) => {
+      streamInfo[streamId] = xtend({}, state.media.byId[streamId])
+      delete streamInfo[streamId].stream
     })
     var updateObj = {
       peer: userInfo,
-      tracks: trackInfo,
+      streams: streamInfo,
       osc: state.osc.local
     }
-  //  console.log("SHARING USER INFO", updateObj)
+    console.log("SHARING USER INFO", updateObj)
     if (id) {
       multiPeer.sendToPeer(id, JSON.stringify({ type: 'updatePeerInfo', message: updateObj }))
     } else {
-      // send to all
+      multiPeer.sendToAll(JSON.stringify({ type: 'updatePeerInfo', message: updateObj }))
     }
 
   }
 }
 // returns a stream that contains all local tracks. Adds tracks one by one using addTrack() because
 // of bug (when all are added at once in an array, tracks with duplicate labels but not duplicate ids are eliminated)
-  function getCombinedLocalStream () {
-    var tracks = []
-    console.log('tracks are', state.peers.byId[state.user.uuid].tracks)
-    var startTrack = state.peers.byId[state.user.uuid].tracks[0]
-    tracks.push(state.media.byId[startTrack].track)
-    var stream = new MediaStream(tracks)
-    state.peers.byId[state.user.uuid].tracks.forEach(function (trackId) {
-      stream.addTrack(state.media.byId[trackId].track)
-    })
-    return stream
-  }
+  // function getCombinedLocalStream () {
+  //   var tracks = []
+  // //  console.log('tracks are', state.peers.byId[state.user.uuid].tracks)
+  //   var startTrack = state.peers.byId[state.user.uuid].tracks[0]
+  //   tracks.push(state.media.byId[startTrack].track)
+  //   var stream = new MediaStream(tracks)
+  //   state.peers.byId[state.user.uuid].tracks.forEach(function (trackId) {
+  //     stream.addTrack(state.media.byId[trackId].track)
+  //   })
+  //   return stream
+  // }
 }

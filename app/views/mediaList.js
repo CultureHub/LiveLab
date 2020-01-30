@@ -50,7 +50,7 @@ function mediaListView (state, emit) {
               >
                 <td class="pa1" style="width:20%;height:20px">${state.peers.byId[media.peerId].nickname}</td>
                 <td class="pa1" style="width:20%;height:20px">${media.name}</td>
-                <td class="pa1" style="width:20%;height:20px">${media.track.kind}</td>
+                <td class="pa1" style="width:20%;height:20px">${media.hasAudio}</td>
                 <td class="pa1" style="width:40%;height:20px">${getSettingsInfo(media)}</td>
               </tr>
             `

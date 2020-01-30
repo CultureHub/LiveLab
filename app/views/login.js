@@ -5,7 +5,7 @@ const input = require('./components/input.js')
 const Dropdown = require('./components/dropdown.js')
 const Video = require('./components/funvideocontainer.js')
 
-const AddBroadcast = require('./addBroadcastUPDATED.js')
+const MediaSettings = require('./mediaSettings.js')
 
 module.exports = loginView
 
@@ -80,7 +80,7 @@ function loginView (state, emit) {
           <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('user:join'))}>Join</div>
           <div> ${state.user.statusMessage} </div>
 
-          ${AddBroadcast(state.devices, emit, state.devices.default.constraints.isOpen)}
+          ${MediaSettings(state.devices, emit, { showElement: state.devices.default.constraints.isOpen})}
         </div>
       </div>
     </div>

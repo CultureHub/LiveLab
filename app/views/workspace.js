@@ -9,7 +9,8 @@ const panel = require('./components/panel.js')
 const chat = require('./components/chat.js')
 const osc = require('./components/osc.js')
 //const windowManager = require('./windowmanager.js')
-const AddBroadcast = require('./addBroadcast.js')
+//const AddBroadcast = require('./addBroadcast.js')
+const AddMedia = require('./addMedia.js')
 const ConfigureOsc = require('./configureOscForwarding')
 const AddOscBroadcast = require('./addOscBroadcast')
 const inspector = require('./inspector.js')
@@ -67,7 +68,7 @@ function workspaceView (state, emit) {
             <i
               style="margin-left:3px"
               class="fas fa-plus-circle dim pointer fr"
-              onclick=${() => emit('devices:toggleAddBroadcast', true)}
+              onclick=${() => emit('devices:addNewMedia', true)}
               title="Add Media Broadcast"
             >
             </i>`
@@ -101,9 +102,12 @@ function workspaceView (state, emit) {
          )}
          <!---->
       </div>
-      ${AddBroadcast(state.devices, emit, state.devices.addBroadcast.active)}
+      ${AddMedia(state.devices, emit, { showElement: state.devices.default.constraints.isOpen, addNewStream: true})}
       ${ConfigureOsc(state.osc.configureForwarding, emit, state.osc.configureForwarding.visible)}
       ${AddOscBroadcast(state.osc.addBroadcast, emit, state.osc.addBroadcast.visible)}
     </div>
     `
 }
+
+
+      // <!--${AddBroadcast(state.devices, emit, state.devices.addBroadcast.active)}-->

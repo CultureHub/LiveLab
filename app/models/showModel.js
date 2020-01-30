@@ -55,6 +55,18 @@ function showModel (state, bus) {
     bus.emit('render')
   })
 
+  bus.on('show:setVideoStream', ({displayIndex, streamIndex}) => {
+    console.log(state.ui.dragging)
+    if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {
+      state.show.displays[displayIndex].tracks[trackIndex] = state.ui.dragging
+    }
+    console.log(state.show.displays)
+    updateWindows()
+    bus.emit('ui:dragClear')
+  //  state.show.displays[displayIndex].tracks[trackIndex] = trackId
+    // bus.emit('render')
+  })
+
   bus.on('show:setVideoTrack', ({displayIndex, trackIndex}) => {
     console.log(state.ui.dragging)
     if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {

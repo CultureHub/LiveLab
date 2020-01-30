@@ -49,6 +49,13 @@ MultiPeer.prototype.sendToPeer = function (peerId, data) {
   }
 }
 
+MultiPeer.prototype.addStream = function (stream) {
+  var self = this
+  Object.keys(this.peers).forEach(function (id) {
+    self.peers[id].addStream(stream)
+  })
+}
+
 MultiPeer.prototype.reinitAll = function () {
   Object.keys(this.peers).forEach(function (id) {
     this.peers[id].destroy(function (e) {
@@ -134,7 +141,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   }.bind(this, _id))
 
   p.on('stream', function (id, stream) {
-    console.log('E: stream', id, stream)
+    console.log('RECEIVED STREAM', id, stream)
     //  console.log("received a stream", stream)
     this.emit('stream', id, stream)
   }.bind(this, _id))
@@ -144,7 +151,9 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', id)
   }.bind(this, _id))
 
-  p.on('error', function (err) {console.log('SIMPLE PEER ERROR', err) }.bind(this))
+  p.on('error', function(error, info) {
+    console.log(error, info)
+  })
 
   p.on('data', function (id, data) {
     console.log('data', id)

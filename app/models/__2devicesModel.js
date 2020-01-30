@@ -144,20 +144,13 @@ function devicesModel (state, bus) {
 
   bus.on('devices:addNewMediaToBroadcast', function () {
   //  if(state.devices.addBroadcast.kind == "screen"){
-      var previewTracks = state.devices.default.previewTracks
-      var tracks = []
-      Object.keys(previewTracks).forEach((kind) => {
-        if (previewTracks[kind] !== null) tracks.push(previewTracks[kind])
-      })
-
-      state.devices.default.previewTracks = { audio: null, video: null}
-      var stream = new MediaStream(tracks)
-  //    console.log("track is", track)
-      bus.emit('media:addStream', {
-    //    track: track,
+      var track = state.devices.default.previewTracks.video.clone()
+      var stream = new MediaStream([track])
+      console.log("track is", track)
+      bus.emit('media:addTrack', {
+        track: track,
         stream: stream,
-      //  trackId: stream.id,
-        streamId: stream.id,
+        trackId: stream.id,
         peerId: state.user.uuid,
         isDefault: false,
         name: 'testAddingStream'
@@ -193,7 +186,7 @@ function devicesModel (state, bus) {
   /** Helper functions for dealing with devices, get user media, and constraints **/
 
   function getLocalMedia(constraints, callback) {
-  //  console.log('CONSTRAINTS', constraints)
+    console.log('CONSTRAINTS', constraints)
     getUserMedia(constraints, function (err, stream) {
       if (err) {
         callback(err, null)

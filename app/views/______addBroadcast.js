@@ -51,13 +51,11 @@ function addBroadcast (devices, emit, showElement) {
             })
           }
     </div>
-
     `
   }
   if (bState.kind==="video"){
     constraintOptions = html`
     <div id="video-constraints">
-
       ${deviceDropdown.render({
         value: 'Device:  ' + defaultLabel,
         options: devices.videoinput.all.map((id) => (
@@ -82,7 +80,6 @@ function addBroadcast (devices, emit, showElement) {
   // }
 
   return html`
-
     ${Modal({
       show: showElement,
       header: "Add Media",
@@ -97,7 +94,6 @@ function addBroadcast (devices, emit, showElement) {
               {
                 label: "kind:",
                 options:  Object.keys(bState.kinds).map((kind)=>{
-
                     return {
                       name: "kind",
                       checked: bState.kind===kind? "true": "false",
@@ -107,7 +103,6 @@ function addBroadcast (devices, emit, showElement) {
                 onChange: setBroadcastKind
               }
             )}
-
             ${constraintOptions}
             <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
             <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Start Broadcast</div>

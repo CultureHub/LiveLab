@@ -16,8 +16,10 @@ const videoDropdown = Dropdown()
 //const deviceDropdown = Dropdown()
 //const previewVid = VideoEl()
 
-function addBroadcast (devices, emit, showElement) {
-  var bState = devices.addBroadcast
+function addBroadcast (devices, emit, opts) {
+//  var bState = devices.addBroadcast
+
+  var showElement = opts.showElement
 
   var audioinput = devices.audioinput
   var videoinput = devices.videoinput
@@ -63,7 +65,7 @@ function addBroadcast (devices, emit, showElement) {
             })}
             <!-- <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
             <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Start Broadcast</div>
-            <p class="red">${bState.errorMessage}</p> -->
+            <p class="red">${devices.default.error}</p> -->
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
                ${Video({
@@ -87,7 +89,10 @@ function addBroadcast (devices, emit, showElement) {
                   </div>
                   </div>
                   <div class="mt2 mb4 i">Actual video dimensions:  ${devices.default.trackInfo.video.width}x${devices.default.trackInfo.video.height}, ${devices.default.trackInfo.video.frameRate}fps</div>
-
+              ${opts.addNewStream && opts.addNewStream === true? html`
+                <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings'))}>Cancel</div>
+                <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Stream(s) to Broadcast</div>
+                CANCEL` : ''}
         </div>`,
       close: () => (emit('devices:toggleSettings', false))
     })}
