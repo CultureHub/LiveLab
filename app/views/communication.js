@@ -30,18 +30,25 @@ function communicationView (state, emit) {
       // var trackId = state.peers.byId[peerIndex].defaultTracks.video
       // var audioId = state.peers.byId[peerIndex].defaultTracks.audio
       var defaultStream = state.peers.byId[peerIndex].defaultStream
-      console.log('DEFAULT STREAM',  defaultStream, state.peers.byId[peerIndex])
+    //  console.log('DEFAULT STREAM',  state)
+
+      var vidEl = ''
+      if(defaultStream!==null && defaultStream in state.media.byId) {
+        if(state.media.byId[defaultStream].stream) {
+          vidEl = Video({
+            htmlProps: {
+              class: 'h-50 w-100'
+            },
+            index: 'communication-' + index,
+          //  track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
+            stream: state.media.byId[defaultStream].stream,
+            id: state.media.byId[defaultStream].stream.id
+          })
+        }
+      }
       return html`
       <div class="fl w-50 pa1">
-        ${Video({
-          htmlProps: {
-            class: 'h-50 w-100'
-          },
-          index: 'communication-' + index,
-        //  track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
-          stream: (defaultStream in state.media.byId)  ? state.media.byId[defaultStream].stream : null,
-          id: (defaultStream in state.media.byId) ?  state.media.byId[defaultStream].stream.id : null
-        })}
+        ${vidEl}
 
 
         <div> <i

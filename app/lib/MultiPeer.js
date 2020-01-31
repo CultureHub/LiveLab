@@ -49,6 +49,12 @@ MultiPeer.prototype.sendToPeer = function (peerId, data) {
   }
 }
 
+MultiPeer.prototype.sendStreamToPeer = function (stream, peerId) {
+  if (peerId in this.peers) {
+    this.peers[peerId].addStream(stream)
+  }
+}
+
 MultiPeer.prototype.addStream = function (stream) {
   var self = this
   Object.keys(this.peers).forEach(function (id) {
@@ -59,7 +65,7 @@ MultiPeer.prototype.addStream = function (stream) {
 MultiPeer.prototype.reinitAll = function () {
   Object.keys(this.peers).forEach(function (id) {
     this.peers[id].destroy(function (e) {
-      console.log("closed!", e)
+    //  console.log("closed!", e)
       this.emit('new peer', {
         id: id
       })
@@ -109,7 +115,7 @@ MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
       console.log('stream is null')
     }
     var options = extend(newOptions, this._peerOptions)
-    console.log("options", options)
+  //  console.log("options", options)
     this.peers[id] = new SimplePeer(options)
     this._attachPeerEvents(this.peers[id], id)
   }.bind(this))
@@ -147,7 +153,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   }.bind(this, _id))
 
   p.on('connect', function (id) {
-    console.log("connected to ", id)
+  //  console.log("connected to ", id)
     this.emit('connect', id)
   }.bind(this, _id))
 
@@ -156,45 +162,45 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   })
 
   p.on('data', function (id, data) {
-    console.log('data', id)
+  //  console.log('data', id)
 
     /* Modify to get bitrate---- Start */
-    const sender = p._pc.getSenders()[1];
-    let parameters = sender.getParameters();
-    parameters.encodings = [{}];
-    parameters.encodings[0].maxBitrate = 25 * 1000
-    // sender.setParameters(parameters).then(()=>{console.log("hahaha")}).catch(e => console.error(e));
-
-    window.setInterval(() => {
-      if (!sender) {
-        return;
-      }
-      sender.getStats().then(res => {
-        res.forEach(report => {
-          let bytes;
-          let packets;
-          if (report.type === 'outbound-rtp') {
-            if (report.isRemote) {
-              return;
-            }
-            const now = report.timestamp;
-            bytes = report.bytesSent;
-            packets = report.packetsSent;
-            //   console.log("bytes" + bytes)
-            if (this.peersLastResult[id] && this.peersLastResult[id].has(report.id)) {
-              // calculate bitrate
-              const bitrate = 8 * (bytes - this.peersLastResult[id].get(report.id).bytesSent) /
-                (now - this.peersLastResult[id].get(report.id).timestamp);
-                //this line below console log current bitrate
-                //console.log("local bitrate: "+ bitrate)
-              this.peersBitrate[id] = bitrate
-              document.getElementById('bitrate').innerHTML = 'Current Local Bitrate: '+bitrate+' bps'
-            }
-          }
-        });
-        this.peersLastResult[id] = res;
-      });
-    }, 1000);
+    // const sender = p._pc.getSenders()[1];
+    // let parameters = sender.getParameters();
+    // parameters.encodings = [{}];
+    // parameters.encodings[0].maxBitrate = 25 * 1000
+    // // sender.setParameters(parameters).then(()=>{console.log("hahaha")}).catch(e => console.error(e));
+    //
+    // window.setInterval(() => {
+    //   if (!sender) {
+    //     return;
+    //   }
+    //   sender.getStats().then(res => {
+    //     res.forEach(report => {
+    //       let bytes;
+    //       let packets;
+    //       if (report.type === 'outbound-rtp') {
+    //         if (report.isRemote) {
+    //           return;
+    //         }
+    //         const now = report.timestamp;
+    //         bytes = report.bytesSent;
+    //         packets = report.packetsSent;
+    //         //   console.log("bytes" + bytes)
+    //         if (this.peersLastResult[id] && this.peersLastResult[id].has(report.id)) {
+    //           // calculate bitrate
+    //           const bitrate = 8 * (bytes - this.peersLastResult[id].get(report.id).bytesSent) /
+    //             (now - this.peersLastResult[id].get(report.id).timestamp);
+    //             //this line below console log current bitrate
+    //             //console.log("local bitrate: "+ bitrate)
+    //           this.peersBitrate[id] = bitrate
+    //           document.getElementById('bitrate').innerHTML = 'Current Local Bitrate: '+bitrate+' bps'
+    //         }
+    //       }
+    //     });
+    //     this.peersLastResult[id] = res;
+    //   });
+    // }, 1000);
     /* Modify to get bitrate---- End */
 
 

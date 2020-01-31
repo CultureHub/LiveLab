@@ -77,7 +77,7 @@ function loginView (state, emit) {
             }
           })}
 
-          <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('user:join'))}>Join</div>
+          <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:startCall'))}>Join</div>
           <div> ${state.user.statusMessage} </div>
 
           ${MediaSettings(state.devices, emit, { showElement: state.devices.default.constraints.isOpen})}

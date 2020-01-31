@@ -97,6 +97,11 @@ function showModel (state, bus) {
 
   })
 
+  bus.on('show:streamRemoved', (trackId) => {
+  //todo
+
+  })
+
   bus.on('show:clearVideoTrack', ({displayIndex, trackIndex}) => {
     state.show.displays[displayIndex].tracks[trackIndex] = null
     updateWindows()

@@ -51,16 +51,20 @@ function mediaModel (state, bus) {
   // })
 
   bus.on('media:updateStreamInfo', function (streamUpdateObject) {
-//    console.log('UPDATING TRACKS',streamUpdateObject)
+  //  console.log('STREAMINFO',streamUpdateObject, state.media.byId)
     Object.keys(streamUpdateObject).forEach((key) => {
-      state.media.byId[key] = xtend(state.media.byId[key], streamUpdateObject[key])
+      if(state.media.byId[key]){
+        state.media.byId[key] = xtend(state.media.byId[key], streamUpdateObject[key])
+      } else {
+        state.media.byId[key] = streamUpdateObject[key]
+      }
     })
   })
 
 
   // Add a new media stream. Stream can have at most one audio track and one video track. More than one audio or video should be added as a separate stream.
   bus.on('media:addStream', function (opts) {
-    var id = opts.streamId
+    var id = opts.stream.id
     state.media.byId[id] = xtend({}, opts, { settings: getSettingsFromStream(opts.stream)})
 
     var hasAudio = false
@@ -156,7 +160,7 @@ function mediaModel (state, bus) {
     bus.emit('show:streamRemoved', streamId)
     delete state.media.byId[streamId]
     var index = state.media.all.indexOf(streamId)
-    if (stream === state.ui.inspector.streamId) {
+    if (streamId === state.ui.inspector.streamId) {
       bus.emit('ui:updateInspectorStream', {streamId: null, pc: null})
     }
     if (index > -1) state.media.all.splice(index, 1)

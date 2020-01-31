@@ -61,7 +61,7 @@ function uiModel (state, bus) {
   bus.on('ui:addPeer', function (opts) {
     var vol = 0.0
     if (opts.peerId === state.user.uuid) vol = 0.0
-    console.log("ADDING PEER COMMUNICATION", opts)
+  //  console.log("ADDING PEER COMMUNICATION", opts)
     var audio = null
     if(opts.defaultAudio != null){
       audio = Audio.addTrack(opts.defaultAudio, vol)
@@ -77,7 +77,7 @@ function uiModel (state, bus) {
   })
 
   bus.on('ui:addAudio', function (opts) {
-    console.log('ADDING AUDIO', opts, state.ui.communication)
+//    console.log('ADDING AUDIO', opts, state.ui.communication)
     var audioEl = Audio.addTrack(opts.track, state.ui.communication[opts.peerId].volume)
     state.ui.communication[opts.peerId].audioEl = audioEl
   })
@@ -108,7 +108,7 @@ function uiModel (state, bus) {
   })
 
   bus.on('ui:toggleCommunicationVolume', function (peerId) {
-    console.log("setting volume", state.ui.communication, peerId)
+    //console.log("setting volume", state.ui.communication, peerId)
     state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
     state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
     bus.emit('render')
@@ -155,7 +155,7 @@ function uiModel (state, bus) {
 
   function appendNewChat (chatObj) {
     if (state.peers.byId[chatObj.peerId]) {
-      console.log(state.ui.chat)
+    //  console.log(state.ui.chat)
       chatObj.nickname = state.peers.byId[chatObj.peerId].nickname
       state.ui.chat.messages.push(chatObj)
     } else {

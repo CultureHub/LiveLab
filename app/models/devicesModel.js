@@ -141,18 +141,25 @@ function devicesModel (state, bus) {
     })
   }
 
+  bus.on('devices:startCall', function ()  {
+    var stream = getStreamFromPreviewTracks()
+    bus.emit('media:addStream', {
+  //    track: track,
+      stream: stream,
+    //  trackId: stream.id,
+      streamId: stream.id,
+      peerId: state.user.uuid,
+      isDefault: true,
+      name: 'default'
+    })
+    bus.emit('user:join')
+  })
 
   bus.on('devices:addNewMediaToBroadcast', function ({isDefault = false} = {}) {
   //  if(state.devices.addBroadcast.kind == "screen"){
-      var previewTracks = state.devices.default.previewTracks
-      var tracks = []
-      Object.keys(previewTracks).forEach((kind) => {
-        if (previewTracks[kind] !== null) tracks.push(previewTracks[kind])
-      })
 
-      state.devices.default.previewTracks = { audio: null, video: null}
-      var stream = new MediaStream(tracks)
   //    console.log("track is", track)
+      var stream = getStreamFromPreviewTracks()
       bus.emit('media:addStream', {
     //    track: track,
         stream: stream,
@@ -160,13 +167,26 @@ function devicesModel (state, bus) {
         streamId: stream.id,
         peerId: state.user.uuid,
         isDefault: isDefault,
-        name: 'testAddingStream'
+        name: isDefault ? 'default':'testAddingStream'
       })
     //  bus.emit('user:updateBroadcastStream')
     //  var stream = new MediaStream([track])
       bus.emit('user:addStream', stream)
       bus.emit('render')
   })
+
+  function getStreamFromPreviewTracks() {
+    var previewTracks = state.devices.default.previewTracks
+    var tracks = []
+    Object.keys(previewTracks).forEach((kind) => {
+      if (previewTracks[kind] !== null) tracks.push(previewTracks[kind])
+    })
+
+    state.devices.default.previewTracks = { audio: null, video: null}
+    return new MediaStream(tracks)
+  }
+
+
 
     bus.on('devices:updateBroadcastConstraint', function(obj){
   //    xtend(state.devices.default.constraints[obj.kind].kinds[state.devices.addBroadcast.kind][key]

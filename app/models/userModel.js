@@ -102,7 +102,7 @@ function userModel (state, bus) {
   })
 
   // Initiate connection with signalling server
-  bus.on('user:join', function () {
+  bus.on('user:join', function (stream) {
     localStorage.setItem('uuid', state.user.uuid)
 
     bus.emit('peers:updatePeer', {
@@ -131,7 +131,7 @@ function userModel (state, bus) {
     multiPeer = new MultiPeer({
       room: state.user.room,
       server: state.user.server,
-  //    stream: getLocalCommunicationStream(),
+      stream: stream,
       userData: {
         uuid: state.user.uuid,
         nickname: state.user.nickname
@@ -155,13 +155,12 @@ function userModel (state, bus) {
       })
       bus.emit
       bus.emit('peers:setAllPeers', peersInfo)*/
-      bus.emit('devices:addNewMediaToBroadcast', { isDefault: true})
       bus.emit('render')
     })
 
     //received new media stream from remote peer
     multiPeer.on('stream', function (peerId, stream) {
-    //  console.log("STREAM", peerId)
+      console.log("STREAM", peerId)
       state.user.statusMessage += 'Received media from peer ' + peerId + '\n'
       // bus.emit('media:addTracksFromStream', {
       //   peerId: peerId,
@@ -171,7 +170,7 @@ function userModel (state, bus) {
       bus.emit('media:addStream', {
         peerId: peerId,
         stream: stream,
-        isDefault: true
+      //  isDefault: true
       })
     })
 
@@ -187,7 +186,7 @@ function userModel (state, bus) {
 
     //when first connected to remote peer, send user information
     multiPeer.on('connect', function (id) {
-    //  console.log("CONNECT", id)
+      console.log("CONNECT", id)
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
       bus.emit('peers:updatePeer', {peerId: id})
       var userInfo = state.peers.byId[state.user.uuid]
@@ -199,6 +198,8 @@ function userModel (state, bus) {
 
       userInfo.streams.forEach((streamId) => {
         infoObj[streamId] = xtend({}, state.media.byId[streamId])
+      //  bus.emit('user:addStream', stream)
+        multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
         delete infoObj[streamId].stream
       })
       //for testing purposes, automatically set inspector info
@@ -241,6 +242,7 @@ function userModel (state, bus) {
   })
 
    bus.on('user:addStream', function(stream){
+     console.log('SENDING STREAM TO REMOTE', stream)
     if(multiPeer !== null) {
     //  var stream = getCombinedLocalStream()
   //    console.log("UPDATED STREAM", stream.getTracks())
