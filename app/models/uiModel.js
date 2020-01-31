@@ -75,6 +75,7 @@ function uiModel (state, bus) {
       }
     }
     console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
+
   })
 
   // bus.on('ui:addAudio', function (opts) {

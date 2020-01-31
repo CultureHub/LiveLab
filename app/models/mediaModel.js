@@ -54,18 +54,21 @@ function mediaModel (state, bus) {
   //  console.log('STREAMINFO',streamUpdateObject, state.media.byId)
     Object.keys(streamUpdateObject).forEach((key) => {
       if(state.media.byId[key]){
-        state.media.byId[key] = xtend(state.media.byId[key], streamUpdateObject[key])
+        state.media.byId[""+key] = xtend({}, state.media.byId[key], streamUpdateObject[key])
       } else {
-        state.media.byId[key] = streamUpdateObject[key]
+        state.media.byId[""+key] = xtend({}, streamUpdateObject[key])
       }
+      window.testObj = state.media.byId
+        console.log('NEWSTREAMINFO',  streamUpdateObject[key],    state.media.byId[key], state.media.byId)
     })
+    bus.emit('render')
   })
 
 
   // Add a new media stream. Stream can have at most one audio track and one video track. More than one audio or video should be added as a separate stream.
   bus.on('media:addStream', function (opts) {
     var id = opts.stream.id
-    state.media.byId[id] = xtend({}, opts, { settings: getSettingsFromStream(opts.stream)})
+    state.media.byId[id] = xtend({}, state.media.byId[id], opts, { settings: getSettingsFromStream(opts.stream)})
 
     var hasAudio = false
     var hasVideo = false

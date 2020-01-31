@@ -20,9 +20,11 @@ function userModel (state, bus) {
     nickname: "tong",
     statusMessage: '',
     multiPeer: null,
-    muted: true,
+    muted: false
   }, state.user)
 
+// // Start out muted
+//  bus.emit('user:toggleMute')
 
   //osc.on
 //login page ui events
@@ -50,14 +52,20 @@ function userModel (state, bus) {
     bus.emit('render')
   })
 
+  // @ to do: dont update state within function, move to ui model
   bus.on('user:toggleMute', function() {
-    var trackId = state.peers.byId[state.user.uuid].defaultTracks.audio
-    var track = state.media.byId[trackId].track
+    // var trackId = state.peers.byId[state.user.uuid].defaultTracks.audio
+    // var track = state.media.byId[trackId].track
+    console.log('TOGGLING MUTE')
+    var defaultStreamId = state.peers.byId[state.user.uuid].defaultStream
+    var defaultStream = state.media.byId[defaultStreamId].stream
+    var audioTracks = defaultStream.getAudioTracks()
     if(state.user.muted===true) {
-      track.enabled = true
+      audioTracks.forEach((track) => track.enabled = true)
       state.user.muted = false
     } else {
-      track.enabled = false
+    //  track.enabled = false
+      audioTracks.forEach((track) => track.enabled = false)
       state.user.muted = true
     }
     bus.emit('render')
@@ -131,7 +139,7 @@ function userModel (state, bus) {
     multiPeer = new MultiPeer({
       room: state.user.room,
       server: state.user.server,
-      stream: stream,
+    //  stream: stream,
       userData: {
         uuid: state.user.uuid,
         nickname: state.user.nickname
@@ -160,7 +168,7 @@ function userModel (state, bus) {
 
     //received new media stream from remote peer
     multiPeer.on('stream', function (peerId, stream) {
-      console.log("STREAM", peerId)
+    //  console.log("STREAM", peerId)
       state.user.statusMessage += 'Received media from peer ' + peerId + '\n'
       // bus.emit('media:addTracksFromStream', {
       //   peerId: peerId,
@@ -186,7 +194,7 @@ function userModel (state, bus) {
 
     //when first connected to remote peer, send user information
     multiPeer.on('connect', function (id) {
-      console.log("CONNECT", id)
+
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
       bus.emit('peers:updatePeer', {peerId: id})
       var userInfo = state.peers.byId[state.user.uuid]
@@ -202,6 +210,8 @@ function userModel (state, bus) {
         multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
         delete infoObj[streamId].stream
       })
+
+    //  console.log("SENDING LOCAL INFO TO REMOTE PEER", userInfo,  infoObj, state )
       //for testing purposes, automatically set inspector info
       updateLocalInfo(id, {
         peer: xtend({}, userInfo),

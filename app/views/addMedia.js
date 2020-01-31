@@ -30,7 +30,7 @@ function addMedia (devices, emit, opts) {
   //     constraintOptions = html`<div id="screen-constraints"></div>`
   // }
 
-  console.log('DEVICES', devices)
+  //console.log('DEVICES', devices)
 
   return html`
 

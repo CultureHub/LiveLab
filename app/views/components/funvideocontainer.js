@@ -20,7 +20,7 @@ const VideoContainer = component(function element (ctx, props) {
   initMedia(props, el)
   if(props.includeAudio) {
     el.volume = props.volume
-    console.log('setting volume', el, props.volume)
+  //  console.log('setting volume', el, props.volume)
   }
   return el
 })

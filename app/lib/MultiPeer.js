@@ -147,7 +147,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   }.bind(this, _id))
 
   p.on('stream', function (id, stream) {
-    console.log('RECEIVED STREAM', id, stream)
+  //  console.log('RECEIVED STREAM', id, stream)
     //  console.log("received a stream", stream)
     this.emit('stream', id, stream)
   }.bind(this, _id))

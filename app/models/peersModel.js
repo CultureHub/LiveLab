@@ -52,7 +52,7 @@ function peersModel (state, bus) {
   })
 
   bus.on('peers:addStreamToPeer', function (opts) {
-    console.log('STREAM TO PEER', state.peers, opts)
+  //  console.log('STREAM TO PEER', state.peers, opts)
 
     state.peers.byId[opts.peerId].streams.push(opts.streamId)
     // if track is default communication track, add to peer defaultTracks
