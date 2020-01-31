@@ -42,7 +42,9 @@ function communicationView (state, emit) {
             index: 'communication-' + index,
           //  track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
             stream: state.media.byId[defaultStream].stream,
-            id: state.media.byId[defaultStream].stream.id
+            id: state.media.byId[defaultStream].stream.id,
+            includeAudio: true,
+            volume: state.ui.communication[peerIndex].volume
           })
         }
       }

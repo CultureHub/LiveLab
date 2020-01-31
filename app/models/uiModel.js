@@ -61,26 +61,27 @@ function uiModel (state, bus) {
   bus.on('ui:addPeer', function (opts) {
     var vol = 0.0
     if (opts.peerId === state.user.uuid) vol = 0.0
-  //  console.log("ADDING PEER COMMUNICATION", opts)
-    var audio = null
-    if(opts.defaultAudio != null){
-      audio = Audio.addTrack(opts.defaultAudio, vol)
-    }
+  //  var audio = opts
+  //  var audio = null
+    // if(opts.defaultAudio != null){
+    //   audio = Audio.addTrack(opts.defaultAudio, vol)
+    // }
     if (state.ui.communication[opts.peerId]) {
       state.ui.communication[opts.peerId].volume = vol
     } else {
       state.ui.communication[opts.peerId] = {
-        volume: vol,
-        audioEl: audio
+        volume: vol//,
+      //  audioEl: audio
       }
     }
+    console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
   })
 
-  bus.on('ui:addAudio', function (opts) {
-//    console.log('ADDING AUDIO', opts, state.ui.communication)
-    var audioEl = Audio.addTrack(opts.track, state.ui.communication[opts.peerId].volume)
-    state.ui.communication[opts.peerId].audioEl = audioEl
-  })
+  // bus.on('ui:addAudio', function (opts) {
+  //   console.log('ADDING AUDIO', opts, state.ui.communication)
+  // //  var audioEl = Audio.addTrack(opts.track, state.ui.communication[opts.peerId].volume)
+  //   state.ui.communication[opts.peerId].audioEl = audioEl
+  // })
 
   bus.on('ui:toggleFullscreen', function () {
     state.ui.windows.fullscreen = !state.ui.windows.fullscreen
@@ -110,7 +111,7 @@ function uiModel (state, bus) {
   bus.on('ui:toggleCommunicationVolume', function (peerId) {
     //console.log("setting volume", state.ui.communication, peerId)
     state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
-    state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
+  //  state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
     bus.emit('render')
   })
 

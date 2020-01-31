@@ -11,7 +11,7 @@ function userModel (state, bus) {
   state.user = xtend({
     //uuid: localStorage.getItem('uuid') || shortid.generate(), // persistent local user id. If none is present in local storage, generate new one
     uuid: shortid.generate(), // for dev purposes, always regenerate id
-    room: 'test',
+    room: 'elephants',
 //modify start---
     server: 'https://livelab.app:6643',
     //server: 'https://live-lab-v1.glitch.me/',

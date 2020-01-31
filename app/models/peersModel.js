@@ -40,7 +40,7 @@ function peersModel (state, bus) {
       defaultStream: null
     }, state.peers.byId[peer.peerId], peer)
 
-    //console.log('NEW  PEER INFO', peer, state.peers.byId)
+    console.log('NEW  PEER INFO',state)
     bus.emit('ui:addPeer', {
       peerId: peer.peerId
     })
