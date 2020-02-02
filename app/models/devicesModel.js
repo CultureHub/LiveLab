@@ -28,13 +28,13 @@ function devicesModel (state, bus) {
     },
     addBroadcast: {
       active: false,
-      kind: "audio",
+      kind: "video",
       name: "",
       errorMessage: "",
       kinds: {
-        audio: {
-          deviceId: null
-        },
+        // audio: {
+        //   deviceId: null
+        // },
         video: {
           deviceId: null
         }
@@ -274,6 +274,7 @@ function devicesModel (state, bus) {
           state.devices.addBroadcast.errorMessage = err
         } else {
           getLocalMedia(constraints, function(err, stream){
+            console.log('updated local media', stream)
             if(err){
               state.devices.addBroadcast.errorMessage = err
               console.log("LOCAL MEDIA ERROR", err)

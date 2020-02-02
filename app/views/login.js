@@ -5,7 +5,7 @@ const input = require('./components/input.js')
 const Dropdown = require('./components/dropdown.js')
 const Video = require('./components/funvideocontainer.js')
 
-const AddBroadcast = require('./addBroadcastUPDATED.js')
+const AddBroadcast = require('./deviceSettings.js')
 
 module.exports = loginView
 

@@ -144,7 +144,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', id)
   }.bind(this, _id))
 
-  p.on('error', function (err) {console.log('SIMPLE PEER ERROR', err) }.bind(this))
+  // p.on('error', function (err) {console.log('SIMPLE PEER ERROR', err) }.bind(this))
 
   p.on('data', function (id, data) {
     console.log('data', id)

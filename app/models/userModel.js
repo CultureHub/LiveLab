@@ -252,7 +252,7 @@ function userModel (state, bus) {
     var tracks = []
     if (state.devices.default.previewTracks.audio !== null) {
       tracks.push(state.devices.default.previewTracks.audio)
-      var track = state.devices.default.previewTracks.audio
+      var track = state.devices.default.previewTracks.audio.clone()
       bus.emit('media:addTrack', {
         track: track,
         trackId: track.id,
@@ -264,7 +264,7 @@ function userModel (state, bus) {
     }
     if (state.devices.default.previewTracks.video !== null) {
       tracks.push(state.devices.default.previewTracks.video)
-      var track = state.devices.default.previewTracks.video
+      var track = state.devices.default.previewTracks.video.clone()
       bus.emit('media:addTrack', {
         track: track,
         trackId: track.id,

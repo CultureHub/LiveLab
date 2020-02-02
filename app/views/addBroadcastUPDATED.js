@@ -61,9 +61,9 @@ function addBroadcast (devices, emit, showElement) {
                 emit('devices:setDefaultVideo', value)
               }
             })}
-            <!-- <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
+             <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
             <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Start Broadcast</div>
-            <p class="red">${bState.errorMessage}</p> -->
+          <!--  <p class="red">${bState.errorMessage}</p> -->
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
                ${Video({
