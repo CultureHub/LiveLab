@@ -35,7 +35,7 @@ function mediaModel (state, bus) {
         track: track,
         trackId: track.id,
         peerId: options.peerId, // should be user peerId ?
-        constraints: options.constraints,
+      //  constraints: options.constraints,
         isDefault: options.isDefault,
         kind: track.kind
       })

@@ -37,18 +37,12 @@ function addBroadcast (devices, emit, showElement) {
       header: "Media Settings",
       contents: html`<div id="add broadcast" class="pa3 f6 fw3">
 
-            ${audioDropdown.render({
-              value: 'Audio:  ' + (defaultAudio === null ? '' : audioinput.byId[defaultAudio].label),
-              options: audioinput.all.map((id) => (
-                {
-                  value: id,
-                  label: audioinput.byId[id].label
-                }
-              )),
-              onchange: (value) => {
-                emit('devices:setDefaultAudio', value)
-              }
-            })}
+      ${input('name', 'name', {
+        value:bState.name,
+        onkeyup: (e) => {
+          emit('devices:setBroadcastName', e.target.value)
+        }
+      })}
             ${videoDropdown.render({
               value: 'Video:  ' + (defaultVideo === null ? '' : videoinput.byId[defaultVideo].label),
               options: videoinput.all.map((id) => (
@@ -61,8 +55,7 @@ function addBroadcast (devices, emit, showElement) {
                 emit('devices:setDefaultVideo', value)
               }
             })}
-            <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings', true))}>Cancel</div>
-            <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Media to Current Call</div>
+
           <!--  <p class="red">${bState.errorMessage}</p> -->
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
@@ -87,7 +80,8 @@ function addBroadcast (devices, emit, showElement) {
                   </div>
                   </div>
                   <div class="mt2 mb4 i">Actual video dimensions:  ${devices.default.trackInfo.video.width}x${devices.default.trackInfo.video.height}, ${devices.default.trackInfo.video.frameRate}fps</div>
-
+                  <div class="f6 link dim ph3 pv2 m2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings', true))}>Cancel</div>
+                  <div class="f6 link dim ph3 pv2 m2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Media to Current Call</div>
         </div>`,
       close: () => (emit('devices:toggleSettings', false))
     })}
