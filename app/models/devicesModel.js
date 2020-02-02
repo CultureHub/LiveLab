@@ -256,45 +256,58 @@ function devicesModel (state, bus) {
     })
   })
 
+  // for now, assume only video
   bus.on('devices:addNewMediaToBroadcast', function () {
-    if(state.devices.addBroadcast.kind == "screen"){
-      var track = state.devices.addBroadcast.previewTrack.clone()
-      console.log("track is", track)
-      bus.emit('media:addTrack', {
-        track: track,
-        peerId: state.user.uuid,
-        isDefault: false,
-        name: state.devices.addBroadcast.name
-      })
-      bus.emit('user:updateBroadcastStream')
+    var track = state.devices.default.previewTracks.video.clone()
+    bus.emit('media:addTrack', {
+         track: track,
+         peerId: state.user.uuid,
+         isDefault: false,
+         name: state.devices.addBroadcast.name
+       })
+     bus.emit('user:updateBroadcastStream')
       bus.emit('render')
-    } else {
-      getConstraintsFromSettings(xtend({}, state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind], {kind: state.devices.addBroadcast.kind}), function (err, constraints) {
-        if(err){
-          state.devices.addBroadcast.errorMessage = err
-        } else {
-          getLocalMedia(constraints, function(err, stream){
-            console.log('updated local media', stream)
-            if(err){
-              state.devices.addBroadcast.errorMessage = err
-              console.log("LOCAL MEDIA ERROR", err)
-              //callback(err, null)
-            } else {
-              var tracks = stream.getTracks()
-              bus.emit('media:addTrack', {
-                track: tracks[0],
-                peerId: state.user.uuid,
-                isDefault: false,
-                name: state.devices.addBroadcast.name
-              })
-              bus.emit('user:updateBroadcastStream')
-            }
-            bus.emit('render')
-          })
-        }
-      })
-    }
   })
+
+  // bus.on('devices:addNewMediaToBroadcast', function () {
+  //   if(state.devices.addBroadcast.kind == "screen"){
+  //     var track = state.devices.addBroadcast.previewTrack.clone()
+  //     console.log("track is", track)
+  //     bus.emit('media:addTrack', {
+  //       track: track,
+  //       peerId: state.user.uuid,
+  //       isDefault: false,
+  //       name: state.devices.addBroadcast.name
+  //     })
+  //     bus.emit('user:updateBroadcastStream')
+  //     bus.emit('render')
+  //   } else {
+  //     getConstraintsFromSettings(xtend({}, state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind], {kind: state.devices.addBroadcast.kind}), function (err, constraints) {
+  //       if(err){
+  //         state.devices.addBroadcast.errorMessage = err
+  //       } else {
+  //         getLocalMedia(constraints, function(err, stream){
+  //           console.log('updated local media', stream)
+  //           if(err){
+  //             state.devices.addBroadcast.errorMessage = err
+  //             console.log("LOCAL MEDIA ERROR", err)
+  //             //callback(err, null)
+  //           } else {
+  //             var tracks = stream.getTracks()
+  //             bus.emit('media:addTrack', {
+  //               track: tracks[0],
+  //               peerId: state.user.uuid,
+  //               isDefault: false,
+  //               name: state.devices.addBroadcast.name
+  //             })
+  //             bus.emit('user:updateBroadcastStream')
+  //           }
+  //           bus.emit('render')
+  //         })
+  //       }
+  //     })
+  //   }
+  // })
 
   function updateBroadcastPreview(callback){
     state.devices.addBroadcast.errorMessage = ""
@@ -376,7 +389,7 @@ function devicesModel (state, bus) {
 //
 
 function getConstraintsFromSettings(settings, callback) {
-  console.log('FORMATING CONSTRAINTS', settings)
+//  console.log('FORMATING CONSTRAINTS', settings)
   var allConstraints = {}
   var userConstraints = {}
   if(settings.deviceId===null) {

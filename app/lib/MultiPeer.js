@@ -50,26 +50,30 @@ MultiPeer.prototype.sendToPeer = function (peerId, data) {
 }
 
 MultiPeer.prototype.reinitAll = function () {
+  console.log('reiniting!')
+  var self = this
   Object.keys(this.peers).forEach(function (id) {
-    this.peers[id].destroy(function (e) {
-      console.log("closed!", e)
-      this.emit('new peer', {
+     console.log(this.peers, id)
+     self.peers[id].destroy()
+  //   self.peers[id].destroy(function (e) {
+      //  console.log("closed!", e)
+      self.emit('new peer', {
         id: id
       })
       var newOptions = {
         initiator: true
       }
-      if (this.stream != null) {
-        newOptions.stream = this.stream
+      if (self.stream != null) {
+        newOptions.stream = self.stream
       } else {
         console.log('stream is null')
       }
-      var options = extend(newOptions, this._peerOptions)
+      var options = extend(newOptions, self._peerOptions)
 
-      this.peers[id] = new SimplePeer(options)
-      this._attachPeerEvents(this.peers[id], id)
-
-    }.bind(this))
+      self.peers[id] = new SimplePeer(options)
+      self._attachPeerEvents(this.peers[id], id)
+  //})
+  //}.bind(this))
   }.bind(this))
   //  this._connectToPeers.bind(this)
 }

@@ -159,7 +159,7 @@ function userModel (state, bus) {
 
     //received new media stream from remote peer
     multiPeer.on('stream', function (peerId, stream) {
-      console.log("STREAM", peerId)
+      console.log("STREAM", stream.getTracks())
       state.user.statusMessage += 'Received media from peer ' + peerId + '\n'
       bus.emit('media:addTracksFromStream', {
         peerId: peerId,
@@ -251,8 +251,8 @@ function userModel (state, bus) {
   function getLocalCommunicationStream () {
     var tracks = []
     if (state.devices.default.previewTracks.audio !== null) {
-      tracks.push(state.devices.default.previewTracks.audio)
       var track = state.devices.default.previewTracks.audio.clone()
+          tracks.push(track)
       bus.emit('media:addTrack', {
         track: track,
         trackId: track.id,
@@ -263,8 +263,8 @@ function userModel (state, bus) {
       })
     }
     if (state.devices.default.previewTracks.video !== null) {
-      tracks.push(state.devices.default.previewTracks.video)
       var track = state.devices.default.previewTracks.video.clone()
+          tracks.push(track)
       bus.emit('media:addTrack', {
         track: track,
         trackId: track.id,

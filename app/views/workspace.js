@@ -67,7 +67,7 @@ function workspaceView (state, emit) {
             <i
               style="margin-left:3px"
               class="fas fa-plus-circle dim pointer fr"
-              onclick=${() => emit('devices:toggleAddBroadcast', true)}
+              onclick=${() => emit('devices:toggleSettings', true)}
               title="Add Media Broadcast"
             >
             </i>`
@@ -101,7 +101,7 @@ function workspaceView (state, emit) {
          )}
          <!---->
       </div>
-      ${AddBroadcast(state.devices, emit, state.devices.addBroadcast.active)}
+      ${AddBroadcast(state.devices, emit, state.devices.default.constraints.isOpen)}
       ${ConfigureOsc(state.osc.configureForwarding, emit, state.osc.configureForwarding.visible)}
       ${AddOscBroadcast(state.osc.addBroadcast, emit, state.osc.addBroadcast.visible)}
     </div>
