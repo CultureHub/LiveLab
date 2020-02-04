@@ -20,7 +20,7 @@ function userModel (state, bus) {
     nickname: "tong",
     statusMessage: '',
     multiPeer: null,
-    muted: true,
+    muted: false,
   }, state.user)
 
 
