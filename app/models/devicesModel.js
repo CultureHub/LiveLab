@@ -1,5 +1,4 @@
 const enumerateDevices = require('enumerate-devices')
-const constraintsJSON = require('./availableConstraints.json')
 const getUserMedia = require('getusermedia')
 const Screen = require('./screenmedia.js')
 
