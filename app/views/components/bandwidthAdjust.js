@@ -1,6 +1,7 @@
 'use strict'
 
 const html = require('choo/html')
+//const PeerConnectionStats = require('./RTCInspector.js')
 
 module.exports = bandWidthView
 
@@ -22,7 +23,14 @@ function bandWidthView(state,emit) {
           kps
          </label>
        <button onclick=${() => {console.log(bv.options[bv.selectedIndex].value)}}>confirm</button>
+       ${Object.values(state.peers.byId).map((peer) => {
+         if(peer.pc) {
+           console.log('STATS', peer.pc)
+          // return PeerConnectionStats(peer)
+         } else {
+           return ''
+         }
+       })}
        </div>`
 
 }
-

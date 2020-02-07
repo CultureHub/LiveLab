@@ -6,22 +6,23 @@ var Nano = require('nanocomponent')
 
 module.exports = RTCInspector
 
-// Receives an RTCPeerConnection and displays stats
-function RTCInspector () {
+// Receives an RTCPeerConnection and deisplays stats
+function RTCInspector (peer) {
   if (!(this instanceof RTCInspector)) return new RTCInspector()
   this.props = {
     htmlProps: {},
     pc: null,
     stats: "",
-    isActive: false
+    isActive: true
   }
-  this.active = false
+  this.active = true
   Nano.call(this)
 }
 
 RTCInspector.prototype = Object.create(Nano.prototype)
 
 RTCInspector.prototype.createElement = function (props) {
+  console.log('CREATING', props)
     this.props = props
     var defaultHtmlProps = {
 
