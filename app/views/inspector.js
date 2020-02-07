@@ -56,7 +56,7 @@ function inspectorComponent (state, emit) {
         contents: innerContents,
         closable: true,
         header:   title,
-        onClose: () => { emit('user:setInspectMedia', state.ui.inspector.trackId) }
+        onClose: () => { emit('ui:setInspectMedia', null) }
       }
     )
   } else {
