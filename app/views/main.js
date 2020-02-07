@@ -5,9 +5,6 @@ const login = require('./login.js')
 const workspace = require('./workspace.js')
 
 module.exports = mainView
-//  <!--${AddBroadcast(state, emit)}-->
-//  ${login(state, emit)}
-// ${allVideos(state, emit)}
 function mainView (state, emit) {
   if (!state.user.loggedIn) {
     return html`
@@ -23,4 +20,3 @@ function mainView (state, emit) {
     `
   }
 }
-// test

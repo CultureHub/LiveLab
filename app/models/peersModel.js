@@ -1,7 +1,7 @@
 // the PEERS data store contains information about each connected peer (including the local user (definied by state.user.uuid))
 // Each peer has/will have:
 // 1. a nickname
-// 2. a set of mediaStreamTrackIds (including metadata about the track)
+// 2. a set of mediaStreamIds (including metadata about the track)
 // 3. certain tracks (defaultTracks) designated for communication
 //
 // The PEER data store ideally should be identical for all users in a session, with each connected peer updating its own information and broadcasting to other users as necessary
@@ -24,22 +24,19 @@ function peersModel (state, bus) {
     })
   })
 
-// update information about a specific peer, creates a new one if none exists
-// Note on Object.assign::
-// Properties in the target object will be overwritten by properties in the sources if they have the same key.
-// Later sources' properties will similarly overwrite earlier ones.
+  // update information about a specific peer, creates a new one if none exists
+  // Note on Object.assign::
+  // Properties in the target object will be overwritten by properties in the sources if they have the same key.
+  // Later sources' properties will similarly overwrite earlier ones.
   bus.on('peers:updatePeer', function (peer) {
     state.peers.byId[peer.peerId] = xtend({
       peerId: peer.peerId,
-      tracks: [],
+      streams: [],
       nickname: null,
-      defaultTracks: {
-        audio: null,
-        video: null
-      }
+      defaultStream: null
     }, state.peers.byId[peer.peerId], peer)
 
-    console.log('NEW  PEER INFO', peer, state.peers.byId)
+    console.log('NEW  PEER INFO',state)
     bus.emit('ui:addPeer', {
       peerId: peer.peerId
     })
@@ -50,15 +47,12 @@ function peersModel (state, bus) {
     bus.emit('render')
   })
 
-  bus.on('peers:addTrackToPeer', function (opts) {
-  //  console.log('Track TO PEER', state.peers, opts)
-
-    state.peers.byId[opts.peerId].tracks.push(opts.trackId)
-    // if track is default communication track, add to peer defaultTracks
+  bus.on('peers:addStreamToPeer', function (opts) {
+    state.peers.byId[opts.peerId].streams.push(opts.streamId)
+    // if stream is default communication stream, add to peer defaultStream
     if (opts.isDefault) {
-      state.peers.byId[opts.peerId].defaultTracks[opts.kind] = opts.trackId
+      state.peers.byId[opts.peerId].defaultStream = opts.streamId
     }
-    // console.log("peersTracks", state.peers.byId[opts.peerId].tracks)
     bus.emit('render')
   })
 
@@ -71,11 +65,10 @@ function peersModel (state, bus) {
   })
 
   bus.on('peers:removePeer', function (peerId) {
-    // remove all tracks associated with this peer
-    state.peers.byId[peerId].tracks.forEach(function (trackId) {
-      bus.emit('media:removeTrack', trackId)
+    state.peers.byId[peerId].streams.forEach(function (streamId) {
+      bus.emit('media:removeStream', streamId)
     })
-    state.peers.byId[peerId].tracks = []
+    state.peers.byId[peerId].streams = []
     var index = state.peers.all.indexOf(peerId)
     if (index > -1) state.peers.all.splice(index, 1)
     delete state.peers.byId[peerId]

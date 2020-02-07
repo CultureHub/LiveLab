@@ -13,22 +13,14 @@ module.exports = addBroadcast
 const audioDropdown = Dropdown()
 const videoDropdown = Dropdown()
 
-//const deviceDropdown = Dropdown()
-//const previewVid = VideoEl()
 
-function addBroadcast (devices, emit, showElement) {
-  var bState = devices.addBroadcast
+function addBroadcast (devices, emit, opts) {
+  var showElement = opts.showElement
 
   var audioinput = devices.audioinput
   var videoinput = devices.videoinput
   var defaultAudio = devices.default.inputDevices.audio
   var defaultVideo = devices.default.inputDevices.video
-
-  // } else {
-  //     constraintOptions = html`<div id="screen-constraints"></div>`
-  // }
-
-  console.log('DEVICES', devices)
 
   return html`
 
@@ -55,8 +47,7 @@ function addBroadcast (devices, emit, showElement) {
                 emit('devices:setDefaultVideo', value)
               }
             })}
-
-          <!--  <p class="red">${bState.errorMessage}</p> -->
+          
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
                ${Video({
@@ -80,8 +71,10 @@ function addBroadcast (devices, emit, showElement) {
                   </div>
                   </div>
                   <div class="mt2 mb4 i">Actual video dimensions:  ${devices.default.trackInfo.video.width}x${devices.default.trackInfo.video.height}, ${devices.default.trackInfo.video.frameRate}fps</div>
-                  <div class="f6 link dim ph3 pv2 m2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings', true))}>Cancel</div>
-                  <div class="f6 link dim ph3 pv2 m2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Media to Current Call</div>
+              ${opts.addNewStream && opts.addNewStream === true? html`
+                <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings'))}>Cancel</div>
+                <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Stream(s) to Broadcast</div>
+                CANCEL` : ''}
         </div>`,
       close: () => (emit('devices:toggleSettings', false))
     })}

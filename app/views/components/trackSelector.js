@@ -7,21 +7,21 @@ module.exports = trackSelector
 function trackSelector (selectorInfo, selectorIndex, state, emit) {
   return html`
     <div class="row">
-      ${selectorInfo.tracks.map((media, index) => {
+      ${selectorInfo.streams.map((media, index) => {
         return html`
           <div class="video-holder selectable"
           onclick=${() => (emit('show:setActiveVideo', {
             displayIndex: selectorIndex,
-            trackIndex: index
+            streamIndex: index
           }))}
 
           draggable = "true"
 
-          ondragstart=${() => (emit('show:clearVideoTrack', {displayIndex: selectorIndex, trackIndex: index}))}
+          ondragstart=${() => (emit('show:clearVideoStream', {displayIndex: selectorIndex, streamIndex: index}))}
 
           ondragover=${(ev) => (ev.preventDefault())}
 
-          ondrop=${(ev) => (emit('show:setVideoTrack', {displayIndex: selectorIndex, trackIndex: index}))}
+          ondrop=${(ev) => (emit('show:setVideoStream', {displayIndex: selectorIndex, streamIndex: index}))}
           >
             <div class="video">
               ${Video({
@@ -29,12 +29,12 @@ function trackSelector (selectorInfo, selectorIndex, state, emit) {
                   class: 'h-100 w-100'
                 },
                 index: 'selector'+'video'+selectorIndex+index,
-                track: media !== null  ? media.track : null,
-                id: media !== null ?  media.track.id : null
+                stream: media !== null  ? media.stream : null,
+                id: media !== null ?  media.stream.id : null
               })}
             </div>
             <div class="video-title ${selectorInfo.active === index ? 'selected' : ''}">
-              ${media === null ? '' : state.peers.byId[media.peerId].nickname + '-' + media.name + '-' + media.track.kind}
+              ${media === null ? '' : state.peers.byId[media.peerId].nickname + '-' + media.name }
             </div>
           </div>
         `
