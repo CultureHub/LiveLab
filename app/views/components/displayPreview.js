@@ -6,7 +6,7 @@ const slider = require('./verticalSlider.js')
 module.exports = displayPreview
 
 function displayPreview (display, index, emit) {
-  var track = display.tracks[display.active]
+  var stream = display.streams[display.active]
   return html`
     <div class="display row">
       <div class="video-holder">
@@ -16,8 +16,8 @@ function displayPreview (display, index, emit) {
             class: 'h-100 w-100'
           },
           index: 'display-video-' +index,
-          track: track !== null  ? track.track : null,
-          id: track !== null ?  track.track.id : null
+          stream: stream !== null  ? stream.stream : null,
+          id: stream !== null ?  stream.stream.id : null
         })}
         </div>
         <div class="video-title display-title">

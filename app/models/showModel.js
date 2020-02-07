@@ -21,7 +21,7 @@ function showModel (state, bus) {
         title: device.label,
         deviceId: device.deviceId,
         active: 0,
-        tracks: [null, null, null, null],
+        streams: [null, null, null, null],
         volume: 100
       }
     })
@@ -57,9 +57,9 @@ function showModel (state, bus) {
 
   bus.on('show:setVideoStream', ({displayIndex, streamIndex}) => {
     console.log(state.ui.dragging)
-    if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {
-      state.show.displays[displayIndex].tracks[trackIndex] = state.ui.dragging
-    }
+  //  if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {
+      state.show.displays[displayIndex].streams[streamIndex] = state.ui.dragging
+  //  }
     console.log(state.show.displays)
     updateWindows()
     bus.emit('ui:dragClear')
@@ -67,29 +67,29 @@ function showModel (state, bus) {
     // bus.emit('render')
   })
 
-  bus.on('show:setVideoTrack', ({displayIndex, trackIndex}) => {
-    console.log(state.ui.dragging)
-    if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {
-      state.show.displays[displayIndex].tracks[trackIndex] = state.ui.dragging
-    }
-    console.log(state.show.displays)
-    updateWindows()
-    bus.emit('ui:dragClear')
-  //  state.show.displays[displayIndex].tracks[trackIndex] = trackId
-    // bus.emit('render')
-  })
+  // bus.on('show:setVideoTrack', ({displayIndex, trackIndex}) => {
+  //   console.log(state.ui.dragging)
+  //   if (state.ui.dragging !== null && state.ui.dragging.track.kind === 'video') {
+  //     state.show.displays[displayIndex].tracks[trackIndex] = state.ui.dragging
+  //   }
+  //   console.log(state.show.displays)
+  //   updateWindows()
+  //   bus.emit('ui:dragClear')
+  // //  state.show.displays[displayIndex].tracks[trackIndex] = trackId
+  //   // bus.emit('render')
+  // })
 
-  bus.on('show:trackRemoved', (trackId) => {
+  bus.on('show:streamRemoved', (streamId) => {
     console.log("previous state", state.show.displays)
     state.show.displays = state.show.displays.map((display) => {
       let obj = Object.assign({}, display)
-      obj.tracks = obj.tracks.map((media) => {
-        console.log("checking " + media + trackId)
-        if(media && media.trackId) return media.trackId == trackId ? null : media
+      obj.streams = obj.streams.map((media) => {
+        console.log("checking " + media + streamId)
+        if(media && media.streamId) return media.streamId == stream ? null : media
         return media
       }
       )
-      console.log("new tracks: ", obj.tracks)
+      console.log("new streams: ", obj.streams)
       return obj
     })
     console.log('new show state', state.show.displays)
@@ -97,10 +97,24 @@ function showModel (state, bus) {
 
   })
 
-  bus.on('show:streamRemoved', (trackId) => {
-  //todo
+  // bus.on('show:trackRemoved', (trackId) => {
+  //   console.log("previous state", state.show.displays)
+  //   state.show.displays = state.show.displays.map((display) => {
+  //     let obj = Object.assign({}, display)
+  //     obj.tracks = obj.tracks.map((media) => {
+  //       console.log("checking " + media + trackId)
+  //       if(media && media.trackId) return media.trackId == trackId ? null : media
+  //       return media
+  //     }
+  //     )
+  //     console.log("new tracks: ", obj.tracks)
+  //     return obj
+  //   })
+  //   console.log('new show state', state.show.displays)
+  //   updateWindows()
+  //
+  // })
 
-  })
 
   bus.on('show:clearVideoTrack', ({displayIndex, trackIndex}) => {
     state.show.displays[displayIndex].tracks[trackIndex] = null
@@ -108,8 +122,8 @@ function showModel (state, bus) {
     bus.emit('render')
   })
 
-  bus.on('show:setActiveVideo', ({displayIndex, trackIndex}) => {
-    state.show.displays[displayIndex].active = trackIndex
+  bus.on('show:setActiveVideo', ({displayIndex, streamIndex}) => {
+    state.show.displays[displayIndex].active = streamIndex
     updateWindows()
     bus.emit('render')
   })
@@ -124,24 +138,43 @@ function showModel (state, bus) {
     console.log('closing window')
   }
 
-  function getTrackFromId(trackId) {
-    if (trackId && trackId !== null) {
-      console.log('getting track', trackId, state.media.byId[trackId])
-      return trackId
+  // function getTrackFromId(trackId) {
+  //   if (trackId && trackId !== null) {
+  //     console.log('getting track', trackId, state.media.byId[trackId])
+  //     return trackId
+  //   }
+  //   return null
+  // }
+
+  function getStreamFromId(streamId) {
+    if (streamId && streamId !== null) {
+      console.log('getting track', streamId, state.media.byId[streamId])
+      return streamId
     }
     return null
   }
 
   function updateWindows() {
     state.show.displays.forEach((display) => {
-      let t =  getTrackFromId(display.tracks[display.active])
+      let t =  getStreamFromId(display.streams[display.active])
       let opts = Object.assign(display, {
-        track: t
+        stream: t
       })
-      console.log('update track', t, opts)
+      console.log('update stream', t, opts)
       display.window.update(opts)
     })
   }
+
+  // function updateWindows() {
+  //   state.show.displays.forEach((display) => {
+  //     let t =  getTrackFromId(display.tracks[display.active])
+  //     let opts = Object.assign(display, {
+  //       track: t
+  //     })
+  //     console.log('update track', t, opts)
+  //     display.window.update(opts)
+  //   })
+  // }
 
   function addDisplay(_opts) {
     let index =  state.show.displays.length + 1
@@ -151,7 +184,7 @@ function showModel (state, bus) {
       isOpen: false,
       fullscreen: false,
       title: 'Output ' + index,
-      tracks: [null, null, null, null],
+      streams: [null, null, null, null],
       opacity: 100,
       onClose: onClose
     }, _opts)
@@ -161,7 +194,28 @@ function showModel (state, bus) {
     opts.window = win
     // opts.track = getTrackFromId(opts.tracks[opts.])
     state.show.displays.push(Object.assign(opts, {
-      track: getTrackFromId(opts.tracks[opts.active])
+      stream: getStreamFromId(opts.streams[opts.active])
     }))
   }
+  // function addDisplay(_opts) {
+  //   let index =  state.show.displays.length + 1
+  //   const opts = Object.assign({
+  //     type: 'window',
+  //     active: 0,
+  //     isOpen: false,
+  //     fullscreen: false,
+  //     title: 'Output ' + index,
+  //     tracks: [null, null, null, null],
+  //     opacity: 100,
+  //     onClose: onClose
+  //   }, _opts)
+  //
+  //   let win = new Window(opts)
+  //
+  //   opts.window = win
+  //   // opts.track = getTrackFromId(opts.tracks[opts.])
+  //   state.show.displays.push(Object.assign(opts, {
+  //     track: getTrackFromId(opts.tracks[opts.active])
+  //   }))
+  // }
 }

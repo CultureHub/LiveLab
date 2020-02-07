@@ -1,7 +1,7 @@
 class Window {
-  constructor({ isOpen = false, track, onClose, title, fullscreen = false, opacity}) {
+  constructor({ isOpen = false, stream, onClose, title, fullscreen = false, opacity}) {
     this.isOpen = open
-    this.track = track
+    this.stream = stream
     this.onClose = onClose
     this.fullscreen = fullscreen
     this.title = ''
@@ -56,6 +56,7 @@ class Window {
       self.video.setAttribute('allowFullScreen', true)
       self.video.style.width = "100%"
       self.video.style.height = "100%"
+      self.video.volume = 0
       //self.video.style.objectFit = "fill"
       self.win.document.body.style.padding = "0px"
       self.win.document.body.style.margin = "0px"
@@ -71,7 +72,7 @@ class Window {
     self.win.document.body.onclick = function () {
       console.log('click!')
       self.win.document.body.removeChild(self.div)
-      self.setTrack(self.track)
+      self.setStream(self.stream)
     }
     self.win.document.body.onkeydown = function(){
       //console.log("key")
@@ -86,7 +87,7 @@ class Window {
 
     self.setTitle(self.title)
     self.setOpacity(self.opacity)
-    self.setTrack(self.track)
+    self.setStream(self.stream)
   }, 100)
     //console.log('track is', this.track)
   }
@@ -94,12 +95,12 @@ class Window {
   update(opts) {
 
     // how to improve this part?
-    if (!this.track) this.track = null
-    if (this.track === null) this.track = {id :null}
-    if (!opts.track) opts.track = null
-    if (opts.track === null) opts.track = {id :null}
+    if (!this.stream) this.stream = null
+    if (this.stream === null) this.stream = {id :null}
+    if (!opts.stream) opts.stream = null
+    if (opts.stream === null) opts.stream = {id :null}
 
-    console.log('UPDATE', opts, this.track.id, opts.track.id)
+    console.log('UPDATE', opts, this.stream.id, opts.stream.id)
 
     if (opts.isOpen !== this.isOpen) {
       if(opts.isOpen === true) {
@@ -110,9 +111,9 @@ class Window {
       this.isOpen = opts.isOpen
     }
 
-    if (opts.track.trackId !== this.track.trackId) {
-        if(this.isOpen) this.setTrack(opts.track)
-        this.track = opts.track
+    if (opts.stream.streamId !== this.stream.streamId) {
+        if(this.isOpen) this.setStream(opts.stream)
+        this.stream = opts.stream
     }
 
     if (opts.title !== this.title) {
@@ -130,17 +131,17 @@ class Window {
     console.log("setting opactity", opacity)
     this.video.style.opacity = parseFloat(opacity)/100
   }
-  setTrack(track) {
+  setStream(stream) {
    //this.win.document.body.click()
-    if (track && track !== null) {
-      if (track.id === null) {
+    if (stream && stream !== null) {
+      if (stream.id === null) {
         this.video.srcObject = null
       } else {
-        var tracks = []
-        tracks.push(track.track)
-        var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
-        console.log('!! setting track ', track)
-        this.video.srcObject = stream
+        // var tracks = []
+        // tracks.push(track.track)
+        // var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
+        // console.log('!! setting track ', track)
+        this.video.srcObject = stream.stream
       }
     //  this.win.document.title = track.id
     } else {
