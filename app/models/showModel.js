@@ -1,5 +1,5 @@
 var xtend = Object.assign
-const Window = require('./../lib/window.js')
+const ShowWindow = require('./../lib/ShowWindow.js')
 module.exports = showModel
 
 function showModel (state, bus) {
@@ -115,7 +115,7 @@ function addDisplay(_opts) {
     onClose: onClose
   }, _opts)
 
-  let win = new Window(opts)
+  let win = new ShowWindow(opts)
   opts.window = win
   state.show.displays.push(Object.assign(opts, {
     stream: getStreamFromId(opts.streams[opts.active])
