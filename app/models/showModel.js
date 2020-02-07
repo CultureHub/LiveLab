@@ -17,7 +17,7 @@ function showModel (state, bus) {
     if (display.isOpen) {
       display.isOpen = false
     } else {
-      console.log(display)
+    //  console.log(display)
       display.isOpen = true
     }
     updateWindows()
@@ -30,10 +30,10 @@ function showModel (state, bus) {
   })
 
   bus.on('show:removeDisplay', displayIndex => {
-    console.log('removing', displayIndex)
+  //  console.log('removing', displayIndex)
     state.show.displays[displayIndex].window.remove()
     state.show.displays.splice(displayIndex, 1)
-    console.log('displays', state.show.displays)
+  //  console.log('displays', state.show.displays)
     bus.emit('render')
   })
 
@@ -44,7 +44,7 @@ function showModel (state, bus) {
   })
 
   bus.on('show:streamRemoved', (streamId) => {
-    console.log("previous state", state.show.displays)
+  //  console.log("previous state", state.show.displays)
     state.show.displays = state.show.displays.map((display) => {
       let obj = Object.assign({}, display)
       obj.streams = obj.streams.map((media) => {
@@ -53,10 +53,10 @@ function showModel (state, bus) {
         return media
       }
     )
-    console.log("new streams: ", obj.streams)
+//    console.log("new streams: ", obj.streams)
     return obj
   })
-  console.log('new show state', state.show.displays)
+//  console.log('new show state', state.show.displays)
   updateWindows()
 
 })
@@ -80,12 +80,12 @@ bus.on('show:updateDisplayProperty', ({displayIndex, property, value}) => {
 })
 
 function onClose() {
-  console.log('closing window')
+//  console.log('closing window')
 }
 
 function getStreamFromId(streamId) {
   if (streamId && streamId !== null) {
-    console.log('getting track', streamId, state.media.byId[streamId])
+    //console.log('getting track', streamId, state.media.byId[streamId])
     return streamId
   }
   return null
@@ -97,7 +97,7 @@ function updateWindows() {
     let opts = Object.assign(display, {
       stream: t
     })
-    console.log('update stream', t, opts)
+//    console.log('update stream', t, opts)
     display.window.update(opts)
   })
 }

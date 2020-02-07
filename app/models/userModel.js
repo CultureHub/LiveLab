@@ -112,10 +112,10 @@ function userModel (state, bus) {
     })
 
     //when first connected to remote peer, send user information
-    multiPeer.on('connect', function (id) {
+    multiPeer.on('connect', function ({id, pc}) {
 
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
-      bus.emit('peers:updatePeer', {peerId: id})
+      bus.emit('peers:updatePeer', {peerId: id, pc: pc})
       var userInfo = state.peers.byId[state.user.uuid]
       var infoObj = {}
 

@@ -13,37 +13,14 @@ module.exports = addMedia
 const audioDropdown = Dropdown()
 const videoDropdown = Dropdown()
 
-//const deviceDropdown = Dropdown()
-//const previewVid = VideoEl()
-
 function addMedia (devices, emit, opts) {
-  //  var bState = devices.addMedia
-
   var showElement = opts.showElement
-
   var audioinput = devices.audioinput
   var videoinput = devices.videoinput
   var defaultAudio = devices.default.inputDevices.audio
   var defaultVideo = devices.default.inputDevices.video
 
-  // // } else {
-  // //     constraintOptions = html`<div id="screen-constraints"></div>`
-  // // }
-  //
-  // //console.log('DEVICES', devices)
-  //
-  // <!--    ${audioDropdown.render({
-  //       value: 'Audio:  ' + (defaultAudio === null ? '' : audioinput.byId[defaultAudio].label),
-  //       options: audioinput.all.map((id) => (
-  //         {
-  //           value: id,
-  //           label: audioinput.byId[id].label
-  //         }
-  //       )),
-  //       onchange: (value) => {
-  //         emit('devices:setDefaultAudio', value)
-  //       }
-  //     })}-->
+
 
   return html`
 
@@ -74,9 +51,6 @@ function addMedia (devices, emit, opts) {
       }
     })}
 
-    <!-- <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
-    <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Start Broadcast</div>
-    <p class="red">${devices.default.error}</p> -->
     <div class="w-100 db flex mt2">
     <div class="w10 h10 dib fl">
 

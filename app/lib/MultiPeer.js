@@ -16,8 +16,8 @@ var MultiPeer = function (options) {
   this._room = options.room
   this.peers = {}
 /*Define and Calculate */
-  this.peersLastResult = {}
-  this.peersBitrate = {}
+  // this.peersLastResult = {}
+  // this.peersBitrate = {}
 
   // Handle events from signalling server
   this.signaller.on('ready', this._connectToPeers.bind(this))
@@ -62,30 +62,30 @@ MultiPeer.prototype.addStream = function (stream) {
   })
 }
 
-MultiPeer.prototype.reinitAll = function () {
-  Object.keys(this.peers).forEach(function (id) {
-    this.peers[id].destroy(function (e) {
-    //  console.log("closed!", e)
-      this.emit('new peer', {
-        id: id
-      })
-      var newOptions = {
-        initiator: true
-      }
-      if (this.stream != null) {
-        newOptions.stream = this.stream
-      } else {
-        console.log('stream is null')
-      }
-      var options = extend(newOptions, this._peerOptions)
-
-      this.peers[id] = new SimplePeer(options)
-      this._attachPeerEvents(this.peers[id], id)
-
-    }.bind(this))
-  }.bind(this))
-  //  this._connectToPeers.bind(this)
-}
+// MultiPeer.prototype.reinitAll = function () {
+//   Object.keys(this.peers).forEach(function (id) {
+//     this.peers[id].destroy(function (e) {
+//     //  console.log("closed!", e)
+//       this.emit('new peer', {
+//         id: id
+//       })
+//       var newOptions = {
+//         initiator: true
+//       }
+//       if (this.stream != null) {
+//         newOptions.stream = this.stream
+//       } else {
+//         console.log('stream is null')
+//       }
+//       var options = extend(newOptions, this._peerOptions)
+//
+//       this.peers[id] = new SimplePeer(options)
+//       this._attachPeerEvents(this.peers[id], id)
+//
+//     }.bind(this))
+//   }.bind(this))
+//   //  this._connectToPeers.bind(this)
+// }
 
 // Once the new peer receives a list of connected peers from the server,
 // creates new simple peer object for each connected peer.
@@ -147,14 +147,11 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   }.bind(this, _id))
 
   p.on('stream', function (id, stream) {
-  //  console.log('RECEIVED STREAM', id, stream)
-    //  console.log("received a stream", stream)
     this.emit('stream', id, stream)
   }.bind(this, _id))
 
   p.on('connect', function (id) {
-  //  console.log("connected to ", id)
-    this.emit('connect', id)
+    this.emit('connect', { id: id, pc: p._pc})
   }.bind(this, _id))
 
   p.on('error', function(error, info) {

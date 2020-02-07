@@ -6,7 +6,7 @@ var Nano = require('nanocomponent')
 
 module.exports = RTCInspector
 
-// Receives an RTCPeerConnection and deisplays stats
+// Receives an RTCPeerConnection and displays stats
 function RTCInspector () {
   if (!(this instanceof RTCInspector)) return new RTCInspector()
   this.props = {

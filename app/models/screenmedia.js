@@ -18,7 +18,7 @@ module.exports = function (options) {
       console.log('error getting screen media', err)
       reject(err)
     } else {
-      console.log("got stream", stream)
+    //  console.log("got stream", stream)
       const video = document.createElement('video')
       video.src = window.URL.createObjectURL(stream)
      // document.body.appendChild(video)

@@ -13,24 +13,14 @@ module.exports = addBroadcast
 const audioDropdown = Dropdown()
 const videoDropdown = Dropdown()
 
-//const deviceDropdown = Dropdown()
-//const previewVid = VideoEl()
 
 function addBroadcast (devices, emit, opts) {
-//  var bState = devices.addBroadcast
-
   var showElement = opts.showElement
 
   var audioinput = devices.audioinput
   var videoinput = devices.videoinput
   var defaultAudio = devices.default.inputDevices.audio
   var defaultVideo = devices.default.inputDevices.video
-
-  // } else {
-  //     constraintOptions = html`<div id="screen-constraints"></div>`
-  // }
-
-//  console.log('DEVICES', devices)
 
   return html`
 
@@ -63,9 +53,7 @@ function addBroadcast (devices, emit, opts) {
                 emit('devices:setDefaultVideo', value)
               }
             })}
-            <!-- <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:updateBroadcastPreview', true))}>Update Preview</div>
-            <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Start Broadcast</div>
-            <p class="red">${devices.default.error}</p> -->
+          
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
                ${Video({

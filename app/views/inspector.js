@@ -21,16 +21,6 @@ function inspectorComponent (state, emit) {
   if(state.ui.inspector !== null){
     var media = state.media.byId[state.ui.inspector]
     var title = html`<span class="i">Track Info: ${state.peers.byId[media.peerId].nickname}-${media.name} </span> `
-
-     // ${media.track.kind==='video' ? Video({
-     //    htmlProps: {
-     //      class: 'h4 w4'
-     //    },
-     //    index: 'inspector',
-     //    track: (state.ui.inspector.trackId in state.media.byId)  ? state.media.byId[state.ui.inspector.trackId].track : null,
-     //    id: (state.ui.inspector.trackId in state.media.byId) ?  state.media.byId[state.ui.inspector.trackId].track.id : null
-     //  }) : null }
-     console.log("showing stream in inspector", state.media.byId[state.ui.inspector], state.ui.inspector)
   var innerContents =  html`<div class="pa2 w-100" style="word-wrap: break-word;font-size:11px">
     ${Video({
        htmlProps: {

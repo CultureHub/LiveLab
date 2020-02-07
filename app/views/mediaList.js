@@ -32,7 +32,6 @@ function mediaListView (state, emit) {
   console.log('media info', state.media)
   return html`
     <div class="pa3 dib" style="width:100%">
-    <!---<h3>Current Room Name: <b>${state.user.room}</b></h3>--->
     <table style="width:100%" cellspacing="0" cellpadding="0" >
       <thead>
         <tr>
@@ -49,7 +48,6 @@ function mediaListView (state, emit) {
           ${Object.keys(state.media.byId).map((id) => {
             var media = state.media.byId[id]
             var className = id === state.ui.inspector ? 'bg-gray pointer' : 'dim pointer'
-            // console.log(id, state.ui.inspector.trackId)
             return html`
               <tr class=${className}
                   draggable="true"
@@ -68,7 +66,6 @@ function mediaListView (state, emit) {
           </tbody>
       </table>
       </div>
-      <!--  <div class="f6 fr ma2 link ph3 pv2 mb2 white bg-dark-pink pointer dib dim" onclick=${() => (emit('devices:toggleAddBroadcast', true))}>+ Add Media Broadcast</div>-->
     </div>
     `
 }

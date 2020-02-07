@@ -62,8 +62,7 @@ function uiModel (state, bus) {
       //  audioEl: audio
       }
     }
-    console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
-
+  //  console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
   })
 
   bus.on('ui:toggleFullscreen', function () {
