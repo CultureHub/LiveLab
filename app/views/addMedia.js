@@ -26,11 +26,24 @@ function addMedia (devices, emit, opts) {
   var defaultAudio = devices.default.inputDevices.audio
   var defaultVideo = devices.default.inputDevices.video
 
-  // } else {
-  //     constraintOptions = html`<div id="screen-constraints"></div>`
-  // }
-
-  //console.log('DEVICES', devices)
+  // // } else {
+  // //     constraintOptions = html`<div id="screen-constraints"></div>`
+  // // }
+  //
+  // //console.log('DEVICES', devices)
+  //
+  // <!--    ${audioDropdown.render({
+  //       value: 'Audio:  ' + (defaultAudio === null ? '' : audioinput.byId[defaultAudio].label),
+  //       options: audioinput.all.map((id) => (
+  //         {
+  //           value: id,
+  //           label: audioinput.byId[id].label
+  //         }
+  //       )),
+  //       onchange: (value) => {
+  //         emit('devices:setDefaultAudio', value)
+  //       }
+  //     })}-->
 
   return html`
 
@@ -39,18 +52,14 @@ function addMedia (devices, emit, opts) {
       header: "Media Settings",
       contents: html`<div id="add broadcast" class="pa3 f6 fw3">
 
-            ${audioDropdown.render({
-              value: 'Audio:  ' + (defaultAudio === null ? '' : audioinput.byId[defaultAudio].label),
-              options: audioinput.all.map((id) => (
-                {
-                  value: id,
-                  label: audioinput.byId[id].label
-                }
-              )),
-              onchange: (value) => {
-                emit('devices:setDefaultAudio', value)
-              }
-            })}
+      ${input('label', 'label', {
+      value: devices.default.name,
+      onkeyup: (e) => {
+        emit('devices:setBroadcastName', e.target.value)
+      }
+    })}
+
+
             ${videoDropdown.render({
               value: 'Video:  ' + (defaultVideo === null ? '' : videoinput.byId[defaultVideo].label),
               options: videoinput.all.map((id) => (
@@ -91,8 +100,7 @@ function addMedia (devices, emit, opts) {
                   <div class="mt2 mb4 i">Actual video dimensions:  ${devices.default.trackInfo.video.width}x${devices.default.trackInfo.video.height}, ${devices.default.trackInfo.video.frameRate}fps</div>
               ${opts.addNewStream && opts.addNewStream === true? html`
                 <div class="f6 link dim ph3 pv2 mb2 dib white bg-gray pointer" onclick=${() => (emit('devices:toggleSettings'))}>Cancel</div>
-                <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Stream(s) to Broadcast</div>
-                CANCEL` : ''}
+                <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:addNewMediaToBroadcast'))}>Add Stream(s) to Broadcast</div>` : ''}
         </div>`,
       close: () => (emit('devices:toggleSettings', false))
     })}

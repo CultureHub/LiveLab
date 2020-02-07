@@ -5,18 +5,26 @@ const panel = require('./components/panel.js')
 
 module.exports = mediaListView
 
-function getSettingsInfo(trackInfo) {
+function getVideoInfo(stream) {
   let settingsString = ''
-  if(trackInfo.kind && trackInfo.settings) {
-    if (trackInfo.kind === 'video'){
-      if(trackInfo.settings.width) {
-        settingsString += trackInfo.settings.width + 'x' + trackInfo.settings.height
+  if(stream.settings && stream.settings.video) {
+      if(stream.settings.video.width) {
+        settingsString += stream.settings.video.width + 'x' + stream.settings.video.height
       }
-      if(trackInfo.settings.frameRate) {
-          settingsString += ', ' + trackInfo.settings.frameRate + 'fps'
+      if(stream.settings.video.frameRate) {
+          settingsString += ', ' + stream.settings.video.frameRate + 'fps'
       }
     }
-  }
+  return settingsString
+}
+
+function geAudioInfo(stream) {
+  let settingsString = '--'
+  if(stream.settings && stream.settings.audio) {
+      if(stream.settings.audio.sampleRate) {
+        settingsString = stream.settings.audio.sampleRate/1000+ 'kHz'
+      }
+    }
   return settingsString
 }
 
@@ -30,8 +38,8 @@ function mediaListView (state, emit) {
         <tr>
           <th style="width:20%">PEER</th>
           <th style="width:20%">NAME</th>
-          <th style="width:20%">KIND</th>
-          <th style="width:40%">INFO</th>
+          <th style="width:20%">VIDEO</th>
+          <th style="width:40%">AUDIO</th>
         </tr>
       </thead>
       </table>
@@ -51,8 +59,8 @@ function mediaListView (state, emit) {
               >
                 <td class="pa1" style="width:20%;height:20px">${state.peers.byId[media.peerId].nickname}</td>
                 <td class="pa1" style="width:20%;height:20px">${media.name}</td>
-                <td class="pa1" style="width:20%;height:20px">${media.hasAudio}</td>
-                <td class="pa1" style="width:40%;height:20px">${getSettingsInfo(media)}</td>
+                <td class="pa1" style="width:20%;height:20px">${getVideoInfo(media)}</td>
+                <td class="pa1" style="width:40%;height:20px">${geAudioInfo(media)}</td>
               </tr>
             `
           })}

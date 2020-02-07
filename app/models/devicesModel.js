@@ -42,6 +42,7 @@ function devicesModel (state, bus) {
     //   previewTrack: null
     // },
     default: {
+      name: 'default',
       inputDevices: {
         audio: null,
         video: null
@@ -103,6 +104,11 @@ function devicesModel (state, bus) {
 
   bus.on('devices:setDefaultVideo', function (val) {
     setDefaultMedia(val, "video")
+  })
+
+  bus.on('devices:setBroadcastName', function(name){
+    state.devices.default.name = name
+    bus.emit('render')
   })
 
 
@@ -167,7 +173,7 @@ function devicesModel (state, bus) {
         streamId: stream.id,
         peerId: state.user.uuid,
         isDefault: isDefault,
-        name: isDefault ? 'default':'testAddingStream'
+        name: state.devices.default.name
       })
     //  bus.emit('user:updateBroadcastStream')
     //  var stream = new MediaStream([track])
