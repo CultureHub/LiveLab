@@ -19,8 +19,8 @@ function inputElement (name, defaultText, opts) {
   var defaultClass = 'pa2 input-reset ba bg-dark-gray hover-bg-black near-white w3'
   inputProps.class = defaultClass + ' ' + inputProps.class
 
-  return html`<div class="">
-    <div class="fw6 w4 lh-copy f6 mr2 dib" for=${name}>${name}:</div>
+  return html`<div class="m3">
+    <div class="fw6 lh-copy f6 mr2 dib" for=${name}>${name}:</div>
     <input ${inputProps}>
   </div>`
 }

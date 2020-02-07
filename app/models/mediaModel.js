@@ -68,7 +68,7 @@ function mediaModel (state, bus) {
   // Add a new media stream. Stream can have at most one audio track and one video track. More than one audio or video should be added as a separate stream.
   bus.on('media:addStream', function (opts) {
     var id = opts.stream.id
-    state.media.byId[id] = xtend({}, state.media.byId[id], opts, { settings: getSettingsFromStream(opts.stream)})
+    state.media.byId[id] = xtend({}, state.media.byId[id], opts)
 
     var hasAudio = false
     var hasVideo = false
@@ -100,15 +100,15 @@ function mediaModel (state, bus) {
     })
   })
 
-  function getSettingsFromStream(stream) {
-    var settings = {}
-    if (stream && stream !== null) {
-      stream.getTracks().forEach((track) =>
-        settings[track.kind] = track.getSettings()
-      )
-    }
-    return settings
-  }
+  // function getSettingsFromStream(stream) {
+  //   var settings = {}
+  //   if (stream && stream !== null) {
+  //     stream.getTracks().forEach((track) =>
+  //       settings[track.kind] = track.getSettings()
+  //     )
+  //   }
+  //   return settings
+  // }
 
 // process of migration from storing tracks to storing streams, now that addStream() works
 // initially: only developed for video stream, assumes one track per stream

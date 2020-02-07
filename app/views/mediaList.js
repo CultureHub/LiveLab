@@ -18,7 +18,7 @@ function getVideoInfo(stream) {
   return settingsString
 }
 
-function geAudioInfo(stream) {
+function getAudioInfo(stream) {
   let settingsString = '--'
   if(stream.settings && stream.settings.audio) {
       if(stream.settings.audio.sampleRate) {
@@ -37,7 +37,7 @@ function mediaListView (state, emit) {
       <thead>
         <tr>
           <th style="width:20%">PEER</th>
-          <th style="width:20%">NAME</th>
+          <th style="width:20%">LABEL</th>
           <th style="width:20%">VIDEO</th>
           <th style="width:40%">AUDIO</th>
         </tr>
@@ -60,7 +60,7 @@ function mediaListView (state, emit) {
                 <td class="pa1" style="width:20%;height:20px">${state.peers.byId[media.peerId].nickname}</td>
                 <td class="pa1" style="width:20%;height:20px">${media.name}</td>
                 <td class="pa1" style="width:20%;height:20px">${getVideoInfo(media)}</td>
-                <td class="pa1" style="width:40%;height:20px">${geAudioInfo(media)}</td>
+                <td class="pa1" style="width:40%;height:20px">${getAudioInfo(media)}</td>
               </tr>
             `
           })}

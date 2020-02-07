@@ -87,6 +87,7 @@ function devicesModel (state, bus) {
 
   bus.on('devices:addNewMedia', function() {
     updateLocalPreview('video')
+    state.devices.default.name = 'vid' + state.peers.byId[state.user.uuid].streams.length
     state.devices.default.constraints.isOpen = !state.devices.default.constraints.isOpen
   //  state.devices.default.add.isOpen = !state.devices.default.constraints.isOpen
     bus.emit('render')
@@ -155,6 +156,7 @@ function devicesModel (state, bus) {
     //  trackId: stream.id,
       streamId: stream.id,
       peerId: state.user.uuid,
+      settings: getSettingsFromStream(stream),
       isDefault: true,
       name: 'default'
     })
@@ -173,8 +175,10 @@ function devicesModel (state, bus) {
         streamId: stream.id,
         peerId: state.user.uuid,
         isDefault: isDefault,
-        name: state.devices.default.name
+        name: state.devices.default.name,
+        settings: getSettingsFromStream(stream)
       })
+      state.devices.default.constraints.isOpen = false
     //  bus.emit('user:updateBroadcastStream')
     //  var stream = new MediaStream([track])
       bus.emit('user:addStream', stream)
@@ -311,6 +315,15 @@ function getConstraintsFromSettings(settings, callback) {
   }
 }
 
+function getSettingsFromStream(stream) {
+  var settings = {}
+  if (stream && stream !== null) {
+    stream.getTracks().forEach((track) =>
+      settings[track.kind] = track.getSettings()
+    )
+  }
+  return settings
+}
 
 // /// OLD code from add broadcast
 // /**
