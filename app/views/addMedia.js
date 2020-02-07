@@ -4,7 +4,7 @@ const html = require('choo/html')
 const Modal = require('./components/modal.js')
 const Dropdown = require('./components/dropdown.js')
 const Video = require('./components/funvideocontainer.js')
-const radioSelect = require('./components/radioSelect.js')
+// const radioSelect = require('./components/radioSelect.js')
 const settingsUI = require('./components/settingsUI.js')
 const input = require('./components/smallInput.js')
 
