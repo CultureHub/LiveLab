@@ -2,11 +2,8 @@
 // to do: unify ui information in this model
 // const MAX_NUM_PEERS = 8 // to do: put this all in one place
 var xtend = Object.assign
-var LiveLabAudio = require('./../lib/LiveLabAudio.js')
 
 module.exports = uiModel
-
-const Audio = new LiveLabAudio()
 
 function uiModel (state, bus) {
   state.ui = xtend({
@@ -57,11 +54,6 @@ function uiModel (state, bus) {
   bus.on('ui:addPeer', function (opts) {
     var vol = 0.0
     if (opts.peerId === state.user.uuid) vol = 0.0
-  //  var audio = opts
-  //  var audio = null
-    // if(opts.defaultAudio != null){
-    //   audio = Audio.addTrack(opts.defaultAudio, vol)
-    // }
     if (state.ui.communication[opts.peerId]) {
       state.ui.communication[opts.peerId].volume = vol
     } else {
@@ -73,12 +65,6 @@ function uiModel (state, bus) {
     console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
 
   })
-
-  // bus.on('ui:addAudio', function (opts) {
-  //   console.log('ADDING AUDIO', opts, state.ui.communication)
-  // //  var audioEl = Audio.addTrack(opts.track, state.ui.communication[opts.peerId].volume)
-  //   state.ui.communication[opts.peerId].audioEl = audioEl
-  // })
 
   bus.on('ui:toggleFullscreen', function () {
     state.ui.windows.fullscreen = !state.ui.windows.fullscreen
@@ -92,7 +78,6 @@ function uiModel (state, bus) {
 
   bus.on('ui:openWindow', function (index) {
     if (state.ui.windows[index].track === null) {
-      // console.log("user default", state.peers, state.user.uuid)
       var trackId = state.peers.byId[state.user.uuid].defaultTracks.video
       state.ui.windows[index].track = state.media.byId[trackId].track
     }
@@ -106,28 +91,16 @@ function uiModel (state, bus) {
   })
 
   bus.on('ui:toggleCommunicationVolume', function (peerId) {
-    //console.log("setting volume", state.ui.communication, peerId)
     state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
-  //  state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
     bus.emit('render')
   })
 
-  // bus.on('ui:initCommunicationAudio', function () {
-  //   state.peers.all.forEach((peerId) => {
-  //       var audioId = state.peers.byId[peerId].defaultTracks.audio
-  //       var track = state.media.byId[audioId]
-  //       addAudioTrack(track)
-  //   })
-  // })
-
   bus.on('ui:removePeer', function (peerId) {
-  //  document.body.removeChild(state.ui.communication[peerId].audioEl)
     delete state.ui.communication[peerId]
   })
 
   bus.on('ui:setInspectMedia', function (mediaId) {
     state.ui.inspector = mediaId
-    // console.log('PEER CONNECTION', state.ui.inspector)
     bus.emit('render')
   })
 

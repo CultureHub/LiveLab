@@ -1,5 +1,4 @@
 const enumerateDevices = require('enumerate-devices')
-const constraintsJSON = require('./availableConstraints.json')
 const getUserMedia = require('getusermedia')
 const Screen = require('./screenmedia.js')
 
@@ -10,6 +9,7 @@ module.exports = devicesModel
 function devicesModel (state, bus) {
   // object representing the user's input and output devices
   state.devices = xtend({
+    // input and output devices that the user has available
     videoinput: {
       byId: {},
       all: []
@@ -26,21 +26,7 @@ function devicesModel (state, bus) {
       byId: {},
       all: []
     },
-    // addBroadcast: {
-    //   active: false,
-    //   kind: "audio",
-    //   name: "",
-    //   errorMessage: "",
-    //   kinds: {
-    //     audio: {
-    //       deviceId: null
-    //     },
-    //     video: {
-    //       deviceId: null
-    //     }
-    //   },
-    //   previewTrack: null
-    // },
+    // information about preview stream
     default: {
       name: 'default',
       inputDevices: {
@@ -72,14 +58,14 @@ function devicesModel (state, bus) {
   // TO DO: put this function somewhere else
   window.onload = function () {
     getDevices()
-  //  loadConstraints()
+    //  loadConstraints()
     //check whether screen share extension is installed OR using nw.js version
     // @to do: add screen share code
-  //  if(sessionStorage.getScreenMediaJSExtensionId || typeof nw == "object"){
-  //     state.devices.addBroadcast.kinds.screen =  {
-  //       deviceId: null
-  //     }
-  // }
+    //  if(sessionStorage.getScreenMediaJSExtensionId || typeof nw == "object"){
+    //     state.devices.addBroadcast.kinds.screen =  {
+    //       deviceId: null
+    //     }
+    // }
     bus.emit('peers:updatePeer', {
       peerId: state.user.uuid
     })
@@ -89,7 +75,6 @@ function devicesModel (state, bus) {
     updateLocalPreview('video')
     state.devices.default.name = 'vid' + state.peers.byId[state.user.uuid].streams.length
     state.devices.default.constraints.isOpen = !state.devices.default.constraints.isOpen
-  //  state.devices.default.add.isOpen = !state.devices.default.constraints.isOpen
     bus.emit('render')
   })
 
@@ -136,7 +121,7 @@ function devicesModel (state, bus) {
               }
               state.devices.default.previewTracks[kind] = track
               state.devices.default.trackInfo[kind] = track.getSettings()
-            //  console.log('DEVICES', state.devices)
+              //  console.log('DEVICES', state.devices)
             })
           } else {
             //to do: do something with error!
@@ -151,9 +136,9 @@ function devicesModel (state, bus) {
   bus.on('devices:startCall', function ()  {
     var stream = getStreamFromPreviewTracks()
     bus.emit('media:addStream', {
-  //    track: track,
+      //    track: track,
       stream: stream,
-    //  trackId: stream.id,
+      //  trackId: stream.id,
       streamId: stream.id,
       peerId: state.user.uuid,
       settings: getSettingsFromStream(stream),
@@ -164,25 +149,18 @@ function devicesModel (state, bus) {
   })
 
   bus.on('devices:addNewMediaToBroadcast', function ({isDefault = false} = {}) {
-  //  if(state.devices.addBroadcast.kind == "screen"){
-
-  //    console.log("track is", track)
-      var stream = getStreamFromPreviewTracks()
-      bus.emit('media:addStream', {
-    //    track: track,
-        stream: stream,
-      //  trackId: stream.id,
-        streamId: stream.id,
-        peerId: state.user.uuid,
-        isDefault: isDefault,
-        name: state.devices.default.name,
-        settings: getSettingsFromStream(stream)
-      })
-      state.devices.default.constraints.isOpen = false
-    //  bus.emit('user:updateBroadcastStream')
-    //  var stream = new MediaStream([track])
-      bus.emit('user:addStream', stream)
-      bus.emit('render')
+    var stream = getStreamFromPreviewTracks()
+    bus.emit('media:addStream', {
+      stream: stream,
+      streamId: stream.id,
+      peerId: state.user.uuid,
+      isDefault: isDefault,
+      name: state.devices.default.name,
+      settings: getSettingsFromStream(stream)
+    })
+    state.devices.default.constraints.isOpen = false
+    bus.emit('user:addStream', stream)
+    bus.emit('render')
   })
 
   function getStreamFromPreviewTracks() {
@@ -198,39 +176,35 @@ function devicesModel (state, bus) {
 
 
 
-    bus.on('devices:updateBroadcastConstraint', function(obj){
-  //    xtend(state.devices.default.constraints[obj.kind].kinds[state.devices.addBroadcast.kind][key]
-
-      state.devices.default.constraints[obj.kind][obj.constraint] = obj.value
-      //updateLocalPreview('video')
-      state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind])
-      .then(() => {
-          state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-           bus.emit('render')
-       // Do something with the track such as using the Image Capture API.
-     })
-     .catch(e => {
-       // The constraints could not be satisfied by the available devices.
-       // @to do: share error message
-       console.log('constraints not satisfied', e)
-       state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-        bus.emit('render')
-     })
-
+  bus.on('devices:updateBroadcastConstraint', function(obj){
+    state.devices.default.constraints[obj.kind][obj.constraint] = obj.value
+    state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind])
+    .then(() => {
+      state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
+      bus.emit('render')
     })
+    .catch(e => {
+      // The constraints could not be satisfied by the available devices.
+      // @to do: share error message
+      console.log('constraints not satisfied', e)
+      state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
+      bus.emit('render')
+    })
+
+  })
 
 
   /** Helper functions for dealing with devices, get user media, and constraints **/
 
   function getLocalMedia(constraints, callback) {
-  //  console.log('CONSTRAINTS', constraints)
+    //  console.log('CONSTRAINTS', constraints)
     getUserMedia(constraints, function (err, stream) {
       if (err) {
         callback(err, null)
         // TO DO: do something about error
       } else {
         window.localStream = stream
-      //  console.log(window.localStream)
+        //  console.log(window.localStream)
         callback(null, stream)
       }
       bus.emit('render')
@@ -274,7 +248,7 @@ function devicesModel (state, bus) {
 //
 
 function getConstraintsFromSettings(settings, callback) {
-//  console.log('FORMATING CONSTRAINTS', settings)
+  //  console.log('FORMATING CONSTRAINTS', settings)
   var allConstraints = {}
   var userConstraints = {}
   if(settings.deviceId===null) {
@@ -292,16 +266,6 @@ function getConstraintsFromSettings(settings, callback) {
     Object.keys(settings).forEach((key) => {
       userConstraints[key] = settings[key]
     })
-    // for(var key in settings){
-    //   //if the user has specified a value for a particular constraint, pass it along to getusermedia.
-    //   //for right now, only specifies "ideal" value, device does the best it can to meet constraints.
-    //   // see https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#Applying_constraints
-    //   console.log(key)
-    //   if(settings[key] && settings[key].value){
-    //     userConstraints[key] = value
-    //   }
-    //     console.log(userConstraints)
-    // }
 
     var type = settings.kind === "audio" ? "audio" : "video"
     allConstraints[type] = userConstraints
@@ -310,7 +274,7 @@ function getConstraintsFromSettings(settings, callback) {
     } else {
       allConstraints.audio = false
     }
-//    console.log('CONSTRAINTS', allConstraints)
+
     callback(null, allConstraints)
   }
 }
@@ -319,198 +283,8 @@ function getSettingsFromStream(stream) {
   var settings = {}
   if (stream && stream !== null) {
     stream.getTracks().forEach((track) =>
-      settings[track.kind] = track.getSettings()
-    )
-  }
-  return settings
+    settings[track.kind] = track.getSettings()
+  )
 }
-
-// /// OLD code from add broadcast
-// /**
-// ** UI event handlers for Add Broadcast Media Pop-up
-// **/
-//
-// bus.on('devices:setBroadcastName', function(name){
-//   state.devices.addBroadcast.name = name
-//   bus.emit('render')
-// })
-//
-// bus.on('devices:updateBroadcastDevice', function(obj){
-//   xtend(state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind], obj)
-//   bus.emit('render')
-// })
-
-// bus.on('devices:toggleAddBroadcast', function(val){
-//   state.devices.addBroadcast.active = val
-//   state.devices.addBroadcast.errorMessage = ""
-//   //if closing window, stop active preview stream
-//   if(val===false){
-//     if(state.devices.addBroadcast.previewTrack !== null) {
-//       state.devices.addBroadcast.previewTrack.stop()
-//       state.devices.addBroadcast.previewTrack = null
-//     }
-//   }
-//
-//   bus.emit('render')
-// })
-//
-// bus.on('devices:setBroadcastKind', function(val){
-//   state.devices.addBroadcast.kind = val
-//   if(state.devices.addBroadcast.previewTrack!==null){
-//     state.devices.addBroadcast.previewTrack.stop()
-//     state.devices.addBroadcast.previewTrack = null
-//   }
-//   bus.emit('render')
-//   if(val==="screen"){
-//     if(typeof nw == "object"){
-//       nw.Screen.chooseDesktopMedia(["window","screen"], (streamId)=>{
-//         state.devices.addBroadcast.kinds.screen.deviceId= streamId
-//         bus.emit('devices:updateBroadcastPreview')
-//       })
-//     } else {
-//       // Screen().then(function(response) {
-//       //   console.log("screen", response)
-//       // })
-//       chrome.runtime.sendMessage(sessionStorage.getScreenMediaJSExtensionId,
-//               {type:'getScreen', id: 1}, null,
-//               function (data) {
-//                   console.log("getting screen", data)
-//                   if (!data || data.sourceId === '') { // user canceled
-//                       var error = new Error('NavigatorUserMediaError');
-//                       error.name = 'NotAllowedError';
-//                       callback(error);
-//                   } else {
-//                     console.log("GOT INFO", data)
-//                     state.devices.addBroadcast.kinds.screen.deviceId= data.sourceId
-//                     bus.emit('devices:updateBroadcastPreview')
-//                   }
-//                 })
-//                       // constraints = (hasConstraints && constraints) || {audio: false, video: {
-//                       //     mandatory: {
-//                       //         chromeMediaSource: 'desktop',
-//                       //         maxWidth: window.screen.width,
-//                       //         maxHeight: window.screen.height,
-//                       //         maxFrameRate: 3
-//                       //     }
-//                       // }};
-//
-//
-//     }
-//
-//   }
-//   // to do: if screen, show screen popup
-//
-//   //set broadcast to default on c
-//
-// //  bus.emit('render')
-// })
-//
-// //add available constraint options to devices model
-// function loadConstraints(){
-//   // xtend(state.devices.addBroadcast.kinds.audio, constraintsJSON.audio)
-//   // xtend(state.devices.addBroadcast.kinds.video, constraintsJSON.video)
-// }
-//
-// bus.on('devices:updateBroadcastPreview', function () {
-//   updateBroadcastPreview(function(err, track){
-//     bus.emit('render')
-//   })
-// })
-
-// function updateBroadcastPreview(callback){
-//   state.devices.addBroadcast.errorMessage = ""
-//   getConstraintsFromSettings(xtend({}, state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind], {kind: state.devices.addBroadcast.kind}), function (err, constraints) {
-//     if(err){
-//       state.devices.addBroadcast.errorMessage = err
-//       callback(err, null)
-//     } else {
-//       getLocalMedia(constraints, function(err, stream){
-//         if(err) {
-//           state.devices.addBroadcast.errorMessage = err
-//           callback(err, null)
-//         } else {
-//           var tracks = stream.getTracks()
-//           tracks.forEach(function (track) {
-//             if(state.devices.addBroadcast.previewTrack!==null){
-//               state.devices.addBroadcast.previewTrack.stop()
-//             }
-//             state.devices.addBroadcast.previewTrack = track
-//           })
-//           callback(null, state.devices.addBroadcast.previewTrack)
-//         }
-//       })
-//     }
-//   })
-// }
-
-
-  // bus.on('devices:addNewMediaToBroadcast', function () {
-  //   if(state.devices.addBroadcast.kind == "screen"){
-  //     var track = state.devices.addBroadcast.previewTrack.clone()
-  //     console.log("track is", track)
-  //     bus.emit('media:addTrack', {
-  //       track: track,
-  //       peerId: state.user.uuid,
-  //       isDefault: false,
-  //       name: state.devices.addBroadcast.name
-  //     })
-  //     bus.emit('user:updateBroadcastStream')
-  //     bus.emit('render')
-  //   } else {
-  //     getConstraintsFromSettings(xtend({}, state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind], {kind: state.devices.addBroadcast.kind}), function (err, constraints) {
-  //       if(err){
-  //         state.devices.addBroadcast.errorMessage = err
-  //       } else {
-  //         getLocalMedia(constraints, function(err, stream){
-  //           if(err){
-  //             state.devices.addBroadcast.errorMessage = err
-  //             console.log("LOCAL MEDIA ERROR", err)
-  //             //callback(err, null)
-  //           } else {
-  //             var tracks = stream.getTracks()
-  //             bus.emit('media:addTrack', {
-  //               track: tracks[0],
-  //               peerId: state.user.uuid,
-  //               isDefault: false,
-  //               name: state.devices.addBroadcast.name
-  //             })
-  //             bus.emit('user:updateBroadcastStream')
-  //           }
-  //           bus.emit('render')
-  //         })
-  //       }
-  //     })
-  //   }
-  // })
-
-  //accepts an object containing the properties to update and their new values. e.g.
-  // { echoCancellation : { value: true}}
-  // bus.on('devices:updateBroadcastConstraints', function(obj){
-  //   Object.keys(obj).forEach(key =>
-  //     {
-  //       xtend(state.devices.addBroadcast.kinds[state.devices.addBroadcast.kind][key], obj[key])
-  //     }
-  //   )
-  //   bus.emit('render')
-  // })
-//
-//   bus.on('devices:updateBroadcastConstraint', function(obj){
-// //    xtend(state.devices.default.constraints[obj.kind].kinds[state.devices.addBroadcast.kind][key]
-//
-//     state.devices.default.constraints[obj.kind][obj.constraint] = obj.value
-//     //updateLocalPreview('video')
-//     state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind])
-//     .then(() => {
-//         state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-//          bus.emit('render')
-//      // Do something with the track such as using the Image Capture API.
-//    })
-//    .catch(e => {
-//      // The constraints could not be satisfied by the available devices.
-//      // @to do: share error message
-//      console.log('constraints not satisfied', e)
-//      state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-//       bus.emit('render')
-//    })
-//
-//   })
+return settings
+}
