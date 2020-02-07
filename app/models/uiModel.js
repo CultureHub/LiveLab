@@ -121,7 +121,7 @@ function uiModel (state, bus) {
   // })
 
   bus.on('ui:removePeer', function (peerId) {
-    document.body.removeChild(state.ui.communication[peerId].audioEl)
+  //  document.body.removeChild(state.ui.communication[peerId].audioEl)
     delete state.ui.communication[peerId]
   })
 

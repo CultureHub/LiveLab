@@ -21,8 +21,8 @@ module.exports = mediaModel
 
 function mediaModel (state, bus) {
   state.media = xtend({
-    byId: {},
-    all: []
+    byId: {}//,
+    // all: []
   }, state.media)
 
 
@@ -87,9 +87,9 @@ function mediaModel (state, bus) {
       var video = opts.stream.getVideoTracks()
       if (video.length > 0) hasVideo = true
     }
-    if (state.media.all.indexOf(id) < 0) {
-      state.media.all.push(id)
-    }
+    // if (state.media.all.indexOf(id) < 0) {
+    //   state.media.all.push(id)
+    // }
 
     bus.emit('peers:addStreamToPeer', {
       streamId: id,
@@ -162,11 +162,11 @@ function mediaModel (state, bus) {
   bus.on('media:removeStream', function (streamId) {
     bus.emit('show:streamRemoved', streamId)
     delete state.media.byId[streamId]
-    var index = state.media.all.indexOf(streamId)
-    if (streamId === state.ui.inspector.streamId) {
-      bus.emit('ui:updateInspectorStream', {streamId: null, pc: null})
+  //  var index = state.media.all.indexOf(streamId)
+    if (streamId === state.ui.inspector) {
+      bus.emit('ui:setInspectMedia', null)
     }
-    if (index > -1) state.media.all.splice(index, 1)
+  //  if (index > -1) state.media.all.splice(index, 1)
     bus.emit('render')
   })
 

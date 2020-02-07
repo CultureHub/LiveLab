@@ -91,7 +91,7 @@ function peersModel (state, bus) {
     state.peers.byId[peerId].streams.forEach(function (streamId) {
       bus.emit('media:removeStream', streamId)
     })
-    state.peers.byId[peerId].tracks = []
+    state.peers.byId[peerId].streams = []
     var index = state.peers.all.indexOf(peerId)
     if (index > -1) state.peers.all.splice(index, 1)
     delete state.peers.byId[peerId]
