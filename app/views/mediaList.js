@@ -38,15 +38,15 @@ function mediaListView (state, emit) {
       <div style="max-height:180px;overflow-y:auto">
         <table cellspacing="0" cellpadding="0" >
           <tbody>
-          ${state.media.all.map((id) => {
+          ${Object.keys(state.media.byId).map((id) => {
             var media = state.media.byId[id]
-            var className = id === state.ui.inspector.trackId ? 'bg-gray pointer' : 'dim pointer'
+            var className = id === state.ui.inspector ? 'bg-gray pointer' : 'dim pointer'
             // console.log(id, state.ui.inspector.trackId)
             return html`
               <tr class=${className}
                   draggable="true"
                   style="height:20px"
-                  onclick=${() => { emit('user:setInspectMedia', id) }}
+                  onclick=${() => { emit('ui:setInspectMedia', id) }}
                   ondragstart=${() => { emit('ui:dragStart', id) }}
               >
                 <td class="pa1" style="width:20%;height:20px">${state.peers.byId[media.peerId].nickname}</td>

@@ -13,11 +13,7 @@ function uiModel (state, bus) {
     tabs: ['Communication', 'Show Control'],
     selectedTab: 0,
     communication: {},
-    inspector: {
-      trackId: null,
-      pc: null, // peer connection to be inspected
-      selectedTab: 'track' // which inspector tab is currently open
-    },
+    inspector: null,
     dragging: null,
     windows:
     [
@@ -129,8 +125,8 @@ function uiModel (state, bus) {
     delete state.ui.communication[peerId]
   })
 
-  bus.on('ui:updateInspectorTrack', function (opts) {
-    state.ui.inspector = xtend(state.ui.inspector, opts)
+  bus.on('ui:setInspectMedia', function (mediaId) {
+    state.ui.inspector = mediaId
     // console.log('PEER CONNECTION', state.ui.inspector)
     bus.emit('render')
   })
