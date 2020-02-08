@@ -29,12 +29,18 @@ function addBroadcast (devices, emit, opts) {
       header: "Media Settings",
       contents: html`<div id="add broadcast" class="pa3 f6 fw3">
 
-      ${input('name', 'name', {
-        value:bState.name,
-        onkeyup: (e) => {
-          emit('devices:setBroadcastName', e.target.value)
-        }
-      })}
+            ${audioDropdown.render({
+              value: 'Audio:  ' + (defaultAudio === null ? '' : audioinput.byId[defaultAudio].label),
+              options: audioinput.all.map((id) => (
+                {
+                  value: id,
+                  label: audioinput.byId[id].label
+                }
+              )),
+              onchange: (value) => {
+                emit('devices:setDefaultAudio', value)
+              }
+            })}
             ${videoDropdown.render({
               value: 'Video:  ' + (defaultVideo === null ? '' : videoinput.byId[defaultVideo].label),
               options: videoinput.all.map((id) => (
@@ -47,7 +53,7 @@ function addBroadcast (devices, emit, opts) {
                 emit('devices:setDefaultVideo', value)
               }
             })}
-          
+
             <div class="w-100 db flex mt4">
               <div class="w-60 h5 dib fl">
                ${Video({
