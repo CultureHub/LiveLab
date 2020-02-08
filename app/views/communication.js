@@ -48,7 +48,6 @@ function communicationView (state, emit) {
                 </i>`:null}
                 ${state.peers.byId[peerIndex].nickname}</div>
         </div>`
-      }
     } else {
       return null
     }
