@@ -26,7 +26,7 @@ function communicationView (state, emit) {
           //  track: (trackId in state.media.byId)  ? state.media.byId[trackId].track : null,
             stream: state.media.byId[defaultStream].stream,
             id: state.media.byId[defaultStream].stream.id,
-            includeAudio: true,
+            includeAudio: false,
             volume: state.ui.communication[peerIndex].volume
           })
         }
