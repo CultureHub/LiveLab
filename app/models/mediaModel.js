@@ -34,16 +34,16 @@ function mediaModel (state, bus) {
     var hasVideo = false
     if (opts.isDefault) {
       state.media.byId[id].name = 'default'
-      var audio = opts.stream.getAudioTracks()
-      if (audio.length > 0) {
-        hasAudio = true
-        bus.emit('ui:addAudio',
-        {
-          track: audio[0],
-          peerId: opts.peerId
-        }
-      )
     }
+    var audio = opts.stream.getAudioTracks()
+    if (audio.length > 0) {
+      hasAudio = true
+      bus.emit('ui:addAudio',
+      {
+        track: audio[0],
+        peerId: opts.peerId
+      }
+    )
     var video = opts.stream.getVideoTracks()
     if (video.length > 0) hasVideo = true
   }

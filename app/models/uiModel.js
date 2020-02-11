@@ -2,8 +2,11 @@
 // to do: unify ui information in this model
 // const MAX_NUM_PEERS = 8 // to do: put this all in one place
 var xtend = Object.assign
+var LiveLabAudio = require('./../lib/LiveLabAudio.js')
 
 module.exports = uiModel
+
+const Audio = new LiveLabAudio()
 
 function uiModel (state, bus) {
   state.ui = xtend({
@@ -58,11 +61,15 @@ function uiModel (state, bus) {
       state.ui.communication[opts.peerId].volume = vol
     } else {
       state.ui.communication[opts.peerId] = {
-        volume: vol//,
-      //  audioEl: audio
+        volume: vol
       }
     }
-  //  console.log("ADDING PEER COMMUNICATION", state.ui.communication[opts.peerId])
+  })
+
+  bus.on('ui:addAudio', function(opts) {
+    console.log('adding audio',opts)
+    var audioEl = Audio.addTrack(opts.track, state.ui.communication[opts.peerId].volume)
+    state.ui.communication[opts.peerId].audioEl = audioEl
   })
 
   bus.on('ui:toggleFullscreen', function () {
@@ -91,10 +98,12 @@ function uiModel (state, bus) {
 
   bus.on('ui:toggleCommunicationVolume', function (peerId) {
     state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
+    state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
     bus.emit('render')
   })
 
   bus.on('ui:removePeer', function (peerId) {
+    if(state.ui.communication[peerId].audioEl) document.body.removeChild(state.ui.communication[peerId].audioEl)
     delete state.ui.communication[peerId]
   })
 
