@@ -49,6 +49,10 @@ npm run watch
 
 # Changelog
 
+## [1.0.2] - 2020-02-11
+### Changed
+- Updated choo devtools 
+
 ## [1.0.1] - 2020-02-11
 ### Added
 - Version number on login page
