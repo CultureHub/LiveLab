@@ -1,12 +1,10 @@
 /* global nw */
-const expose = require('choo-expose')
-const log = require('choo-log')
+var devtools = require('choo-devtools')
 const choo = require('choo')
 
 const app = choo()
 
-app.use(log())
-app.use(expose())
+app.use(devtools())
 
 // console.log("type", typeof nw)
 if(typeof nw === 'object'){
