@@ -46,3 +46,13 @@ To develop either version, open a separate command line and type
 ```
 npm run watch
 ```
+
+# Changelog
+
+## [1.0.1] - 2020-02-11
+### Added
+- Version number on login page
+- Changelog
+
+### Fixed
+- Audio turning off when show control open
