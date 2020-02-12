@@ -47,7 +47,9 @@ function mediaListView (state, emit) {
           <tbody>
           ${Object.keys(state.media.byId).map((id) => {
             var media = state.media.byId[id]
+
             var className = id === state.ui.inspector ? 'bg-gray pointer' : 'dim pointer'
+            if(state.peers.byId[media.peerId].requestMedia === false) className += ' green'
             return html`
               <tr class=${className}
                   draggable="true"
