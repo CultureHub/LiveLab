@@ -73,6 +73,8 @@ app.route('/public/index.html', require('./views/main.js'))
 // routes for github pages, starting with /LiveLab
 app.route('/LiveLab', require('./views/main.js'))
 app.route('/LiveLab#sendonly', require('./views/sendOnly/landing.js'))
+app.route('/LiveLab/sendonly', require('./views/sendOnly/landing.js'))
+
 
 
 app.mount('body div')

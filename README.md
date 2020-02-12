@@ -49,9 +49,19 @@ npm run watch
 
 # Changelog
 
+## [1.1.1] - 2020-02-12
+### Fixed
+ - Updated route for gh-pages
+ 
+## [1.1.0] - 2020-02-12
+### Added
+- Interface for sending media without receiving, with separate route at #sendonly
+- Flag for each peer 'requestMedia', indicating whether that peer should receive media
+- Peers no longer send media by default, only when requested. (breaking change / not compatible with earlier versions)
+
 ## [1.0.2] - 2020-02-11
 ### Changed
-- Updated choo devtools 
+- Updated choo devtools
 
 ## [1.0.1] - 2020-02-11
 ### Added
