@@ -2,7 +2,7 @@
 var devtools = require('choo-devtools')
 const choo = require('choo')
 
-const app = choo()
+const app = choo({hash: true})
 
 app.use(devtools())
 
@@ -58,9 +58,13 @@ app.use(require('./models/showModel.js'))
 
 
 // routing is different in nwjs vs browser version...include both routes to cover bases
-app.route('/public/index.html', require('./views/main.js'))
-app.route('', require('./views/main.js'))
-app.route('/LiveLab', require('./views/main.js'))
+// app.route('/public/index.html', require('./views/main.js'))
+app.route('/', require('./views/main.js'))
+// app.route('/LiveLab', require('./views/main.js'))
+//
+// app.route('/public/index.html/send-only', require('./views/sendOnly/landing.js'))
+// app.route('/LiveLab/send-only', require('./views/sendOnly/landing.js'))
+app.route('#sendOnly', require('./views/sendOnly/landing.js'))
 
 app.mount('body div')
 

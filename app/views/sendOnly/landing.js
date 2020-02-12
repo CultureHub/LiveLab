@@ -1,11 +1,11 @@
 'use strict'
 
 const html = require('choo/html')
-const input = require('./components/input.js')
-const Dropdown = require('./components/dropdown.js')
-const Video = require('./components/funvideocontainer.js')
+const input = require('./../components/input.js')
+const Dropdown = require('./../components/dropdown.js')
+const Video = require('./../components/funvideocontainer.js')
 
-const MediaSettings = require('./mediaSettings.js')
+const MediaSettings = require('./../mediaSettings.js')
 
 module.exports = loginView
 

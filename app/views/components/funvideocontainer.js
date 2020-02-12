@@ -35,7 +35,7 @@ function initMedia(props, el) {
 }
 
 VideoContainer.on('update', function (ctx, props) {
-  console.log('updating video', ctx, props)
+  //console.log('updating video', ctx, props)
   if (props[0].id) {
     if (props[0].id !== ctx.prev.id) {
       if (props[0].id !== null) {

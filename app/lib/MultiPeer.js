@@ -52,6 +52,8 @@ MultiPeer.prototype.sendToPeer = function (peerId, data) {
 MultiPeer.prototype.sendStreamToPeer = function (stream, peerId) {
   if (peerId in this.peers) {
     this.peers[peerId].addStream(stream)
+  } else {
+    console.log('PEER NOT FOUND', peerId)
   }
 }
 
@@ -154,9 +156,9 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', { id: id, pc: p._pc})
   }.bind(this, _id))
 
-  p.on('error', function(error, info) {
-    console.log(error, info)
-  })
+  // p.on('error', function(error, info) {
+  //   console.log(error, info)
+  // })
 
   p.on('data', function (id, data) {
   //  console.log('data', id)

@@ -82,6 +82,12 @@ function userModel (state, bus) {
       userData: {
         uuid: state.user.uuid,
         nickname: state.user.nickname
+      },
+      peerOptions: {
+        offerOptions: {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true
+         }
       }
     })
 
@@ -151,7 +157,6 @@ function userModel (state, bus) {
           } else if (data.data.type === 'requestMedia') {
             var userInfo = state.peers.byId[state.user.uuid]
             var infoObj = {}
-
             userInfo.streams.forEach((streamId) => {
           //    infoObj[streamId] = xtend({}, state.media.byId[streamId])
               multiPeer.sendStreamToPeer(state.media.byId[streamId].stream, data.id)
