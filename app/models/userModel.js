@@ -72,7 +72,8 @@ function userModel (state, bus) {
 
     bus.emit('peers:updatePeer', {
       peerId: state.user.uuid,
-      nickname: state.user.nickname
+      nickname: state.user.nickname,
+      requestMedia: true
     })
 
     multiPeer = new MultiPeer({
@@ -117,12 +118,16 @@ function userModel (state, bus) {
 
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
       bus.emit('peers:updatePeer', {peerId: id, pc: pc})
+      // if user is set to receive media, request from remote peer
+      if (state.peers.byId[state.user.uuid].requestMedia === true) {
+        multiPeer.sendToPeer(id, JSON.stringify({ type: 'requestMedia', message: null }))
+      }
       var userInfo = state.peers.byId[state.user.uuid]
       var infoObj = {}
-
+      //
       userInfo.streams.forEach((streamId) => {
         infoObj[streamId] = xtend({}, state.media.byId[streamId])
-        multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
+      //  multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
         delete infoObj[streamId].stream
       })
 
@@ -142,6 +147,15 @@ function userModel (state, bus) {
             if('osc' in data.data.message) bus.emit('osc:updateRemoteOscInfo', {
               osc: data.data.message.osc,
               peerId: data.id
+            })
+          } else if (data.data.type === 'requestMedia') {
+            var userInfo = state.peers.byId[state.user.uuid]
+            var infoObj = {}
+
+            userInfo.streams.forEach((streamId) => {
+          //    infoObj[streamId] = xtend({}, state.media.byId[streamId])
+              multiPeer.sendStreamToPeer(state.media.byId[streamId].stream, data.id)
+        //      delete infoObj[streamId].stream
             })
           } else if(data.data.type=== 'chatMessage'){
            bus.emit('ui:receivedNewChat', data.data.message)

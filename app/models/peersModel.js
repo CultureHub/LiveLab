@@ -33,7 +33,8 @@ function peersModel (state, bus) {
       peerId: peer.peerId,
       streams: [],
       nickname: null,
-      defaultStream: null
+      defaultStream: null,
+      requestMedia: true // flag indicating whether the peer should receive media from other peers
     }, state.peers.byId[peer.peerId], peer)
 
     console.log('NEW  PEER INFO',state)
