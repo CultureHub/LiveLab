@@ -67,13 +67,13 @@ function userModel (state, bus) {
 
 
   // Initiate connection with signalling server
-  bus.on('user:join', function (stream) {
+  bus.on('user:join', function (opts) {
     localStorage.setItem('uuid', state.user.uuid)
 
     bus.emit('peers:updatePeer', {
       peerId: state.user.uuid,
       nickname: state.user.nickname,
-      requestMedia: true
+      requestMedia: opts.requestMedia
     })
 
     multiPeer = new MultiPeer({

@@ -35,7 +35,7 @@ function loginView (state, emit) {
         <div class="w-40 center">
           <legend class="f1 fw6 ph0 mh0">LIVE LAB </legend>
           <legend class="mb3">v${state.user.version}</legend>
-          <legend class="f4 fw6 ph0 mh0">Join Session</legend>
+          <legend class="f4 fw6 ph0 mh0">SEND MEDIA</legend>
           ${input('Nickname', 'how you will appear to everyone else', {
             value: state.peers.byId[state.user.uuid].nickname,
             onkeyup: setNickname
@@ -78,7 +78,7 @@ function loginView (state, emit) {
             }
           })}
 
-          <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:startCall',  {requestMedia: true}))}>Join</div>
+          <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:startCall', {requestMedia: false}))}>Join</div>
           <div> ${state.user.statusMessage} </div>
 
           ${MediaSettings(state.devices, emit, { showElement: state.devices.default.constraints.isOpen})}

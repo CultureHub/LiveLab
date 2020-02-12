@@ -133,7 +133,7 @@ function devicesModel (state, bus) {
     })
   }
 
-  bus.on('devices:startCall', function ()  {
+  bus.on('devices:startCall', function (opts)  {
     var stream = getStreamFromPreviewTracks()
     bus.emit('media:addStream', {
       //    track: track,
@@ -145,7 +145,7 @@ function devicesModel (state, bus) {
       isDefault: true,
       name: 'default'
     })
-    bus.emit('user:join')
+    bus.emit('user:join', opts)
   })
 
   bus.on('devices:addNewMediaToBroadcast', function ({isDefault = false} = {}) {
