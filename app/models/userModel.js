@@ -13,7 +13,7 @@ function userModel (state, bus) {
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     room: 'elephants',
     server: 'https://livelab.app:6643',
-    version: '1.0.2',
+    version: '1.1.0',
     loggedIn: false,
     nickname: "tong",
     statusMessage: '',

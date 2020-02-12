@@ -57,15 +57,22 @@ app.use(require('./models/oscModel.js'))
 app.use(require('./models/showModel.js'))
 
 
-// routing is different in nwjs vs browser version...include both routes to cover bases
-// app.route('/public/index.html', require('./views/main.js'))
+// Routing
+// base URL is different for nw.js, gh-pages, and local versions
+// @todo: how to make this more concise / not repeat routes?
+
 app.route('/', require('./views/main.js'))
-// app.route('/LiveLab', require('./views/main.js'))
 //
-// app.route('/public/index.html/send-only', require('./views/sendOnly/landing.js'))
-// app.route('/LiveLab/send-only', require('./views/sendOnly/landing.js'))
+
 app.route('#sendOnly', require('./views/sendOnly/landing.js'))
+app.route('#sendonly', require('./views/sendOnly/landing.js'))
+
+// routes for nw.js
+app.route('/public/index.html', require('./views/main.js'))
+
+// routes for github pages, starting with /LiveLab
+app.route('/LiveLab', require('./views/main.js'))
+app.route('/LiveLab#sendonly', require('./views/sendOnly/landing.js'))
+
 
 app.mount('body div')
-
-// browserify test
