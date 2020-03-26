@@ -64,44 +64,20 @@ MultiPeer.prototype.addStream = function (stream) {
   })
 }
 
-// MultiPeer.prototype.reinitAll = function () {
-//   Object.keys(this.peers).forEach(function (id) {
-//     this.peers[id].destroy(function (e) {
-//     //  console.log("closed!", e)
-//       this.emit('new peer', {
-//         id: id
-//       })
-//       var newOptions = {
-//         initiator: true
-//       }
-//       if (this.stream != null) {
-//         newOptions.stream = this.stream
-//       } else {
-//         console.log('stream is null')
-//       }
-//       var options = extend(newOptions, this._peerOptions)
-//
-//       this.peers[id] = new SimplePeer(options)
-//       this._attachPeerEvents(this.peers[id], id)
-//
-//     }.bind(this))
-//   }.bind(this))
-//   //  this._connectToPeers.bind(this)
-// }
-
 // Once the new peer receives a list of connected peers from the server,
 // creates new simple peer object for each connected peer.
 MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
   this.emit('peers', peers)
-  //  console.log('servers', servers)
+
+  // If client receives a list of STUN and TURN servers from the server, use in signalling process.
   if (servers) {
     this._peerOptions.config = {
       iceServers: servers,
-      sdpSemantics: 'plan-b'
+    //  sdpSemantics: 'plan-b'
     }
   } else {
     this._peerOptions.config = {
-      sdpSemantics: 'plan-b'
+    //  sdpSemantics: 'plan-b'
     }
   }
   peers.forEach(function (id) {
@@ -156,53 +132,11 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', { id: id, pc: p._pc})
   }.bind(this, _id))
 
-  // p.on('error', function(error, info) {
-  //   console.log(error, info)
-  // })
+  p.on('error', function(error, info) {
+    console.log(error, info)
+  })
 
   p.on('data', function (id, data) {
-  //  console.log('data', id)
-
-    /* Modify to get bitrate---- Start */
-    // const sender = p._pc.getSenders()[1];
-    // let parameters = sender.getParameters();
-    // parameters.encodings = [{}];
-    // parameters.encodings[0].maxBitrate = 25 * 1000
-    // // sender.setParameters(parameters).then(()=>{console.log("hahaha")}).catch(e => console.error(e));
-    //
-    // window.setInterval(() => {
-    //   if (!sender) {
-    //     return;
-    //   }
-    //   sender.getStats().then(res => {
-    //     res.forEach(report => {
-    //       let bytes;
-    //       let packets;
-    //       if (report.type === 'outbound-rtp') {
-    //         if (report.isRemote) {
-    //           return;
-    //         }
-    //         const now = report.timestamp;
-    //         bytes = report.bytesSent;
-    //         packets = report.packetsSent;
-    //         //   console.log("bytes" + bytes)
-    //         if (this.peersLastResult[id] && this.peersLastResult[id].has(report.id)) {
-    //           // calculate bitrate
-    //           const bitrate = 8 * (bytes - this.peersLastResult[id].get(report.id).bytesSent) /
-    //             (now - this.peersLastResult[id].get(report.id).timestamp);
-    //             //this line below console log current bitrate
-    //             //console.log("local bitrate: "+ bitrate)
-    //           this.peersBitrate[id] = bitrate
-    //           document.getElementById('bitrate').innerHTML = 'Current Local Bitrate: '+bitrate+' bps'
-    //         }
-    //       }
-    //     });
-    //     this.peersLastResult[id] = res;
-    //   });
-    // }, 1000);
-    /* Modify to get bitrate---- End */
-
-
     this.emit('data', {
       id: id,
       data: JSON.parse(data)
