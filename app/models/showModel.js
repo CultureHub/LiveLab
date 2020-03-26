@@ -48,7 +48,7 @@ function showModel (state, bus) {
     state.show.displays = state.show.displays.map((display) => {
       let obj = Object.assign({}, display)
       obj.streams = obj.streams.map((media) => {
-        console.log("checking " + media + streamId)
+      //  console.log("checking " + media + streamId)
         if(media && media.streamId) return media.streamId == streamId ? null : media
         return media
       }

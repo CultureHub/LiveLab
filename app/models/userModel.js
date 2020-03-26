@@ -11,8 +11,8 @@ function userModel (state, bus) {
   state.user = xtend({
     //uuid: localStorage.getItem('uuid') || shortid.generate(), // persistent local user id. If none is present in local storage, generate new one
     uuid: shortid.generate(), // for dev purposes, always regenerate id
-    room: 'elephants',
-    server: 'https://livelab.app:6643',
+    room: 'mongoose',
+    server: 'https://live-lab-v1.glitch.me',
     version: '1.1.1',
     loggedIn: false,
     nickname: "tong",
@@ -89,7 +89,7 @@ function userModel (state, bus) {
           offerToReceiveVideo: true
          }
       }
-    })
+    }, bus)
 
 
     //received initial list of peers from signalling server, update local peer information

@@ -66,18 +66,18 @@ class ShowWindow {
 
       window.vid = self.video
 
-      console.log('loaded video', self.video, self.video.videoWidth)
+      //console.log('loaded video', self.video, self.video.videoWidth)
 
 
   //  }
 
     self.win.document.body.onclick = function () {
-      console.log('click!')
+      //console.log('click!')
       self.win.document.body.removeChild(self.div)
       self.setStream(self.stream)
     }
     self.win.document.body.onkeydown = function(){
-      //console.log("key")
+      ////console.log("key")
       if(!self.fullscreen) {
         self.video.webkitRequestFullScreen()
         self.fullscreen = true
@@ -91,7 +91,7 @@ class ShowWindow {
     self.setOpacity(self.opacity)
     self.setStream(self.stream)
   }, 100)
-    //console.log('track is', this.track)
+    ////console.log('track is', this.track)
   }
 
   update(opts) {
@@ -102,7 +102,7 @@ class ShowWindow {
     if (!opts.stream) opts.stream = null
     if (opts.stream === null) opts.stream = {id :null}
 
-    console.log('UPDATE', opts, this.stream.id, opts.stream.id)
+    //console.log('UPDATE', opts, this.stream.id, opts.stream.id)
 
     if (opts.isOpen !== this.isOpen) {
       if(opts.isOpen === true) {
@@ -130,7 +130,7 @@ class ShowWindow {
   }
 
   setOpacity(opacity) {
-    console.log("setting opactity", opacity)
+    //console.log("setting opactity", opacity)
     this.video.style.opacity = parseFloat(opacity)/100
   }
   setStream(stream) {
@@ -142,7 +142,7 @@ class ShowWindow {
         // var tracks = []
         // tracks.push(track.track)
         // var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
-        // console.log('!! setting track ', track)
+        // //console.log('!! setting track ', track)
         this.video.srcObject = stream.stream
       }
     //  this.win.document.title = track.id
@@ -153,7 +153,7 @@ class ShowWindow {
 
   // to do
   setTitle(title) {
-    console.log('set title')
+    //console.log('set title')
     this.win.document.title = title
   }
 

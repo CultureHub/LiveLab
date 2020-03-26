@@ -49,10 +49,14 @@ npm run watch
 
 # Changelog
 
+## [1.1.2] - 2020-03-26
+### Changed
+  - Got rid of 'plan-b' specification to see whether affects signalling issues
+  
 ## [1.1.1] - 2020-02-12
 ### Fixed
  - Updated route for gh-pages
- 
+
 ## [1.1.0] - 2020-02-12
 ### Added
 - Interface for sending media without receiving, with separate route at #sendonly

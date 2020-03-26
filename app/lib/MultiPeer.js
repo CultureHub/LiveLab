@@ -6,7 +6,8 @@ var extend = Object.assign
 var events = require('events').EventEmitter
 var inherits = require('inherits')
 
-var MultiPeer = function (options) {
+var MultiPeer = function (options, emitter) {
+  this.emitter = emitter
   // connect to websocket signalling server. To DO: error validation
   this.signaller = io(options.server)
   this._userData = options.userData || null
@@ -53,7 +54,8 @@ MultiPeer.prototype.sendStreamToPeer = function (stream, peerId) {
   if (peerId in this.peers) {
     this.peers[peerId].addStream(stream)
   } else {
-    console.log('PEER NOT FOUND', peerId)
+  //  console.log('PEER NOT FOUND', peerId)
+    this.emitter.emit('log:warn', 'peer not found', peerId)
   }
 }
 
@@ -67,17 +69,19 @@ MultiPeer.prototype.addStream = function (stream) {
 // Once the new peer receives a list of connected peers from the server,
 // creates new simple peer object for each connected peer.
 MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
+  console.log(' PEERS ARE', peers)
+//  this.emitter.emit('log:info', 'connected to peers', peers)
   this.emit('peers', peers)
 
   // If client receives a list of STUN and TURN servers from the server, use in signalling process.
   if (servers) {
     this._peerOptions.config = {
       iceServers: servers,
-    //  sdpSemantics: 'plan-b'
+      sdpSemantics: 'plan-b'
     }
   } else {
     this._peerOptions.config = {
-    //  sdpSemantics: 'plan-b'
+      sdpSemantics: 'plan-b'
     }
   }
   peers.forEach(function (id) {
@@ -90,7 +94,8 @@ MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
     if (this.stream != null) {
       newOptions.stream = this.stream
     } else {
-      console.log('stream is null')
+    //  console.log('stream is null')
+      this.emitter.emit('log:warn', 'stream is null', id)
     }
     var options = extend(newOptions, this._peerOptions)
   //  console.log("options", options)
@@ -115,8 +120,9 @@ MultiPeer.prototype._handleSignal = function (data) {
 
 // handle events for each connected peer
 MultiPeer.prototype._attachPeerEvents = function (p, _id) {
+  var self = this
   p.on('signal', function (id, signal) {
-    console.log('signal')
+    //console.log('signal')
     //  console.log("peer signal sending over sockets", id, signal)
     this.signaller.emit('signal', {
       id: id,
@@ -132,9 +138,10 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', { id: id, pc: p._pc})
   }.bind(this, _id))
 
-  p.on('error', function(error, info) {
-    console.log(error, info)
-  })
+  // p.on('error', function(error, info) {
+  // //  console.log(error, info)
+  //   self.emitter.emit('log:error', 'RTC error', error, info)
+  // })
 
   p.on('data', function (id, data) {
     this.emit('data', {
@@ -144,7 +151,7 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
   }.bind(this, _id))
 
   p.on('close', function (id) {
-    console.log('CLOSED')
+    //console.log('CLOSED')
     delete(this.peers[id])
     this.emit('close', id)
   }.bind(this, _id))

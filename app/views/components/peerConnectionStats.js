@@ -4,7 +4,7 @@
 // questions -- what other information is useful from these reports?
 // How to correlate the information contained in these reports to the tracks or streams that they apply to?
 // Does trackIdentifier correspond to trackId?
-//
+// @todo: clear interval when element is unloaded
 
 var html = require('choo/html')
 var Component = require('choo/component')
@@ -12,7 +12,7 @@ var Component = require('choo/component')
 
 module.exports = class PeerConnectionStats extends Component {
   constructor (peerId, emit) {
-    console.log('constructiong', peerId, emit)
+  //  console.log('constructiong', peerId, emit)
     super(peerId)
   }
 

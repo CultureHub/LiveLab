@@ -4,7 +4,15 @@ const choo = require('choo')
 
 const app = choo({hash: true})
 
-app.use(devtools())
+localStorage.setItem('logLevel', 'debug')
+//localStorage.setItem('logLevel', 'warn')
+localStorage.setItem('debug', null)
+//localStorage.setItem('debug', 'simple-peer')
+if (process.env.NODE_ENV !== 'production') {
+  app.use(devtools())
+}
+
+
 
 // console.log("type", typeof nw)
 if(typeof nw === 'object'){

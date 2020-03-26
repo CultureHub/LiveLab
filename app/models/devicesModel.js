@@ -109,7 +109,7 @@ function devicesModel (state, bus) {
     getConstraintsFromSettings(xtend({}, {kind: kind, deviceId: state.devices.default.inputDevices[kind]}, state.devices.default.constraints[kind]), function(err, constraints){
       if(err) {
         //to do: do something with error!
-        console.log("CONSTRAINT ERROR", err)
+        bus.emit("log:error", err)
       } else {
         getLocalMedia (constraints, function(err, stream){
 
@@ -121,11 +121,10 @@ function devicesModel (state, bus) {
               }
               state.devices.default.previewTracks[kind] = track
               state.devices.default.trackInfo[kind] = track.getSettings()
-              //  console.log('DEVICES', state.devices)
             })
           } else {
             //to do: do something with error!
-            console.log("GET USER MEDIA ERROR", err)
+            bus.emit("log:error", 'error getting user media', err)
           }
           bus.emit('render')
         })
@@ -186,7 +185,8 @@ function devicesModel (state, bus) {
     .catch(e => {
       // The constraints could not be satisfied by the available devices.
       // @to do: share error message
-      console.log('constraints not satisfied', e)
+    //  console.log('constraints not satisfied', e)
+      bus.emit('log:warn', 'constraints not satisfied by device', e)
       state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
       bus.emit('render')
     })
