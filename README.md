@@ -51,8 +51,11 @@ npm run watch
 
 ## [1.1.2] - 2020-03-26
 ### Changed
-  - Got rid of 'plan-b' specification to see whether affects signalling issues
-  
+ - Logs using built in Choo logging function, so that later it will be easier to show logs to user
+ 
+### Fixed
+  - Catch 'Ice Connection Failed' error -- hopefully removes ghost black screens
+
 ## [1.1.1] - 2020-02-12
 ### Fixed
  - Updated route for gh-pages

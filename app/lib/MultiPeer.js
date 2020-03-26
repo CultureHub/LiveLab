@@ -25,6 +25,8 @@ var MultiPeer = function (options, emitter) {
   //  this.signaller.on('peers', )
   this.signaller.on('signal', this._handleSignal.bind(this))
 
+  this.signaller.on('disconnect', (e) => emitter.emit('log:error', 'socket disconnected'))
+
   // emit 'join' event to signalling server
   this.signaller.emit('join', this._room, this._userData)
 
@@ -138,10 +140,10 @@ MultiPeer.prototype._attachPeerEvents = function (p, _id) {
     this.emit('connect', { id: id, pc: p._pc})
   }.bind(this, _id))
 
-  // p.on('error', function(error, info) {
-  // //  console.log(error, info)
-  //   self.emitter.emit('log:error', 'RTC error', error, info)
-  // })
+  p.on('error', function(error, info) {
+  //  console.log(error, info)
+    self.emitter.emit('log:error', 'RTC error', error, info)
+  })
 
   p.on('data', function (id, data) {
     this.emit('data', {
