@@ -10,7 +10,8 @@ var MultiPeer = function (options, emitter) {
   this.emitter = emitter
   // connect to websocket signalling server. To DO: error validation
   this.signaller = io(options.server)
-  this._userData = options.userData || null
+  this._userData = options.userData || {}
+  this.uuid = this._userData.uuid
   this.stream = options.stream || null
   // this.stream = options.stream || null
   this._peerOptions = options.peerOptions || {}
@@ -25,12 +26,39 @@ var MultiPeer = function (options, emitter) {
   //  this.signaller.on('peers', )
   this.signaller.on('signal', this._handleSignal.bind(this))
 
+  // updated list of peers when loss of connection is suspected
+  this.signaller.on('peers', (peers) => {
+    console.log('new peers', peers)
+    self._connectToPeers(null, peers, self.servers)
+  })
+
+  // when socket is reconnecting,
+  this.signaller.on('reconnect', (e) => {
+    this.signaller.emit('join', this._room, this._userData)
+    emitter.emit('log:warn', 'socket reconnected!')
+  })
+
   this.signaller.on('disconnect', (e) => emitter.emit('log:error', 'socket disconnected'))
 
   // emit 'join' event to signalling server
   this.signaller.emit('join', this._room, this._userData)
 
   var self = this
+
+  this.isOnline = true
+  var self = this
+  this.checkConnectivity = setInterval(() => {
+    if(self.isOnline !== navigator.onLine) {
+      if(navigator.onLine === false) {
+        self.onDisconnect()
+      } else {
+        self.onReconnect()
+      }
+    }
+    self.isOnline = navigator.onLine
+    //console.log(navigator.onLine)
+  }, 500)
+
   window.onunload = function(){
     Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
   //  return 'Are you sure you want to leave?';
@@ -38,6 +66,28 @@ var MultiPeer = function (options, emitter) {
 }
 // inherits from events module in order to trigger events
 inherits(MultiPeer, events)
+
+// called when an internet connection is lost
+MultiPeer.prototype.onDisconnect = function () {
+  this.emitter.emit('log:warn', 'disconnected from internet')
+}
+
+// called when internet connection reestablished
+MultiPeer.prototype.onReconnect = function () {
+  this.emitter.emit('log:warn', 'reconnected to internet')
+  this.signaller.emit('getPeers')
+  // Object.keys(this.peers).forEach(function (id) {
+  //     this.peers[id].destroy(function (e) {
+  //       this.emitter.emit('log:error', e)
+  //     })
+  //   }
+  //   )
+  // this.signaller.close()
+  // this.signaller.open()
+  // destroy existing peer connections
+  // @ to do: check whether peer connection is still valid before destroying
+
+}
 
 // send data to all connected peers via data channels
 MultiPeer.prototype.sendToAll = function (data) {
@@ -71,7 +121,7 @@ MultiPeer.prototype.addStream = function (stream) {
 // Once the new peer receives a list of connected peers from the server,
 // creates new simple peer object for each connected peer.
 MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
-  console.log(' PEERS ARE', peers)
+  console.log(' PEERS ARE', peers, this.peers)
 //  this.emitter.emit('log:info', 'connected to peers', peers)
   this.emit('peers', peers)
 
@@ -85,24 +135,32 @@ MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
     this._peerOptions.config = {
       sdpSemantics: 'plan-b'
     }
+    this.servers = servers
   }
-  peers.forEach(function (id) {
-    this.emit('new peer', {
-      id: id
-    })
-    var newOptions = {
-      initiator: true
-    }
-    if (this.stream != null) {
-      newOptions.stream = this.stream
+  peers.filter((id) => id!== this.uuid).forEach(function (id) {
+    if(this.peers[id]) {
+      // peer is still connected; do nothing
+      if(this.peers[id]._pc.connectionState === 'connected'){}
+      console.log(' peer exists', id, this.peers[id], this.peers[id]._pc.connectionState)
     } else {
-    //  console.log('stream is null')
-      this.emitter.emit('log:warn', 'stream is null', id)
+      console.log(' peer does not exist', id)
+      this.emit('new peer', {
+        id: id
+      })
+      var newOptions = {
+        initiator: true
+      }
+      if (this.stream != null) {
+        newOptions.stream = this.stream
+      } else {
+      //  console.log('stream is null')
+        this.emitter.emit('log:warn', 'stream is null', id)
+      }
+      var options = extend(newOptions, this._peerOptions)
+    //  console.log("options", options)
+      this.peers[id] = new SimplePeer(options)
+      this._attachPeerEvents(this.peers[id], id)
     }
-    var options = extend(newOptions, this._peerOptions)
-  //  console.log("options", options)
-    this.peers[id] = new SimplePeer(options)
-    this._attachPeerEvents(this.peers[id], id)
   }.bind(this))
 }
 
