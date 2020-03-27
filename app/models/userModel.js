@@ -23,10 +23,9 @@ function userModel (state, bus) {
   }, state.user)
 
   // save user info to local storage
-  window.addEventListener('unload', function(){
-    localStorage.setItem('livelab-nickname', state.user.nickname)
-    localStorage.setItem('livelab-room', state.user.room)
-  })
+  // window.addEventListener('unload', function(){
+  //
+  // })
   //osc.on
 //login page ui events
 // @todo: move this to ui state or somewhere else
@@ -82,7 +81,11 @@ function userModel (state, bus) {
 
   // Initiate connection with signalling server
   bus.on('user:join', function (opts) {
-    localStorage.setItem('uuid', state.user.uuid)
+  //  localStorage.setItem('uuid', state.user.uuid)
+    localStorage.setItem('livelab-nickname', state.user.nickname)
+    localStorage.setItem('livelab-room', state.user.room)
+    window.history.pushState({}, 'room', '?room=' + state.user.room + window.location.hash)
+  //  document.location = window.location.origin + window.location.pathname + '?room=' + state.user.room + window.location.hash
 
     bus.emit('peers:updatePeer', {
       peerId: state.user.uuid,
