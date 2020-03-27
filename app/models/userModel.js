@@ -113,11 +113,11 @@ function userModel (state, bus) {
       bus.emit('peers:removePeer', id)
     })
 
-    multiPeer.on('new peer', function (data) {
-      bus.emit('peers:updatePeer', {
-        peerId: data.id
-      })
-    })
+    // multiPeer.on('new peer', function (data) {
+    //   // bus.emit('peers:updatePeer', {
+    //   //   peerId: data.id
+    //   // })
+    // })
 
     //when first connected to remote peer, send user information
     multiPeer.on('connect', function ({id, pc}) {

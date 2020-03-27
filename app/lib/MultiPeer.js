@@ -28,7 +28,7 @@ var MultiPeer = function (options, emitter) {
 
   // updated list of peers when loss of connection is suspected
   this.signaller.on('peers', (peers) => {
-    console.log('new peers', peers)
+  //  console.log('new peers', peers)
     self._connectToPeers(null, peers, self.servers)
   })
 
@@ -76,16 +76,7 @@ MultiPeer.prototype.onDisconnect = function () {
 MultiPeer.prototype.onReconnect = function () {
   this.emitter.emit('log:warn', 'reconnected to internet')
   this.signaller.emit('getPeers')
-  // Object.keys(this.peers).forEach(function (id) {
-  //     this.peers[id].destroy(function (e) {
-  //       this.emitter.emit('log:error', e)
-  //     })
-  //   }
-  //   )
-  // this.signaller.close()
-  // this.signaller.open()
-  // destroy existing peer connections
-  // @ to do: check whether peer connection is still valid before destroying
+
 
 }
 
@@ -121,8 +112,7 @@ MultiPeer.prototype.addStream = function (stream) {
 // Once the new peer receives a list of connected peers from the server,
 // creates new simple peer object for each connected peer.
 MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
-  console.log(' PEERS ARE', peers, this.peers)
-//  this.emitter.emit('log:info', 'connected to peers', peers)
+ this.emitter.emit('log:info', 'peers connected to server', peers)
   this.emit('peers', peers)
 
   // If client receives a list of STUN and TURN servers from the server, use in signalling process.
@@ -141,12 +131,12 @@ MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
     if(this.peers[id]) {
       // peer is still connected; do nothing
       if(this.peers[id]._pc.connectionState === 'connected'){}
-      console.log(' peer exists', id, this.peers[id], this.peers[id]._pc.connectionState)
+      // console.log(' peer exists', id, this.peers[id], this.peers[id]._pc.connectionState)
     } else {
-      console.log(' peer does not exist', id)
-      this.emit('new peer', {
-        id: id
-      })
+      // console.log(' peer does not exist', id)
+      // // this.emit('new peer', {
+      // //   id: id
+      // // })
       var newOptions = {
         initiator: true
       }
