@@ -12,13 +12,14 @@ function userModel (state, bus) {
     //uuid: localStorage.getItem('uuid') || shortid.generate(), // persistent local user id. If none is present in local storage, generate new one
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     room: 'mongoose',
-    server: 'https://live-lab-v1.glitch.me',
-    version: '1.1.1',
+    server: 'https://livelab.app:6643',
+    version: '1.2.0',
     loggedIn: false,
     nickname: "tong",
     statusMessage: '',
     multiPeer: null,
-    muted: false
+    muted: false,
+    isOnline: true
   }, state.user)
 
   //osc.on
@@ -64,6 +65,14 @@ function userModel (state, bus) {
     bus.emit('render')
   })
 
+  bus.on('user:disconnect', () => {
+    state.user.isOnline = false
+  //  bus.emit('render')
+  })
+  bus.on('user:reconnect', () => {
+    state.user.isOnline = true
+  //  bus.emit('render')
+  })
 
 
   // Initiate connection with signalling server

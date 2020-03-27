@@ -66,14 +66,16 @@ function peersModel (state, bus) {
   })
 
   bus.on('peers:removePeer', function (peerId) {
-    state.peers.byId[peerId].streams.forEach(function (streamId) {
-      bus.emit('media:removeStream', streamId)
-    })
-    state.peers.byId[peerId].streams = []
-    var index = state.peers.all.indexOf(peerId)
-    if (index > -1) state.peers.all.splice(index, 1)
-    delete state.peers.byId[peerId]
-    bus.emit('ui:removePeer', peerId)
-    bus.emit('render')
+    if(state.peers.byId[peerId]){
+      state.peers.byId[peerId].streams.forEach(function (streamId) {
+        bus.emit('media:removeStream', streamId)
+      })
+      state.peers.byId[peerId].streams = []
+      var index = state.peers.all.indexOf(peerId)
+      if (index > -1) state.peers.all.splice(index, 1)
+      delete state.peers.byId[peerId]
+      bus.emit('ui:removePeer', peerId)
+      bus.emit('render')
+    }
   })
 }

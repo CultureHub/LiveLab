@@ -20,3 +20,10 @@ function mainView (state, emit) {
     `
   }
 }
+// 
+// ${state.user.isOnline === false ?
+//     html`
+//       <div class='absolute bg-red w-100 pa3 tc'>
+//         You are not connected to the internet :(
+//       </div>` : ''
+//     }

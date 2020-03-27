@@ -69,11 +69,13 @@ inherits(MultiPeer, events)
 
 // called when an internet connection is lost
 MultiPeer.prototype.onDisconnect = function () {
+  this.emitter.emit('user:disconnect')
   this.emitter.emit('log:warn', 'disconnected from internet')
 }
 
 // called when internet connection reestablished
 MultiPeer.prototype.onReconnect = function () {
+  this.emitter.emit('user:reconnect')
   this.emitter.emit('log:warn', 'reconnected to internet')
   this.signaller.emit('getPeers')
 
@@ -131,9 +133,9 @@ MultiPeer.prototype._connectToPeers = function (_t, peers, servers) {
     if(this.peers[id]) {
       // peer is still connected; do nothing
       if(this.peers[id]._pc.connectionState === 'connected'){}
-      // console.log(' peer exists', id, this.peers[id], this.peers[id]._pc.connectionState)
+       console.log(' peer exists', id, this.peers[id], this.peers[id]._pc.connectionState)
     } else {
-      // console.log(' peer does not exist', id)
+       console.log(' peer does not exist', id)
       // // this.emit('new peer', {
       // //   id: id
       // // })
