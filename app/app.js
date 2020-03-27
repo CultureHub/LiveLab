@@ -72,8 +72,13 @@ app.use(require('./models/showModel.js'))
 app.route('/', require('./views/main.js'))
 //
 
+var baseUrls = [
+
+]
 app.route('#sendOnly', require('./views/sendOnly/landing.js'))
 app.route('#sendonly', require('./views/sendOnly/landing.js'))
+app.route('/sendonly', require('./views/sendOnly/landing.js'))
+
 
 // routes for nw.js
 app.route('/public/index.html', require('./views/main.js'))
