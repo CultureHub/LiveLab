@@ -59,10 +59,14 @@ var MultiPeer = function (options, emitter) {
     //console.log(navigator.onLine)
   }, 500)
 
-  window.onunload = function(){
+  window.addEventListener('unload', function(){
     Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
   //  return 'Are you sure you want to leave?';
-  };
+  })
+  // window.onunload = function(){
+  //   Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
+  // //  return 'Are you sure you want to leave?';
+  // };
 }
 // inherits from events module in order to trigger events
 inherits(MultiPeer, events)

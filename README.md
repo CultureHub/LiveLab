@@ -48,10 +48,15 @@ npm run watch
 ```
 
 # Changelog
-
+## [1.2.1] - 2020-03-27
+### Added
+ - room and nickname info saved to local storage
+ 
 ## [1.2.0] - 2020-03-26
 ### Added
  - client rejoins room when server is reconnected
+ - [server update] added 'getPeers' function so that client can query for existing peers in room
+ - client reconnects to peers when internet connection is rest
 
 ### Changed
  - Logs using built in Choo logging function, so that later it will be easier to show logs to user
