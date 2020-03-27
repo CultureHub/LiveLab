@@ -36,11 +36,11 @@ function loginView (state, emit) {
           <legend class="f1 fw6 ph0 mh0">LIVE LAB </legend>
           <legend class="mb3">v${state.user.version}</legend>
           <legend class="f4 fw6 ph0 mh0">Join Session</legend>
-          ${input('Nickname', 'how you will appear to everyone else', {
+          ${input('Nickname', 'Your name', {
             value: state.peers.byId[state.user.uuid].nickname,
             onkeyup: setNickname
           })}
-          ${input('Room', 'room name', {
+          ${input('Room', 'Room name', {
             value: state.user.room,
             onkeyup: setRoom
           })}

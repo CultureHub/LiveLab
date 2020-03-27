@@ -15,7 +15,7 @@ function userModel (state, bus) {
     server: 'https://livelab.app:6643',
     version: '1.2.1',
     loggedIn: false,
-    nickname: localStorage.getItem('livelab-nickname') || null,
+    nickname: localStorage.getItem('livelab-nickname') || '',
     statusMessage: '',
     multiPeer: null,
     muted: false,
