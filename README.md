@@ -51,7 +51,9 @@ npm run watch
 ## [1.2.1] - 2020-03-27
 ### Added
  - room and nickname info saved to local storage
- 
+ - Room added to URL query params: '?room=roomName'. When using with sendOnly, follow format 'https://livelab.app?room=roomName#sendOnly'
+ - Room name auto-populated on login page when specified in query
+
 ## [1.2.0] - 2020-03-26
 ### Added
  - client rejoins room when server is reconnected
