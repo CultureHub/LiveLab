@@ -71,7 +71,13 @@ function workspaceView (state, emit) {
               onclick=${() => emit('devices:addNewMedia', true)}
               title="Add Media Broadcast"
             >
-            </i>`
+            </i>
+              <i
+               class="fas fa-desktop dim pointer fr mr3"
+               title="Share Screen"
+               onclick= ${() => emit('devices:shareScreen')}
+               ></i>
+            `
           }
         )}
         ${inspector(state,emit)}

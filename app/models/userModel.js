@@ -13,7 +13,7 @@ function userModel (state, bus) {
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     server: 'https://livelab.app:6643',
-    version: '1.2.1',
+    version: '1.2.2',
     loggedIn: false,
     nickname: localStorage.getItem('livelab-nickname') || '',
     statusMessage: '',

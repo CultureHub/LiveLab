@@ -4,8 +4,8 @@ const choo = require('choo')
 
 const app = choo({hash: true})
 
-//localStorage.setItem('logLevel', 'debug')
-localStorage.setItem('logLevel', 'warn')
+localStorage.setItem('logLevel', 'debug')
+//localStorage.setItem('logLevel', 'warn')
 localStorage.setItem('debug', null)
 //localStorage.setItem('debug', 'simple-peer')
 if (process.env.NODE_ENV !== 'production') {

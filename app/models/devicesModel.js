@@ -1,6 +1,5 @@
 const enumerateDevices = require('enumerate-devices')
 const getUserMedia = require('getusermedia')
-const Screen = require('./screenmedia.js')
 
 const xtend = Object.assign
 
@@ -77,6 +76,39 @@ function devicesModel (state, bus) {
     state.devices.default.constraints.isOpen = !state.devices.default.constraints.isOpen
     bus.emit('render')
   })
+
+  bus.on('devices:shareScreen', () => {
+    startCapture({
+  // video: {
+  //   resizeMode: "none"
+  // },
+  // audio: true
+})
+  //  console.log(stream)
+  })
+
+  async function startCapture(displayMediaOptions) {
+    let stream = null;
+    try {
+      stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+      console.log(stream)
+      var settings = getSettingsFromStream(stream)
+      console.log(settings)
+      bus.emit('media:addStream', {
+        stream: stream,
+        streamId: stream.id,
+        peerId: state.user.uuid,
+        isDefault: false,
+        name: settings.video.displaySurface,
+        settings: settings
+      })
+      bus.emit('user:addStream', stream)
+      bus.emit('render')
+    } catch(err) {
+      bus.emit('log:warn', err)
+    }
+    return stream;
+  }
 
   bus.on('devices:toggleSettings', function() {
     state.devices.default.constraints.isOpen = !state.devices.default.constraints.isOpen

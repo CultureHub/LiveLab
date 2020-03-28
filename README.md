@@ -48,6 +48,11 @@ npm run watch
 ```
 
 # Changelog
+
+## [1.2.2] - 2020-03-28
+### Added
+ - screensharing
+
 ## [1.2.1] - 2020-03-27
 ### Added
  - room and nickname info saved to local storage
