@@ -29,15 +29,7 @@ Run the browser version:
 npm run start-local
 ```
 
-To run the desktop version, first install nwjs as a command-line utility.
-```
-npm install -g nwjs
-```
-Then, install version 0.28.0 of nwjs:
-```
-nw install 0.28.0-sdk
-```
-Run the desktop app:
+To run the desktop version:
 ```
 npm run start-nw
 ```
@@ -48,6 +40,10 @@ npm run watch
 ```
 
 # Changelog
+
+## [1.2.3] - 2020-03-28
+### Fixed
+ - building and running the desktop on multiple platforms and without requiring nw.js to be installed globally
 
 ## [1.2.2] - 2020-03-28
 ### Added
