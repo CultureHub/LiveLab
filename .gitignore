@@ -7,6 +7,7 @@ yarn-error.log*
 .DS_Store
 
 build
+dist
 
 # Runtime data
 pids
