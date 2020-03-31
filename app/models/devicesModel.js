@@ -42,9 +42,9 @@ function devicesModel (state, bus) {
       constraints: {
         isOpen: false,
         audio: {
-          echoCancellation: false,
-          autoGainControl: false,
-          noiseSuppression: false
+          echoCancellation: true,
+          autoGainControl: true,
+          noiseSuppression: true
         },
         video: {
           width: 1920,
@@ -94,9 +94,7 @@ function devicesModel (state, bus) {
     let stream = null;
     try {
       stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-      console.log(stream)
       var settings = getSettingsFromStream(stream)
-      console.log(settings)
       bus.emit('media:addStream', {
         stream: stream,
         streamId: stream.id,
@@ -219,7 +217,7 @@ function devicesModel (state, bus) {
     } else {
       state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind]).then(() => {
         state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-        console.log('info', state.devices.default.previewTracks[obj.kind].getSettings(), state.devices.default.previewTracks[obj.kind].getConstraints())
+      //  console.log('info', state.devices.default.previewTracks[obj.kind].getSettings(), state.devices.default.previewTracks[obj.kind].getConstraints())
         bus.emit('render')
       })
       .catch(e => {
@@ -238,7 +236,6 @@ function devicesModel (state, bus) {
   /** Helper functions for dealing with devices, get user media, and constraints **/
 
   function getLocalMedia(constraints, callback) {
-     console.log('CONSTRAINTS', constraints)
     navigator.mediaDevices.getUserMedia(constraints)
     .then((stream) => {
       window.localStream = stream
