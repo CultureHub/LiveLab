@@ -84,7 +84,7 @@ function addBroadcast (devices, emit, opts) {
                         })
                       }
                       }>
-                    ${constraint}</div>`
+                    <span class="pl1">${constraint}</span></div>`
                   )}
                  <h4> Video </h4>
               ${Object.keys(devices.default.constraints.video).map((constraint) => input(constraint, "",

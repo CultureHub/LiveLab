@@ -40,6 +40,9 @@ npm run watch
 ```
 
 # Changelog
+## [1.2.4] - 2020-03-31
+### Added
+ - controls for echoCancellation, autoGainControl, and noiseSuppressiong
 
 ## [1.2.3] - 2020-03-28
 ### Fixed

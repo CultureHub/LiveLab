@@ -156,7 +156,7 @@ function devicesModel (state, bus) {
               }
               state.devices.default.previewTracks[kind] = track
               state.devices.default.trackInfo[kind] = track.getSettings()
-              bus.emit('log:info', 'got track', track.getSettings())
+              bus.emit('log:info', 'got track', track.getSettings(), track.getConstraints())
             })
           } else {
             //to do: do something with error!
@@ -219,7 +219,7 @@ function devicesModel (state, bus) {
     } else {
       state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind]).then(() => {
         state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-        console.log('info', state.devices.default.previewTracks[obj.kind].getSettings())
+        console.log('info', state.devices.default.previewTracks[obj.kind].getSettings(), state.devices.default.previewTracks[obj.kind].getConstraints())
         bus.emit('render')
       })
       .catch(e => {
