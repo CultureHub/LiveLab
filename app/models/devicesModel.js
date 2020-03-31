@@ -1,5 +1,4 @@
 const enumerateDevices = require('enumerate-devices')
-const getUserMedia = require('getusermedia')
 
 const xtend = Object.assign
 
@@ -42,7 +41,11 @@ function devicesModel (state, bus) {
       },
       constraints: {
         isOpen: false,
-        audio: {},
+        audio: {
+          echoCancellation: false,
+          autoGainControl: false,
+          noiseSuppression: false
+        },
         video: {
           width: 1920,
           height: 1080,
@@ -153,6 +156,7 @@ function devicesModel (state, bus) {
               }
               state.devices.default.previewTracks[kind] = track
               state.devices.default.trackInfo[kind] = track.getSettings()
+              bus.emit('log:info', 'got track', track.getSettings())
             })
           } else {
             //to do: do something with error!
@@ -209,19 +213,24 @@ function devicesModel (state, bus) {
 
   bus.on('devices:updateBroadcastConstraint', function(obj){
     state.devices.default.constraints[obj.kind][obj.constraint] = obj.value
-    state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind])
-    .then(() => {
-      state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-      bus.emit('render')
-    })
-    .catch(e => {
-      // The constraints could not be satisfied by the available devices.
-      // @to do: share error message
-    //  console.log('constraints not satisfied', e)
-      bus.emit('log:warn', 'constraints not satisfied by device', e)
-      state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
-      bus.emit('render')
-    })
+    // audio constraints appear to need a new call to get user media
+    if(obj.kind === 'audio'){
+      updateLocalPreview(obj.kind)
+    } else {
+      state.devices.default.previewTracks[obj.kind].applyConstraints(state.devices.default.constraints[obj.kind]).then(() => {
+        state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
+        console.log('info', state.devices.default.previewTracks[obj.kind].getSettings())
+        bus.emit('render')
+      })
+      .catch(e => {
+        // The constraints could not be satisfied by the available devices.
+        // @to do: share error message
+      //  console.log('constraints not satisfied', e)
+        bus.emit('log:warn', 'constraints not satisfied by device', e)
+        state.devices.default.trackInfo[obj.kind] = state.devices.default.previewTracks[obj.kind].getSettings()
+        bus.emit('render')
+      })
+    }
 
   })
 
@@ -229,18 +238,26 @@ function devicesModel (state, bus) {
   /** Helper functions for dealing with devices, get user media, and constraints **/
 
   function getLocalMedia(constraints, callback) {
-    //  console.log('CONSTRAINTS', constraints)
-    getUserMedia(constraints, function (err, stream) {
-      if (err) {
-        callback(err, null)
-        // TO DO: do something about error
-      } else {
-        window.localStream = stream
-        //  console.log(window.localStream)
-        callback(null, stream)
-      }
-      bus.emit('render')
+     console.log('CONSTRAINTS', constraints)
+    navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      window.localStream = stream
+      //  console.log(window.localStream)
+      callback(null, stream)
+    }).catch((err) => {
+      callback(err)
     })
+    // getUserMedia(constraints, function (err, stream) {
+    //   if (err) {
+    //     callback(err, null)
+    //     // TO DO: do something about error
+    //   } else {
+    //     window.localStream = stream
+    //     //  console.log(window.localStream)
+    //     callback(null, stream)
+    //   }
+
+  //  })
   }
 
   // bus.on('devices:getDevices', function () {
