@@ -57,19 +57,34 @@ function peersModel (state, bus) {
     bus.emit('render')
   })
 
-  bus.on('peers:hangupTrack', function (trackId) {
-    var index = state.peers.byId[state.user.uuid].tracks.indexOf(trackId)
-    if (index > -1) state.peers.byId[state.user.uuid].tracks.splice(index, 1)
-    bus.emit('media:removeTrack', trackId)
-    bus.emit('user:updateBroadcastStream')
-    bus.emit('render')
+  bus.on('peers:hangupTrack', function (streamId) {
+  //  var peerId = state.media.byId[streamId].peerId
+     //  var index = state.peers.byId[state.user.uuid].streams.indexOf(streamId)
+     // if (index > -1) state.peers.byId[state.user.uuid].streams.splice(index, 1)
+     // bus.emit('media:removeTrack', streamId)
+
+    // remove stream from peer connection
+    state.user.multiPeer.removeStream(state.media.byId[streamId].stream)
+    // bus.emit('peers:removeStreamFromPeer', state.user.uuid, streamId)
+     bus.emit('media:removeStream', streamId)
+     // bus.emit('user:updateBroadcastStream')
+     bus.emit('render')
+  })
+
+  bus.on('peers:removeStreamFromPeer', function(peerId, streamId){
+    if(state.peers.byId[peerId]) {
+    var index = state.peers.byId[peerId].streams.indexOf(streamId)
+    if (index > -1) state.peers.byId[peerId].streams.splice(index, 1)
+  } else {
+    bus.emit('log:error', peerId, 'not found')
+  }
   })
 
   bus.on('peers:removePeer', function (peerId) {
     if(state.peers.byId[peerId]){
-      state.peers.byId[peerId].streams.forEach(function (streamId) {
-        bus.emit('media:removeStream', streamId)
-      })
+      // state.peers.byId[peerId].streams.forEach(function (streamId) {
+      //   bus.emit('media:removeStream', streamId)
+      // })
       state.peers.byId[peerId].streams = []
       var index = state.peers.all.indexOf(peerId)
       if (index > -1) state.peers.all.splice(index, 1)

@@ -93,6 +93,12 @@ MultiPeer.prototype.sendToAll = function (data) {
   }, this)
 }
 
+MultiPeer.prototype.removeStream = function (stream) {
+  Object.keys(this.peers).forEach(function (id) {
+    this.peers[id].removeStream(stream)
+  }, this)
+}
+
 MultiPeer.prototype.sendToPeer = function (peerId, data) {
   if (peerId in this.peers) {
     this.peers[peerId].send(data)

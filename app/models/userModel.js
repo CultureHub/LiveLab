@@ -108,6 +108,7 @@ function userModel (state, bus) {
       }
     }, bus)
 
+    state.user.multiPeer = multiPeer
 
     //received initial list of peers from signalling server, update local peer information
     multiPeer.on('peers', function (peers) {
@@ -210,6 +211,9 @@ function userModel (state, bus) {
    })
 
 
+   bus.on('user:updateLocalInfo', () => {
+     updateLocalInfo()
+   })
 
 //share local updates to track or user information with peers
 function updateLocalInfo(id){

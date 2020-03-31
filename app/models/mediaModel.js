@@ -48,6 +48,16 @@ function mediaModel (state, bus) {
     if (video.length > 0) hasVideo = true
   }
 
+  opts.stream.getTracks().forEach((track) => {
+    track.onended = (e) => {
+      console.log('ENDED', e, opts)
+      if(state.media.byId[id]){
+        bus.emit('media:removeStream', id)
+        bus.emit('render')
+      }
+    }
+  })
+
   bus.emit('peers:addStreamToPeer', {
     streamId: id,
     peerId: opts.peerId,
@@ -59,12 +69,19 @@ function mediaModel (state, bus) {
 
 
 bus.on('media:removeStream', function (streamId) {
+  console.log('stopping tracks')
+  // var tracks = state.media.byId[streamId].stream.getTracks()
+  // tracks.forEach((track) => track.stop())
   bus.emit('show:streamRemoved', streamId)
-  delete state.media.byId[streamId]
+  // console.log(state.media.byId[streamId])
+  //
   if (streamId === state.ui.inspector) {
     bus.emit('ui:setInspectMedia', null)
   }
-  bus.emit('render')
+    bus.emit('peers:removeStreamFromPeer', state.media.byId[streamId].peerId, streamId)
+    delete state.media.byId[streamId]
+   bus.emit('user:updateLocalInfo')
+   bus.emit('render')
 })
 
 
