@@ -40,6 +40,13 @@ npm run watch
 ```
 
 # Changelog
+## [1.2.5] - 2020-03-31
+### Changed
+ - scrollable track info
+ - removed bandwidth info
+ - no volume control for own audio
+ - colors for muting and volume control
+
 ## [1.2.4] - 2020-03-31
 ### Added
  - controls for echoCancellation, autoGainControl, and noiseSuppressiong

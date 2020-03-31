@@ -92,7 +92,7 @@ function workspaceView (state, emit) {
              }
            )}
          ${oscEl}
-         <!---->
+         <!--
          ${panel(
            {
              htmlProps: {
@@ -106,7 +106,7 @@ function workspaceView (state, emit) {
              header:   "Bandwith Adjustment"
            }
          )}
-         <!---->
+         !--->
       </div>
       ${AddMedia(state.devices, emit, { showElement: state.devices.default.constraints.isOpen, addNewStream: true})}
       ${ConfigureOsc(state.osc.configureForwarding, emit, state.osc.configureForwarding.visible)}

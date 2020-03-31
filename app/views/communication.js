@@ -36,16 +36,16 @@ function communicationView (state, emit) {
         ${vidEl}
 
 
-          <div> <i
-                  class=${state.ui.communication[peerIndex].volume==0?"fa fa-volume-off ma2 dim pointer":"fa fa-volume-up ma2 dim pointer"}
-                  aria-hidden="true"
-                  onclick=${()=>emit('ui:toggleCommunicationVolume', peerIndex)} >
-                </i>
+          <div>
                 ${peerIndex === state.user.uuid? html`<i
-                  class=${`fa fa-microphone${state.user.muted ?'-slash':''} ma2 dim pointer`}
+                  class=${`fa fa-microphone${state.user.muted ?'-slash red':''} ma2 dim pointer`}
                   aria-hidden="true"
                   onclick=${()=>emit('user:toggleMute')} >
-                </i>`:null}
+                </i>`:html`<i
+                        class=${state.ui.communication[peerIndex].volume==0?"fa fa-volume-off ma2 dim pointer":"fa fa-volume-up ma2 dim pointer green"}
+                        aria-hidden="true"
+                        onclick=${()=>emit('ui:toggleCommunicationVolume', peerIndex)} >
+                      </i>`}
                 ${state.peers.byId[peerIndex].nickname}</div>
         </div>`
     } else {

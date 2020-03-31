@@ -21,7 +21,7 @@ function inspectorComponent (state, emit) {
   if(state.ui.inspector !== null){
     var media = state.media.byId[state.ui.inspector]
     var title = html`<span class="i">Track Info: ${state.peers.byId[media.peerId].nickname}-${media.name} </span> `
-  var innerContents =  html`<div class="pa2 w-100" style="word-wrap: break-word;font-size:11px">
+  var innerContents =  html`<div class="pa2 w-100 h4 overflow-y-scroll" style="word-wrap: break-word;font-size:11px">
     ${Video({
        htmlProps: {
          class: 'h4 w4'
