@@ -49,7 +49,7 @@ function mediaListView (state, emit) {
             var media = state.media.byId[id]
 
             var className = id === state.ui.inspector ? 'bg-gray pointer' : 'dim pointer'
-            if(state.peers.byId[media.peerId].requestMedia === false) className += ' green'
+            if(state.peers.byId[media.peerId] && state.peers.byId[media.peerId].requestMedia === false) className += ' green'
             return html`
               <tr class=${className}
                   draggable="true"
