@@ -97,9 +97,11 @@ function uiModel (state, bus) {
   })
 
   bus.on('ui:toggleCommunicationVolume', function (peerId) {
-    state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
-    state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
+    if(state.ui.communication[peerId]) {
+      state.ui.communication[peerId].volume === 0 ? state.ui.communication[peerId].volume = 1 : state.ui.communication[peerId].volume = 0
+      state.ui.communication[peerId].audioEl.volume = state.ui.communication[peerId].volume
     bus.emit('render')
+  }
   })
 
   bus.on('ui:removePeer', function (peerId) {
