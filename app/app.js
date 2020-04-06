@@ -56,13 +56,13 @@ if(typeof nw === 'object'){
   // nw.Screen.on('displayRemoved', screenCB.onDisplayRemoved)
 }
 
-app.use(require('./models/devicesModel.js'))
-app.use(require('./models/mediaModel.js'))
-app.use(require('./models/peersModel.js'))
-app.use(require('./models/userModel.js'))
-app.use(require('./models/uiModel.js'))
-app.use(require('./models/oscModel.js'))
-app.use(require('./models/showModel.js'))
+// app.use(require('./models/devicesModel.js'))
+// app.use(require('./stores/mediaStore.js'))
+// app.use(require('./stores/peerStore.js'))
+app.use(require('./stores/userStore.js'))
+// app.use(require('./stores/uiModel.js'))
+// app.use(require('./models/oscModel.js'))
+// app.use(require('./models/showModel.js'))
 
 
 // Routing
@@ -73,16 +73,16 @@ app.route('/', require('./views/main.js'))
 //
 
 
-app.route('#sendOnly', require('./views/sendOnly/landing.js'))
-app.route('#sendonly', require('./views/sendOnly/landing.js'))
+// app.route('#sendOnly', require('./views/sendOnly/landing.js'))
+// app.route('#sendonly', require('./views/sendOnly/landing.js'))
 
 // routes for nw.js
 app.route('/public/index.html', require('./views/main.js'))
 
 // routes for github pages, starting with /LiveLab
 app.route('/LiveLab', require('./views/main.js'))
-app.route('/LiveLab#sendonly', require('./views/sendOnly/landing.js'))
-app.route('/LiveLab/sendonly', require('./views/sendOnly/landing.js'))
+// app.route('/LiveLab#sendonly', require('./views/sendOnly/landing.js'))
+// app.route('/LiveLab/sendonly', require('./views/sendOnly/landing.js'))
 
 
 

@@ -8,68 +8,74 @@ var inherits = require('inherits')
 
 var MultiPeer = function (options, emitter) {
   this.emitter = emitter
-  // connect to websocket signalling server. To DO: error validation
-  this.signaller = io(options.server)
-  this._userData = options.userData || {}
-  this.uuid = this._userData.uuid
-  this.stream = options.stream || null
-  // this.stream = options.stream || null
-  this._peerOptions = options.peerOptions || {}
-  this._room = options.room
   this.peers = {}
-/*Define and Calculate */
-  // this.peersLastResult = {}
-  // this.peersBitrate = {}
 
-  // Handle events from signalling server
-  this.signaller.on('ready', this._connectToPeers.bind(this))
-  //  this.signaller.on('peers', )
-  this.signaller.on('signal', this._handleSignal.bind(this))
-
-  // updated list of peers when loss of connection is suspected
-  this.signaller.on('peers', (peers) => {
-  //  console.log('new peers', peers)
-    self._connectToPeers(null, peers, self.servers)
-  })
-
-  // when socket is reconnecting,
-  this.signaller.on('reconnect', (e) => {
-    this.signaller.emit('join', this._room, this._userData)
-    emitter.emit('log:warn', 'socket reconnected!')
-  })
-
-  this.signaller.on('disconnect', (e) => emitter.emit('log:error', 'socket disconnected'))
-
-  // emit 'join' event to signalling server
-  this.signaller.emit('join', this._room, this._userData)
-
-  var self = this
-
-  this.isOnline = true
-  var self = this
-  this.checkConnectivity = setInterval(() => {
-    if(self.isOnline !== navigator.onLine) {
-      if(navigator.onLine === false) {
-        self.onDisconnect()
-      } else {
-        self.onReconnect()
-      }
-    }
-    self.isOnline = navigator.onLine
-    //console.log(navigator.onLine)
-  }, 500)
-
-  window.addEventListener('unload', function(){
-    Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
-  //  return 'Are you sure you want to leave?';
-  })
-  // window.onunload = function(){
-  //   Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
-  // //  return 'Are you sure you want to leave?';
-  // };
 }
 // inherits from events module in order to trigger events
 inherits(MultiPeer, events)
+
+MultiPeer.prototype.init = function (options) {
+
+// connect to websocket signalling server. To DO: error validation
+this.signaller = io(options.server)
+this._userData = options.userData || {}
+this.uuid = this._userData.uuid
+this.stream = options.stream || null
+// this.stream = options.stream || null
+this._peerOptions = options.peerOptions || {}
+this._room = options.room
+
+/*Define and Calculate */
+// this.peersLastResult = {}
+// this.peersBitrate = {}
+
+// Handle events from signalling server
+this.signaller.on('ready', this._connectToPeers.bind(this))
+//  this.signaller.on('peers', )
+this.signaller.on('signal', this._handleSignal.bind(this))
+
+// updated list of peers when loss of connection is suspected
+this.signaller.on('peers', (peers) => {
+//  console.log('new peers', peers)
+  self._connectToPeers(null, peers, self.servers)
+})
+
+// when socket is reconnecting,
+this.signaller.on('reconnect', (e) => {
+  this.signaller.emit('join', this._room, this._userData)
+  emitter.emit('log:warn', 'socket reconnected!')
+})
+
+this.signaller.on('disconnect', (e) => emitter.emit('log:error', 'socket disconnected'))
+
+// emit 'join' event to signalling server
+this.signaller.emit('join', this._room, this._userData)
+
+var self = this
+
+this.isOnline = true
+var self = this
+this.checkConnectivity = setInterval(() => {
+  if(self.isOnline !== navigator.onLine) {
+    if(navigator.onLine === false) {
+      self.onDisconnect()
+    } else {
+      self.onReconnect()
+    }
+  }
+  self.isOnline = navigator.onLine
+  //console.log(navigator.onLine)
+}, 500)
+
+window.addEventListener('unload', function(){
+  Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
+//  return 'Are you sure you want to leave?';
+})
+// window.onunload = function(){
+//   Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
+// //  return 'Are you sure you want to leave?';
+// };
+}
 
 // called when an internet connection is lost
 MultiPeer.prototype.onDisconnect = function () {
