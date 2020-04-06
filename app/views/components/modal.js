@@ -29,6 +29,6 @@ function Modal (opts) {
         </div>
     `
   } else {
-    return null;
+    return html`<div></div>`;
   }
 }
