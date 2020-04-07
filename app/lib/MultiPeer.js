@@ -6,6 +6,7 @@ var EventEmitter = require('events').EventEmitter
 var Messenger = require('./PeerMessenger.js')
 const assert = require('assert')
 const shortid = require('shortid')
+const merge = require('deepmerge')
 
 function log(...message){console.log(...message)}
 function makeError(...message) { console.error(...message)}
@@ -17,7 +18,9 @@ class MultiPeer extends EventEmitter {
     this.peers = {}
     this.messenger = new Messenger(this)
     this.isOnline = true
-    this.streams = {}
+    this._streams = {}
+
+    this.streams = [] // user facing list of streams
   }
 
   init({ server = 'https://livelab.app:6643', room = '', userData = {}, peerOptions = {}, sendOnly = false }) {
@@ -27,7 +30,12 @@ class MultiPeer extends EventEmitter {
     this.user = Object.assign({}, {
       uuid: shortid.generate(),
       nickname: '',
-      sendOnly: sendOnly
+      sendOnly: sendOnly,
+      streamInfo: {},
+      navigator: {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform
+      }
     }, userData)
 
     // options for signalling server
@@ -64,16 +72,44 @@ class MultiPeer extends EventEmitter {
     }, 500)
 
     window.addEventListener('unload', function(){
-      Object.keys(self.peers).forEach((id) => self.peers[id].destroy())
+      Object.keys(self.peers).forEach((id) => self.peers[id]._peer.destroy())
     })
   }
 
   addStream(stream) {
     var settings = getSettingsFromStream(stream)
-    this.streams[stream.id] = {
-      settings: settings,
-      stream: stream
-    }
+    this._streams[stream.id] = stream
+    this.user.streamInfo[stream.id] = { settings: settings }
+    this._updateStreamsList()
+  }
+
+  // @to do: attach peer info to stream, contain in object
+  // order by uuid
+  _updateStreamsList() {
+    var streams = []
+    Object.values(this._streams).forEach((stream) => {
+    //  stream.peer = this.user
+      streams.push(Object.assign({
+        peer: this.user,
+        stream: stream
+      }, this.user.streamInfo[stream.id]))
+    })
+    Object.values(this.peers).forEach((peer) =>
+      Object.values(peer.streams).forEach((stream) => {
+      //  if(stream.stream) {
+          var streamObj = { peer: peer, stream: stream}
+          // streams.push({
+          //   peer: peer,
+          //   stream: stream
+          // })
+          if(peer.streamInfo[stream.id]) streamObj = Object.assign({}, peer.streamInfo[stream.id], streamObj)
+          streams.push(streamObj)
+      //  }
+      })
+    )
+    log('streams', streams, this.peers)
+    this.emit('update')
+    this.streams = streams
   }
 
   onDisconnect() {
@@ -94,7 +130,7 @@ class MultiPeer extends EventEmitter {
       var options = Object.assign({
         stream: this.stream
       }, this._peerOptions)
-      this.peers[data.id] = { _peer: new SimplePeer(options), id: data.id, streams: {} }
+      this.peers[data.id] = { _peer: new SimplePeer(options), id: data.id, streams: {}, streamInfo: {} }
       this._attachPeerEvents(this.peers[data.id], data.id)
     }
     this.peers[data.id]._peer.signal(data.signal)
@@ -122,7 +158,7 @@ class MultiPeer extends EventEmitter {
       } else {
         var newOptions = { initiator: true }
         var options = Object.assign(newOptions, this._peerOptions)
-        this.peers[id] = { _peer: new SimplePeer(options), id: id, streams: {} }
+        this.peers[id] = { _peer: new SimplePeer(options), id: id, streams: {}, streamInfo: {} }
         this._attachPeerEvents(this.peers[id], id)
       }
     })
@@ -142,17 +178,25 @@ class MultiPeer extends EventEmitter {
     //.bind(this, _id))
 
     p.on('stream', (stream) => {
-
-      if(peer.streams[stream.id]) {
-        peer.streams[stream.id].stream = stream
-      } else {
-        warn('no info for stream ', stream.id, peer, stream)
-        peer.streams[stream.id] = {
-          stream: stream
+      log('stream', stream, peer)
+      stream.getTracks().forEach((track) => {
+        track.onended = (e) => {
+          warn('stream ended', stream)
+          if(peer && peer.streams[stream.id]) delete peer.streams[stream.id]
+          this._updateStreamsList()
         }
-      }
+      })
+      peer.streams[stream.id] = stream
+      // if(peer.streams[stream.id]) {
+      //   peer.streams[stream.id] = stream
+      // } else {
+      //   warn('no info for stream ', stream.id, peer, stream)
+      //   peer.streams[stream.id] = {
+      //     stream: stream
+      //   }
+      // }
+      this._updateStreamsList()
       this.emit('stream', id, stream)
-      log(stream, peer)
     })
 
     p.on('connect', () => {
@@ -161,14 +205,16 @@ class MultiPeer extends EventEmitter {
       this.emit('connect', { id: id, pc: p._pc, peer: p})
     })
 
-    p.on('error', (error, info) => { makeError('RTC error', error, info) })
+    p.on('error', (error, info) => { warn('RTC error', error, info) })
 
     p.on('data', (data) => this._processData(data, peer))
 
     p.on('close', (id) => {
       //console.log('CLOSED')
       delete(this.peers[id])
-      this.emit('close', id)
+      log('close', id)
+      this._updateStreamsList()
+    //  this.emit('close', id)
     })
   }
 
@@ -181,14 +227,15 @@ class MultiPeer extends EventEmitter {
    */
    // sendLocalInfo
    _shareUserInfo (peer) {
-     var streamInfo = {}
-     Object.values(this.streams).forEach((stream) => {
-       streamInfo[stream.stream.id] = Object.assign({}, stream)
-       delete streamInfo[stream.stream.id].stream
-     })
+     // var streamInfo = {}
+     // Object.values(this._streams).forEach((stream) => {
+     //   streamInfo[stream.stream.id] = Object.assign({}, stream)
+     //   delete streamInfo[stream.stream.id].stream
+     // })
+     console.log('sharing info', this.user)
      peer._peer.send(JSON.stringify({
        type: 'userInfo',
-       data: Object.assign({}, this.user, { streams: streamInfo })
+       data: Object.assign({}, this.user)
      }))
 
       if ( !this.user.sendOnly ) {
@@ -206,11 +253,13 @@ class MultiPeer extends EventEmitter {
       if(payload.type === 'message'){
          self.messenger.messageReceived(payload.data, id)
       } else if(payload.type === 'userInfo') {
-
-        peer = Object.assign(peer, payload.data)
-        console.log( 'peer', peer)
+        console.log('got info', peer, payload.data)
+        var newPeer = Object.assign(peer, payload.data)
+        //newPeer.streams = Object.assign({}, peer.streams)
+        peer = newPeer
       } else if(payload.type === 'requestMedia') {
-        Object.values(this.streams).forEach((stream) => { peer._peer.addStream(stream.stream) })
+        Object.values(this._streams).forEach((stream) => { peer._peer.addStream(stream) })
+        this._updateStreamsList()
       }
       // this.emit('data', {
       //   id: id,

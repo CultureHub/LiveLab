@@ -70,6 +70,8 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
   })
 
+  state.multiPeer.on('update', () => { emitter.emit('render')})
+
   // emitter.on('user:setServer', function (server) {
   //   state.user.server = server
   //   emitter.emit('render')

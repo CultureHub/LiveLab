@@ -37,6 +37,7 @@
     "choo": "^7.0.0",
     "choo-devtools": "^3.0.3",
     "debug": "^4.1.1",
+    "deepmerge": "^4.2.2",
     "electron-json-storage": "^4.1.8",
     "electron-store": "^5.1.0",
     "electron-window": "^0.8.1",
