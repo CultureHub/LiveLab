@@ -31,7 +31,7 @@ module.exports = class Login extends Component {
     // this.selectedDevices.audio = null
     // this.selectedDevices.video = null
   //  this.tracks.video = null
-    this.settingsIsOpen = true
+    this.settingsIsOpen = false
     this.mediaSettings = new MediaSettings({
       onSave: this.updateMedia.bind(this),
       onClose: this.closeSettings.bind(this)
@@ -145,7 +145,10 @@ module.exports = class Login extends Component {
         </legend>
           ${this.audioDropdown}
           ${this.videoDropdown}
-        <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => (emit('devices:startCall',  {requestMedia: true}))}>Join</div>
+        <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => {
+
+          emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(Object.values(this.tracks)), nickname: this.nickname, requestMedia: true})
+        }}>Join</div>
         <div> ${state.user.statusMessage} </div>
 
 

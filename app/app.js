@@ -57,9 +57,9 @@ if(typeof nw === 'object'){
 }
 
 // app.use(require('./models/devicesModel.js'))
-// app.use(require('./stores/mediaStore.js'))
-// app.use(require('./stores/peerStore.js'))
 app.use(require('./stores/userStore.js'))
+app.use(require('./stores/mediaStore.js'))
+//app.use(require('./stores/peerStore.js'))
 // app.use(require('./stores/uiModel.js'))
 // app.use(require('./models/oscModel.js'))
 // app.use(require('./models/showModel.js'))

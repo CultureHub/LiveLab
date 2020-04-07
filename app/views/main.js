@@ -13,11 +13,11 @@ function mainView (state, emit) {
     </div>
     `
   }
-  // else {
-  //   return html`
-  //   <div class="w-100 h-100 mw-100 dt">
-  //     ${workspace(state, emit)}
-  //   </div>
-  //   `
-  //  }
+  else {
+    return html`
+    <div class="w-100 h-100 mw-100 dt">
+       USER STREAMS WILL GO HERE
+    </div>
+    `
+   }
 }
