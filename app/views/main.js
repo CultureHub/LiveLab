@@ -22,7 +22,7 @@ function mainView (state, emit) {
       <div style='resize:both;border:2px'></div>
        ${state.multiPeer.streams.map((stream, index) =>
          html`
-          <div style='resize:both;overflow:auto' class='w5 h5 ma3'>
+          <div style='resize:both;overflow:auto' class='w5 h5 ma0'>
             ${Video({
              htmlProps: { class: 'w-100' },
              index: 'communication-' + index,

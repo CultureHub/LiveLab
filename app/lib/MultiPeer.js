@@ -1,7 +1,7 @@
 // to do --> add classes for stream and simple peer that add extra information to each?
 
 var io = require('socket.io-client')
-var SimplePeer = require('simple-peer')
+var Peer = require('./MultiPeer-Peer.js')
 var EventEmitter = require('events').EventEmitter
 var Messenger = require('./PeerMessenger.js')
 const assert = require('assert')
@@ -130,8 +130,10 @@ class MultiPeer extends EventEmitter {
       var options = Object.assign({
         stream: this.stream
       }, this._peerOptions)
-      this.peers[data.id] = { _peer: new SimplePeer(options), id: data.id, streams: {}, streamInfo: {} }
-      this._attachPeerEvents(this.peers[data.id], data.id)
+    //  this.peers[data.id] = { _peer: new Peer(options), id: data.id, streams: {}, streamInfo: {} }
+      this.peers[data.id] = new Peer ({ peerOptions: options, id: data.id, streams: {}, streamInfo: {}, signaller: this.signaller, parent: this })
+
+    //  this._attachPeerEvents(this.peers[data.id], data.id)
     }
     this.peers[data.id]._peer.signal(data.signal)
   }
@@ -158,63 +160,9 @@ class MultiPeer extends EventEmitter {
       } else {
         var newOptions = { initiator: true }
         var options = Object.assign(newOptions, this._peerOptions)
-        this.peers[id] = { _peer: new SimplePeer(options), id: id, streams: {}, streamInfo: {} }
-        this._attachPeerEvents(this.peers[id], id)
+        this.peers[id] = new Peer ({ peerOptions: options, id: id, streams: {}, streamInfo: {}, signaller: this.signaller, parent: this })
+        //this._attachPeerEvents(this.peers[id], id)
       }
-    })
-  }
-
-  _attachPeerEvents( peer, id ) {
-    var self = this
-    var p = peer._peer
-    p.on('signal', (signal) => {
-      //console.log('signal')
-      //  console.log("peer signal sending over sockets", id, signal)
-      this.signaller.emit('signal', {
-        id: id,
-        signal: signal
-      })
-    })
-    //.bind(this, _id))
-
-    p.on('stream', (stream) => {
-      log('stream', stream, peer)
-      stream.getTracks().forEach((track) => {
-        track.onended = (e) => {
-          warn('stream ended', stream)
-          if(peer && peer.streams[stream.id]) delete peer.streams[stream.id]
-          this._updateStreamsList()
-        }
-      })
-      peer.streams[stream.id] = stream
-      // if(peer.streams[stream.id]) {
-      //   peer.streams[stream.id] = stream
-      // } else {
-      //   warn('no info for stream ', stream.id, peer, stream)
-      //   peer.streams[stream.id] = {
-      //     stream: stream
-      //   }
-      // }
-      this._updateStreamsList()
-      this.emit('stream', id, stream)
-    })
-
-    p.on('connect', () => {
-      log('connected', p)
-      this._shareUserInfo(peer)
-      this.emit('connect', { id: id, pc: p._pc, peer: p})
-    })
-
-    p.on('error', (error, info) => { warn('RTC error', error, info) })
-
-    p.on('data', (data) => this._processData(data, peer))
-
-    p.on('close', (id) => {
-      //console.log('CLOSED')
-      delete(this.peers[id])
-      log('close', id)
-      this._updateStreamsList()
-    //  this.emit('close', id)
     })
   }
 
