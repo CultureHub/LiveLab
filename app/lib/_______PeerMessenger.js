@@ -1,9 +1,17 @@
 const events = require('events').EventEmitter
+const Channel = require('./MultiPeer-Channel.js')
 
 class Messenger extends events {
   constructor(multiPeer) {
     super()
     this.multiPeer = multiPeer
+    this.channels = {}
+  }
+
+  addChannel(name) {
+    let channel = new Channel(name, this)
+    this.channels[name] = channel
+    return channels
   }
 
   send(tag, data){

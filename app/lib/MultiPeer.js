@@ -1,9 +1,9 @@
 // to do --> add classes for stream and simple peer that add extra information to each?
 
 var io = require('socket.io-client')
-var Peer = require('./MultiPeer-Peer.js')
+var Peer = require('./Peer.js')
 var EventEmitter = require('events').EventEmitter
-var Messenger = require('./PeerMessenger.js')
+//var Messenger = require('./PeerMessenger.js')
 const assert = require('assert')
 const shortid = require('shortid')
 const merge = require('deepmerge')
@@ -16,7 +16,7 @@ class MultiPeer extends EventEmitter {
   constructor() {
     super()
     this.peers = {}
-    this.messenger = new Messenger(this)
+  //  this.messenger = new Messenger(this)
     this.isOnline = true
     this._streams = {}
 
@@ -80,6 +80,9 @@ class MultiPeer extends EventEmitter {
     var settings = getSettingsFromStream(stream)
     this._streams[stream.id] = stream
     this.user.streamInfo[stream.id] = { settings: settings }
+    Object.values(this.peers).forEach((peer) => {
+      peer.addStream(stream)
+    })
     this._updateStreamsList()
   }
 
@@ -174,46 +177,46 @@ class MultiPeer extends EventEmitter {
     Handling events related to specific peers
    */
    // sendLocalInfo
-   _shareUserInfo (peer) {
-     // var streamInfo = {}
-     // Object.values(this._streams).forEach((stream) => {
-     //   streamInfo[stream.stream.id] = Object.assign({}, stream)
-     //   delete streamInfo[stream.stream.id].stream
-     // })
-     console.log('sharing info', this.user)
-     peer._peer.send(JSON.stringify({
-       type: 'userInfo',
-       data: Object.assign({}, this.user)
-     }))
+   // _shareUserInfo (peer) {
+   //   // var streamInfo = {}
+   //   // Object.values(this._streams).forEach((stream) => {
+   //   //   streamInfo[stream.stream.id] = Object.assign({}, stream)
+   //   //   delete streamInfo[stream.stream.id].stream
+   //   // })
+   //   console.log('sharing info', this.user)
+   //   peer._peer.send(JSON.stringify({
+   //     type: 'userInfo',
+   //     data: Object.assign({}, this.user)
+   //   }))
+   //
+   //    if ( !this.user.sendOnly ) {
+   //      peer._peer.send(JSON.stringify({
+   //       type: 'requestMedia'
+   //     }))
+   //   }
+   // }
 
-      if ( !this.user.sendOnly ) {
-        peer._peer.send(JSON.stringify({
-         type: 'requestMedia'
-       }))
-     }
-   }
-
-  _processData(data, peer) {
-      let payload = JSON.parse(data)
-      // assert.equal(typeof payload.data, 'object', 'Data should be of type object')
-
-        console.log('data', peer, JSON.parse(data))
-      if(payload.type === 'message'){
-         self.messenger.messageReceived(payload.data, id)
-      } else if(payload.type === 'userInfo') {
-        console.log('got info', peer, payload.data)
-        var newPeer = Object.assign(peer, payload.data)
-        //newPeer.streams = Object.assign({}, peer.streams)
-        peer = newPeer
-      } else if(payload.type === 'requestMedia') {
-        Object.values(this._streams).forEach((stream) => { peer._peer.addStream(stream) })
-        this._updateStreamsList()
-      }
-      // this.emit('data', {
-      //   id: id,
-      //   data: JSON.parse(data)
-      // })
-  }
+  // _processData(data, peer) {
+  //     let payload = JSON.parse(data)
+  //     // assert.equal(typeof payload.data, 'object', 'Data should be of type object')
+  //
+  //       console.log('data', peer, JSON.parse(data))
+  //     if(payload.type === 'message'){
+  //        self.messenger.messageReceived(payload.data, id)
+  //     } else if(payload.type === 'userInfo') {
+  //       console.log('got info', peer, payload.data)
+  //       var newPeer = Object.assign(peer, payload.data)
+  //       //newPeer.streams = Object.assign({}, peer.streams)
+  //       peer = newPeer
+  //     } else if(payload.type === 'requestMedia') {
+  //       Object.values(this._streams).forEach((stream) => { peer._peer.addStream(stream) })
+  //       this._updateStreamsList()
+  //     }
+  //     // this.emit('data', {
+  //     //   id: id,
+  //     //   data: JSON.parse(data)
+  //     // })
+  // }
 
 }
 

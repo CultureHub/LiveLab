@@ -72,6 +72,31 @@ module.exports = (state, emitter) => {
 
   state.multiPeer.on('update', () => { emitter.emit('render')})
 
+  emitter.on('user:shareScreen', () => {
+    startCapture({})
+  })
+
+  async function startCapture(displayMediaOptions) {
+    let stream = null;
+    try {
+      stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+      state.multiPeer.addStream(stream)
+      var settings = getSettingsFromStream(stream)
+      // bus.emit('media:addStream', {
+      //   stream: stream,
+      //   streamId: stream.id,
+      //   peerId: state.user.uuid,
+      //   isDefault: false,
+      //   name: settings.video.displaySurface,
+      //   settings: settings
+      // })
+      // bus.emit('user:addStream', stream)
+      emitter.emit('render')
+    } catch(err) {
+      emitter.emit('log:warn', err)
+    }
+    return stream;
+  }
   // emitter.on('user:setServer', function (server) {
   //   state.user.server = server
   //   emitter.emit('render')
