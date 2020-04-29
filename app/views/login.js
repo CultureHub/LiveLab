@@ -132,7 +132,7 @@ module.exports = class Login extends Component {
       </div>
     <div class="vh-100 dt w-100 fixed top-0 left-0">
       <div class="dtc v-mid">
-        <div class="w-40 center">
+        <div class="w-50-ns w-100 center pa3">
         <legend class="f1 fw6 ph0 mh0">LIVE LAB </legend>
         <legend class="mb3">v${state.user.version}</legend>
         <legend class="f4 fw6 ph0 mh0">Join Session</legend>
