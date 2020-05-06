@@ -2,6 +2,7 @@ const shortid = require('shortid')
 const MultiPeer = require('./../lib/MultiPeer.js')
 
 module.exports = (state, emitter) => {
+
   state.user = {
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     nickname: localStorage.getItem('livelab-nickname') || '',
@@ -10,8 +11,10 @@ module.exports = (state, emitter) => {
     version: '1.2.5',
     loggedIn: false,
     isOnline: true,
-    room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
-    server: 'https://livelab.app:6643',
+    // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
+    room: state.query.room,
+    // server: 'https://livelab.app:6643',
+    server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true
   }
@@ -20,7 +23,12 @@ module.exports = (state, emitter) => {
   state.multiPeer = new MultiPeer({}, emitter)
 
   emitter.on('user:join', function ({ room, server, nickname, stream, requestMedia }) {
-    state.user.room = room
+    console.log('room is ', state.query.room)
+    if (state.query.room){
+      state.user.room = state.query.room
+    } else {
+      state.user.room = shortid.generate()
+    }
     state.user.server = server
     state.user.nickname = nickname
 
@@ -82,21 +90,13 @@ module.exports = (state, emitter) => {
       stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
       state.multiPeer.addStream(stream)
       var settings = getSettingsFromStream(stream)
-      // bus.emit('media:addStream', {
-      //   stream: stream,
-      //   streamId: stream.id,
-      //   peerId: state.user.uuid,
-      //   isDefault: false,
-      //   name: settings.video.displaySurface,
-      //   settings: settings
-      // })
-      // bus.emit('user:addStream', stream)
       emitter.emit('render')
     } catch(err) {
       emitter.emit('log:warn', err)
     }
     return stream;
   }
+
   // emitter.on('user:setServer', function (server) {
   //   state.user.server = server
   //   emitter.emit('render')

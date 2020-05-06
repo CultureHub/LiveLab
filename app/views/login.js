@@ -135,19 +135,19 @@ module.exports = class Login extends Component {
         <div class="w-50-ns w-100 center pa3">
         <legend class="f1 fw6 ph0 mh0">LIVE LAB </legend>
         <legend class="mb3">v${state.user.version}</legend>
-        <legend class="f4 fw6 ph0 mh0">Join Session</legend>
-        ${input('Nickname', 'Your name', {  value: this.nickname,  onkeyup: (e) => { this.nickname = e.target.value } })}
-        ${input('Room', 'Room name', {  value: this.room, onkeyup: (e) => { this.room = e.target.value}})}
-        ${input('Signalling server', 'e.g. http://server.glitch.me', { value: this.server, onkeyup: (e) => { this.server = e.target.value} })}
+        <!-- <legend class="f4 fw6 ph0 mh0">Join Session</legend> -->
+        ${input('Your Name', 'Your name', {  value: this.nickname,  onkeyup: (e) => { this.nickname = e.target.value } })}
+      <!--  ${input('Room', 'Room name', {  value: this.room, onkeyup: (e) => { this.room = e.target.value}})}
+        ${input('Signalling server', 'e.g. http://server.glitch.me', { value: this.server, onkeyup: (e) => { this.server = e.target.value} })} !-->
        <legend class="f4 fw6 ph0 mh0">Choose Default Input Devices
           <i class="fas fa-cog ma2 dim pointer" aria-hidden="true" onclick=${this.openSettings.bind(this)} ></i>
         </legend>
           ${this.audioDropdown}
           ${this.videoDropdown}
-        <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => {
+        <div class="f3 link mt4 dim ph3 pv3 mb2 dib white bg-dark-pink pointer" onclick=${() => {
           var tracks = Object.values(this.tracks).filter((track) => track !== null)
           emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
-        }}>Join</div>
+        }}>${state.user.room? 'Join': 'Start'}</div>
         <div> ${state.user.statusMessage} </div>
 
         </div>

@@ -142,17 +142,20 @@ class MultiPeer extends EventEmitter {
   }
 
   _connectToPeers (_t, peers, servers) {
+    console.log(peers, servers)
     // If client receives a list of STUN and TURN servers from the server, use in signalling process.
     this.emit('ready', peers)
 
     if (servers) {
       this._peerOptions.config = {
         iceServers: servers,
-        sdpSemantics: 'plan-b'
+        sdpSemantics: 'plan-b',
+      //  trickle: false
       }
     } else {
       this._peerOptions.config = {
-        sdpSemantics: 'plan-b'
+        sdpSemantics: 'plan-b',
+    //    trickle: false
       }
       this.servers = servers
     }

@@ -6,13 +6,13 @@ const app = choo({hash: true})
 
 localStorage.setItem('logLevel', 'debug')
 //localStorage.setItem('logLevel', 'warn')
-localStorage.setItem('debug', null)
+//localStorage.setItem('debug', null)
 //localStorage.setItem('debug', 'simple-peer')
 if (process.env.NODE_ENV !== 'production') {
   app.use(devtools())
 }
 
-
+window.grid = require('./views/videogrid.js')
 
 // console.log("type", typeof nw)
 if(typeof nw === 'object'){
@@ -58,7 +58,9 @@ if(typeof nw === 'object'){
 
 // app.use(require('./models/devicesModel.js'))
 app.use(require('./stores/userStore.js'))
-app.use(require('./stores/mediaStore.js'))
+app.use(require('./stores/layoutStore.js'))
+
+// app.use(require('./stores/mediaStore.js'))
 //app.use(require('./stores/peerStore.js'))
 // app.use(require('./stores/uiModel.js'))
 // app.use(require('./models/oscModel.js'))
