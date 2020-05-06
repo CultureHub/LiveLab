@@ -13,7 +13,7 @@ module.exports = (state, emitter) => {
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-    // server: 'https://livelab.app:6643',
+   // server: 'https://livelab.app:6643',
     server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true

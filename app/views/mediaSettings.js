@@ -110,7 +110,7 @@ module.exports = class MediaSettings extends Component {
 
 
   createElement (isOpen) {
-    console.log('rerendering', isOpen)
+  //  console.log('rerendering', isOpen)
     this.isOpen = isOpen
 
     var self = this
@@ -166,7 +166,7 @@ module.exports = class MediaSettings extends Component {
     })}
   </div>`
 )
-console.log('audio INFO', this.trackInfo.audio)
+//console.log('audio INFO', this.trackInfo.audio)
 this.trackInfoEl =  html` <div class="mt2 mb4 i">
   Actual video dimensions:  ${this.trackInfo.video.width}x${this.trackInfo.video.height}, ${this.trackInfo.video.frameRate}fps
    <br>${Object.keys(this.constraints.audio).map((key) => `${key}: ${this.trackInfo.audio[key]}`).join(', ')}

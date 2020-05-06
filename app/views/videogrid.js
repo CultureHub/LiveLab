@@ -63,7 +63,7 @@ const divs = elements.map((innerEl, index) => {
       const row = Math.floor(index/grid.cols)
       const col = index%grid.cols
       const style = styleObj(stretchToFit === true? styleNoMargin : styleMargins )(row, col)
-      console.log(style)
+    //  console.log(style)
       const el = html`<div class="absolute">
               ${innerEl}
           </div>`

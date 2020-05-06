@@ -55,7 +55,8 @@ class MultiPeer extends EventEmitter {
 
     // when socket is reconnecting,
     this.signaller.on('reconnect', (e) => {
-      this.signaller.emit('join', this._room, this._userData)
+      console.log('ATTEMPTING TO RECONNECT')
+      this.signaller.emit('join', this._room, this.user)
       warn('socket reconnected!')
     })
 
@@ -142,7 +143,7 @@ class MultiPeer extends EventEmitter {
   }
 
   _connectToPeers (_t, peers, servers) {
-    console.log(peers, servers)
+    console.log('READY TO CONNECT', peers, servers)
     // If client receives a list of STUN and TURN servers from the server, use in signalling process.
     this.emit('ready', peers)
 

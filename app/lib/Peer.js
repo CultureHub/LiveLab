@@ -66,7 +66,7 @@ class Peer extends EventEmitter {
     //.bind(this, _id))
 
     p.on('stream', (stream) => {
-      log('stream', stream, this)
+    //  log('stream', stream, this)
       stream.getTracks().forEach((track) => {
         track.onended = (e) => {
           warn('stream ended', stream)
@@ -89,7 +89,7 @@ class Peer extends EventEmitter {
     })
 
     p.on('connect', () => {
-      console.log('connected', p)
+    //  console.log('connected', p)
     //  this._shareUserInfo(this)
       Object.values(this.channels).forEach((channel) => { channel.initialSync() })
       this._parent.emit('connect', { id: id, pc: p._pc, peer: p})
