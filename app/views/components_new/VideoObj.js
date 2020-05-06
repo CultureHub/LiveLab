@@ -14,7 +14,7 @@ module.exports = class VideoObj extends Component {
 
   update(srcObject = "", style = {}) {
     if(srcObject !== this._el.srcObject) this._el.srcObject = srcObject
-    console.log('video src2', srcObject)
+    // console.log('video src2', srcObject)
     css(style, this._el)
 
     return false
@@ -26,7 +26,7 @@ module.exports = class VideoObj extends Component {
     this._el.srcObject = srcObject
     css(style, this._el)
 
-    console.log('video src', srcObject)
+    // console.log('video src', srcObject)
     this._el.oncanplay = () => {
       this._el.muted = true
       this._el.play()

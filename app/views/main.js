@@ -4,6 +4,7 @@ const html = require('choo/html')
 const Login = require('./login.js')
 const communication = require('./communication.js')
 const menu = require('./menu.js')
+const peersList = require('./peersList.js')
 
 
 //const workspace = require('./workspace.js')
@@ -22,6 +23,7 @@ function mainView (state, emit) {
     return html`<div>
         ${communication(state, emit)}
         ${menu(state, emit)}
+        ${peersList(state, emit)}
     </div>`
    }
   // return html`<div>${grid(state, emit)}</div>`

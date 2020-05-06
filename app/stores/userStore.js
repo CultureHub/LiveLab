@@ -13,8 +13,8 @@ module.exports = (state, emitter) => {
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-   // server: 'https://livelab.app:6643',
-    server: 'https://live-lab-v1.glitch.me',
+   server: 'https://livelab.app:6643',
+    // server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true
   }
@@ -89,7 +89,7 @@ module.exports = (state, emitter) => {
     try {
       stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
       state.multiPeer.addStream(stream)
-      var settings = getSettingsFromStream(stream)
+    //  var settings = getSettingsFromStream(stream)
       emitter.emit('render')
     } catch(err) {
       emitter.emit('log:warn', err)

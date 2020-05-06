@@ -21,7 +21,7 @@ class Channel extends EventEmitter {
     this.tag = tag
     this._peer = peer
     this.log = []
-    console.log('initial data', this.localData)
+    //console.log('initial data', this.localData)
     this.initialSync = this.initialSync.bind(this)
     this.value = null
   }
@@ -39,7 +39,7 @@ class Channel extends EventEmitter {
   }
 
   receivedMessage(msg) {
-    console.log('RECEIVED', msg)
+//    console.log('RECEIVED', msg)
     this.emit('update', msg.data)
     this.value = msg.data
     this.log.push(msg)

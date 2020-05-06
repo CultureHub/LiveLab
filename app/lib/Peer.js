@@ -21,7 +21,7 @@ class Peer extends EventEmitter {
     this._attachEvents(id)
 
     this.channels = {}
-    console.log('USER INFO', parent.user)
+  //  console.log('USER INFO', parent.user)
 
     this.userInfo = this.addChannel({ localData: parent.user, tag: 'userInfo' })
     this.userInfo.on('update', (data) => {
@@ -34,8 +34,8 @@ class Peer extends EventEmitter {
     // if user requests media, send streams
     this.requestMedia = this.addChannel({ localData: parent.user.sendOnly? false: true, tag: 'requestMedia' })
     this.requestMedia.on('update', (sendMedia) => {
-      console.log('request', sendMedia, parent.streams)
-      if(sendMedia) Object.values(parent._streams).forEach((stream) => { this._peer.addStream(stream) })
+      console.log('%c requesting media', sendMedia, parent.streams, 'background: #cc44ff; color: #000')
+      if(sendMedia) Object.values(parent._localStreams).forEach((stream) => { this._peer.addStream(stream) })
     })
   //  parent.messenger.addChannel('userInfo')
   }
@@ -67,6 +67,7 @@ class Peer extends EventEmitter {
 
     p.on('stream', (stream) => {
     //  log('stream', stream, this)
+      console.log('got stream', stream, 'background: #00ffff; color: #fff' )
       stream.getTracks().forEach((track) => {
         track.onended = (e) => {
           warn('stream ended', stream)
@@ -89,7 +90,7 @@ class Peer extends EventEmitter {
     })
 
     p.on('connect', () => {
-    //  console.log('connected', p)
+      console.log(`%c connected to ${id}`, 'background: #222; color: #bada55; margin: 2px', p, this.channels)
     //  this._shareUserInfo(this)
       Object.values(this.channels).forEach((channel) => { channel.initialSync() })
       this._parent.emit('connect', { id: id, pc: p._pc, peer: p})

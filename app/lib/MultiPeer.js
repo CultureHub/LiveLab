@@ -18,7 +18,7 @@ class MultiPeer extends EventEmitter {
     this.peers = {}
   //  this.messenger = new Messenger(this)
     this.isOnline = true
-    this._streams = {}
+    this._localStreams = {} // local user streams
 
     this.streams = [] // user facing list of streams
   }
@@ -48,7 +48,10 @@ class MultiPeer extends EventEmitter {
     this.signaller.on('signal', this._handleSignal.bind(this))
 
     // updated list of peers when loss of connection is suspected
-    this.signaller.on('peers', (peers) => {  self._connectToPeers(null, peers, self.servers)  })
+    this.signaller.on('peers', (peers) => {
+      console.log('peers')
+      self._connectToPeers(null, peers, self.servers)
+    })
 
      // emit 'join' event to signalling server
     this.signaller.emit('join', this.room, this.user)
@@ -79,7 +82,7 @@ class MultiPeer extends EventEmitter {
 
   addStream(stream) {
     var settings = getSettingsFromStream(stream)
-    this._streams[stream.id] = stream
+    this._localStreams[stream.id] = stream
     this.user.streamInfo[stream.id] = { settings: settings }
     Object.values(this.peers).forEach((peer) => {
       peer.addStream(stream)
@@ -91,7 +94,7 @@ class MultiPeer extends EventEmitter {
   // order by uuid
   _updateStreamsList() {
     var streams = []
-    Object.values(this._streams).forEach((stream) => {
+    Object.values(this._localStreams).forEach((stream) => {
     //  stream.peer = this.user
       streams.push(Object.assign({
         peer: this.user,
@@ -112,8 +115,8 @@ class MultiPeer extends EventEmitter {
       })
     )
     log('streams', streams, this.peers)
-    this.emit('update')
     this.streams = streams
+    this.emit('update')
   }
 
   onDisconnect() {
@@ -145,7 +148,7 @@ class MultiPeer extends EventEmitter {
   _connectToPeers (_t, peers, servers) {
     console.log('READY TO CONNECT', peers, servers)
     // If client receives a list of STUN and TURN servers from the server, use in signalling process.
-    this.emit('ready', peers)
+
 
     if (servers) {
       this._peerOptions.config = {
@@ -164,6 +167,7 @@ class MultiPeer extends EventEmitter {
       if(this.peers[id]) {
         // peer is still connected; do nothing
         if(this.peers[id]._peer._pc.connectionState === 'connected'){}
+        console.warn('peer exists', this.peers[id])
       } else {
         var newOptions = { initiator: true }
         var options = Object.assign(newOptions, this._peerOptions)
@@ -171,6 +175,7 @@ class MultiPeer extends EventEmitter {
         //this._attachPeerEvents(this.peers[id], id)
       }
     })
+    this.emit('ready', peers)
   }
 
   sendToAll(data) {
@@ -183,7 +188,7 @@ class MultiPeer extends EventEmitter {
    // sendLocalInfo
    // _shareUserInfo (peer) {
    //   // var streamInfo = {}
-   //   // Object.values(this._streams).forEach((stream) => {
+   //   // Object.values(this._localStreams).forEach((stream) => {
    //   //   streamInfo[stream.stream.id] = Object.assign({}, stream)
    //   //   delete streamInfo[stream.stream.id].stream
    //   // })
@@ -213,7 +218,7 @@ class MultiPeer extends EventEmitter {
   //       //newPeer.streams = Object.assign({}, peer.streams)
   //       peer = newPeer
   //     } else if(payload.type === 'requestMedia') {
-  //       Object.values(this._streams).forEach((stream) => { peer._peer.addStream(stream) })
+  //       Object.values(this._localStreams).forEach((stream) => { peer._peer.addStream(stream) })
   //       this._updateStreamsList()
   //     }
   //     // this.emit('data', {
