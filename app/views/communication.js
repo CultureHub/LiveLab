@@ -7,7 +7,12 @@ const grid = require('./videogrid.js')
 
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
-     return state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.select.objectFit.value})
+     let videoSettings = ''
+     if(stream.settings && stream.settings.video) videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
+    return html`<div class='w-100 h-100'>
+      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.select.objectFit.value})}
+      <div class="absolute pa1 ph2 ma1 bottom-0" style="background:rgba(0, 0, 0, 0.5)">${stream.peer.nickname} ${videoSettings}</div>
+     </div>`
    })
    //return html`<div>${elements}</div>`
    return html`<div>${grid({

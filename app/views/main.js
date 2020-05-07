@@ -23,8 +23,9 @@ function mainView (state, emit) {
     return html`<div>
         ${communication(state, emit)}
         ${menu(state, emit)}
-        ${peersList(state, emit)}
+
     </div>`
    }
+     // ${peersList(state, emit)}
   // return html`<div>${grid(state, emit)}</div>`
 }

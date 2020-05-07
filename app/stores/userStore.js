@@ -66,13 +66,15 @@ module.exports = (state, emitter) => {
     })
 
     state.multiPeer.addStream(stream)
+    state.user.loggedIn = true
+
     // to do: media addTracks
     emitter.emit('render')
   })
 
   //received initial list of peers from signalling server, update local peer information
   state.multiPeer.on('ready', function (peers) {
-    state.user.loggedIn = true
+    // state.user.loggedIn = true
     document.title = `LiveLab V1 - ${state.user.room}`
     state.user.statusMessage += 'Connected to server ' + state.user.server + '\n'
     emitter.emit('render')
