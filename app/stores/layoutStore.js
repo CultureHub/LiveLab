@@ -24,6 +24,10 @@ module.exports = (state, emitter) => {
     num: 3
   }
 
+  emitter.on('layout:toggleGridPresets', (prop, value) => {
+
+  })
+
   emitter.on('layout:selectProp', (prop, value) => {
     state.layout.select[prop].value = value
     emitter.emit('render')

@@ -17,7 +17,7 @@ module.exports = (state, emit) => {
    //return html`<div>${elements}</div>`
    return html`<div>${grid({
      elements: elements,
-     stretchToFit: false,
+     stretchToFit: state.layout.select.stretchToFit.value,
      ratio: '16:9'
    }, emit)}</div>`
    //return html`<div>${grid(state, emit)}</div>`

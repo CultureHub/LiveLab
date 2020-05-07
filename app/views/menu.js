@@ -9,6 +9,11 @@ module.exports = (state, emit) => {
      title="Share Screen"
      onclick= ${() => emit('user:shareScreen')}
      ></i>
+     <i
+      class="fas fa-th-large dim pointer fr mr3"
+      title="Stretch To Fit"
+      onclick= ${() => emit('user:shareScreen')}
+      ></i>
   </div>
   `
 }

@@ -4,8 +4,8 @@ const html = require('choo/html')
 const Login = require('./login.js')
 const communication = require('./communication.js')
 const menu = require('./menu.js')
-const peersList = require('./peersList.js')
-
+//const peersList = require('./peersList.js')
+const Chat = require( './chat.js')
 
 //const workspace = require('./workspace.js')
 
@@ -23,7 +23,7 @@ function mainView (state, emit) {
     return html`<div>
         ${communication(state, emit)}
         ${menu(state, emit)}
-
+        ${state.cache(Chat, 'chat').render(state.multiPeer)}
     </div>`
    }
      // ${peersList(state, emit)}
