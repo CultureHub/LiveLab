@@ -110,13 +110,14 @@ class MultiPeer extends EventEmitter {
     //  stream.peer = this.user
       streams.push(Object.assign({
         peer: this.user,
-        stream: stream
+        stream: stream,
+        isLocal: true
       }, this.user.streamInfo[stream.id]))
     })
     Object.values(this.peers).forEach((peer) =>
       Object.values(peer.streams).forEach((stream) => {
       //  if(stream.stream) {
-          var streamObj = { peer: peer, stream: stream}
+          var streamObj = { peer: peer, stream: stream, isLocal: false}
           // streams.push({
           //   peer: peer,
           //   stream: stream

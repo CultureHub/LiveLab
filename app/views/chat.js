@@ -61,7 +61,7 @@ module.exports = class Chat extends Component {
     </div>`
     container.scrollTop = container.scrollHeight
       // ${container}
-    return html`  <div  class="pa3 dib fixed bottom-2 right-2 bg-dark-gray w-100" style="max-width:30rem;">
+    return html`  <div>
           ${container}
           ${input('', 'message', {
             value: this.inputValue,
