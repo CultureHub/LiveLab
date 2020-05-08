@@ -18,16 +18,28 @@ menuItem = ({ title, onclick, icon, selected = false }) => html`
 //   onclick= ${() => emit('user:shareScreen')}
 //   ></i>
 
+
+
 module.exports = (state, emit) => {
   return html`
   <div class="fixed bottom-0 right-0 pa2">
+      ${menuItem({
+        icon:  state.user.videomuted ?'fa-video red':'fa-video',
+        title: "Mute your video",
+        onclick: () => emit('user:toggleVideoMute')
+      })}
+      ${menuItem({
+        icon:  state.user.muted ?'fa-microphone-slash red':'fa-microphone',
+        title: "Mute your microphone",
+        onclick: () => emit('user:toggleAudioMute')
+      })}
       ${menuItem({
         icon: 'fa-desktop',
         title: "Share screen",
         onclick: () => emit('user:shareScreen')
       })}
       ${menuItem({
-        icon: 'fa-volume-up',
+        icon: 'fa-sliders-h',
         title: "Toggle volume controls",
         onclick: () => emit('layout:toggleMenuItem', 'audio'),
         selected: state.layout.menu.audio

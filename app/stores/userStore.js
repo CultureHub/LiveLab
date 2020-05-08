@@ -16,11 +16,43 @@ module.exports = (state, emitter) => {
    server: 'https://livelab.app:6643',
     // server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
-    requestMedia: true
+    requestMedia: true,
+    muted: false,
+    videomuted: false
   }
 
 
   state.multiPeer = new MultiPeer({}, emitter)
+
+  const setMuted = (muteVal) => {
+    if(state.multiPeer.defaultStream) {
+      const tracks = state.multiPeer.defaultStream.getAudioTracks()
+      tracks.forEach((track) => {
+        track.enabled = !muteVal
+      })
+    }
+  }
+
+  const setVideoMuted = (muteVal) => {
+    if(state.multiPeer.defaultStream) {
+      const tracks = state.multiPeer.defaultStream.getVideoTracks()
+      tracks.forEach((track) => {
+        track.enabled = !muteVal
+      })
+    }
+  }
+
+  emitter.on('user:toggleAudioMute', () => {
+    state.user.muted = !state.user.muted
+    setMuted(state.user.muted)
+    emitter.emit('render')
+  })
+
+  emitter.on('user:toggleVideoMute', () => {
+    state.user.videomuted = !state.user.videomuted
+    setVideoMuted(state.user.videomuted)
+    emitter.emit('render')
+  })
 
   emitter.on('user:join', function ({ room, server, nickname, stream, requestMedia }) {
     console.log('room is ', state.query.room)
@@ -62,10 +94,11 @@ module.exports = (state, emitter) => {
           offerToReceiveAudio: true,
           offerToReceiveVideo: true
          }
-      }
+      },
+      stream: stream
     })
 
-    state.multiPeer.addStream(stream)
+  //  state.multiPeer.addStream(stream)
     state.user.loggedIn = true
 
     // to do: media addTracks

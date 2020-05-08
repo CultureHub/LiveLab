@@ -8,7 +8,8 @@ const menu = require('./menu.js')
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 
-
+// const chat = new Chat()
+// const audio = new Audio()
 //const workspace = require('./workspace.js')
 const floating = (content, isVisible) => {
   if(isVisible) {
@@ -18,7 +19,7 @@ const floating = (content, isVisible) => {
       </div>
     `
   } else {
-    return html`<div style="display:none">{content}</div>`
+    return html`<div style="display:none">${content}</div>`
   }
 }
 

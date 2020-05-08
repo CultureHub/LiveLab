@@ -69,11 +69,19 @@ module.exports = class Audio extends Component {
       stream: stream
     }
     this.streams[streamObj.id] = streamObj
+    Object.entries(this.streams).forEach(([id, stream]) => {
+      const tracks =  stream.stream.stream.getAudioTracks()
+      tracks.forEach((track) => track.onmute = (e)=> {
+        console.log('TRACK WAS MUTES')
+      })
+    })
+
     return streamObj
   }
 
   createElement(streams) {
-    console.log('RENDERING')
+    console.log('RENDERING', this)
+    Object.entries(this.streams).forEach(([id, stream]) => console.log('TRACKS', stream.stream.stream.getAudioTracks()))
     // console.log(streams)
     //
     // // @todo: dont use local streams
@@ -81,29 +89,45 @@ module.exports = class Audio extends Component {
     //   this.addStreamSource(stream)
     // })
 
+    // const section = (content, classes="") => html`<div class="${classes}">${content}</div>`
 
+    const slider = ({ label, value, oninput, labelClass="", inputClass="", description=""}) => html`<div class="db pv2" title=${description}>
+          <div class="dib w3 v-mid ${labelClass}" title=${description}>${label}</div>
+          <input class="v-mid ${inputClass}" type="range" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}>
+        </div>
+      `
 
     return html`<div>
-      <div class ="db ma1">
-        <div class="dib w3 v-mid b"> master </div>
-        <input class="v-mid" type="range" min="0" max="1" value=${this.masterGain.gain.value}  step="0.01" oninput=${(e) => { this.masterGain.gain.value = e.target.value}}>
-      </div>
-      ${Object.entries(this.streams).map(([id, streamObj]) => {
-        return html`
-          <div class ="db ma1">
-            <div class="dib w3 v-mid">${streamObj.stream.peer.nickname}</div>
-             <input class="v-mid" type="range" min="0" max="1" value=${streamObj.gain.gain.value}  step="0.01"
-             oninput=${(e) => {
-               console.log(streamObj.gain)
-               streamObj.gain.gain.value = e.target.value
-             }}
-             >
-          </div>`
+      <div class="pb2" title="master volume">
+        ${slider({
+          description: "master volume",
+          label: "master volume",
+          value: this.masterGain.gain.value*100,
+          oninput: (e) => { this.masterGain.gain.value = e.target.value/100},
+          labelClass: "b w4",
+          inputClass: "w5"
         })}
-        <div class ="db mt4 bt">
-          <div class="db i v-mid">default for new streams</div>
-          <input class="v-mid" type="range" min="0" max="1" value=${this.defaultVolume}  step="0.01" oninput=${(e) => { this.defaultVolume = e.target.value}}>
-        </div>
+      </div>
+      ${Object.entries(this.streams).length > 0 ? html`<div class="pv1">
+        ${Object.entries(this.streams).map(([id, streamObj]) => slider({
+          description: "volume control for individual streams",
+          label: streamObj.stream.peer.nickname,
+          value: streamObj.gain.gain.value*100,
+          oninput: (e) => { streamObj.gain.gain.value = e.target.value/100}
+        }))}
+      </div>`: ''}
+      <div class="pt0">
+        ${slider({
+          description: "default volume when a new stream is added",
+          label: "default",
+          labelClass: "i",
+          value: this.defaultVolume*100,
+          oninput: (e) => {
+            this.defaultVolume = e.target.value/100
+            this.rerender()
+          }
+        })}
+      </div>
     </div>`
   }
 }

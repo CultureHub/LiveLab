@@ -6,7 +6,7 @@ module.exports = (state, emitter) => {
   state.layout = {
     menu: {
       chat: true,
-      audio: true
+      audio: false
     }
   }
 

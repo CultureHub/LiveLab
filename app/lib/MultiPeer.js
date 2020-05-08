@@ -24,7 +24,7 @@ class MultiPeer extends EventEmitter {
     this.channels = {}
   }
 
-  init({ server = 'https://livelab.app:6643', room = '', userData = {}, peerOptions = {}, sendOnly = false }) {
+  init({ server = 'https://livelab.app:6643', room = '', userData = {}, peerOptions = {}, sendOnly = false, stream }) {
 
     this.signaller = io(server)
     this.room = room
@@ -36,8 +36,10 @@ class MultiPeer extends EventEmitter {
       navigator: {
         userAgent: navigator.userAgent,
         platform: navigator.platform
-      }
+      },
     }, userData)
+
+
 
     console.log('SEND ONLY', sendOnly)
     this.addChannel('userInfo', { localData: this.user })
@@ -46,6 +48,12 @@ class MultiPeer extends EventEmitter {
 
     // options for signalling server
     this._peerOptions = peerOptions
+
+    this.defaultStream = null
+    if(stream) {
+      this.defaultStream = stream
+      this.addStream(stream)
+    }
 
     var self = this
     // Handle events from signalling server
