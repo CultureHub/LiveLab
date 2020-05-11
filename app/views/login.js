@@ -161,6 +161,3 @@ module.exports = class Login extends Component {
     `
   }
 }
-
-
-//   <!--  ${MediaSettings(state.devices, emit, { showElement: state.devices.default.constraints.isOpen})} --->

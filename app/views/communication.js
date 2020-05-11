@@ -67,12 +67,9 @@ function openWindow(stream, title, settings) {
     vid.autoplay = "autoplay"
     vid.loop = "loop"
     vid.muted = "muted"
-    // vid.setAttribute('controls', false)
-    // vid.setAttribute('allowFullScreen', true)
     vid.style.width = "100%"
     vid.style.height = "100%"
     vid.style.objectFit = "contain"
-  //  vid.setAttribute('muted', true)
     win.document.body.style.padding = "0px"
     win.document.body.style.margin = "0px"
     win.document.body.appendChild(vid)

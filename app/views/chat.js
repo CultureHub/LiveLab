@@ -41,12 +41,6 @@ module.exports = class Chat extends Component {
   createElement(state) {
     var scrollEl = html`<div id="testScroll" style="bottom:0px">
       ${this.messages.map((obj)=>{
-        // return html`
-        //   <div class="bg-light-green black ph3 pa3 ma1" style="width: fit-content">
-        //     <span class="pa1">${obj.user.nickname}:</span>
-        //     <span class="pa1">${obj.message}</span>
-        //   </div>
-        // `
         return html`
           <tr>
             <th class="pa1">${obj.user.nickname}:</th>

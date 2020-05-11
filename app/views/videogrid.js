@@ -26,8 +26,6 @@ const css = (el, style) => {
   return el
 }
 
-
-
 module.exports = ({
   elements = [],
   ratio = '4:3',
@@ -79,88 +77,3 @@ const divs = elements.map((innerEl, index) => {
 
   </div>`
 }
-
-
-// const controls = html`<div class="fixed pa4 bottom-1 right-1" style="background:rgba(0, 0, 0, 0.5)">
-//   <button type="button" onclick=${() => emit("layout:increase")}>add</button>
-//   <button type="button" onclick=${() => emit("layout:decrease")}>remove</button>
-//
-//   ${Object.entries(state.layout.select).map(([key, value]) => {
-//     console.log(value)
-//     return html`<form>
-//       ${value.label}:
-//       ${value.options.map((label) => html`
-//         <input class="ma2" type="radio" name=${key} value=${label} id=${label} onchange=${() => emit('layout:selectProp', key, label)} ${label === value.value? 'checked':''}>
-//         <label for=${label}">${label}</label>
-//       `)}
-//     </form>`
-//   })}
-//   </div>`
-
-// ${key}
-// <!--${value.options.map((label) => html`<input type="radio" name="${key}" id="${label}">${label}</input>`)}-->
-  // ${controls}
-// /**
-//  * Makes an element draggable.
-//  *
-//  * @param {HTMLElement} element - The element.
-//  */
-// function draggable(element) {
-//   var isMouseDown = false;
-//
-//   // initial mouse X and Y for `mousedown`
-//   var mouseX;
-//   var mouseY;
-//
-//   // element X and Y before and after move
-//   var elementX = 0;
-//   var elementY = 0;
-//
-//   // mouse button down over the element
-//   element.addEventListener('mousedown', onMouseDown);
-//
-//   /**
-//    * Listens to `mousedown` event.
-//    *
-//    * @param {Object} event - The event.
-//    */
-//   function onMouseDown(event) {
-//     mouseX = event.clientX;
-//     mouseY = event.clientY;
-//     isMouseDown = true;
-//   }
-//
-//   // mouse button released
-//   element.addEventListener('mouseup', onMouseUp);
-//
-//   /**
-//    * Listens to `mouseup` event.
-//    *
-//    * @param {Object} event - The event.
-//    */
-//   function onMouseUp(event) {
-//     isMouseDown = false;
-//     elementX = parseInt(element.style.left) || 0;
-//     elementY = parseInt(element.style.top) || 0;
-//   }
-//
-//   // need to attach to the entire document
-//   // in order to take full width and height
-//   // this ensures the element keeps up with the mouse
-//   document.addEventListener('mousemove', onMouseMove);
-//
-//   /**
-//    * Listens to `mousemove` event.
-//    *
-//    * @param {Object} event - The event.
-//    */
-//   function onMouseMove(event) {
-//     if (!isMouseDown) return;
-//     var deltaX = event.clientX - mouseX;
-//     var deltaY = event.clientY - mouseY;
-//     element.style.left = elementX + deltaX + 'px';
-//     element.style.top = elementY + deltaY + 'px';
-//   }
-//
-// //  return element
-// }

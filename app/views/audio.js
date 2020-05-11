@@ -69,28 +69,11 @@ module.exports = class Audio extends Component {
       stream: stream
     }
     this.streams[streamObj.id] = streamObj
-    // onmute event never calles
-    // Object.entries(this.streams).forEach(([id, stream]) => {
-    //   const tracks =  stream.stream.stream.getAudioTracks()
-    //   tracks.forEach((track) => track.onmute = (e)=> {
-    //     console.log('TRACK WAS MUTES')
-    //   })
-    // })
 
     return streamObj
   }
 
   createElement(streams) {
-  //  console.log('RENDERING', this)
-  //  Object.entries(this.streams).forEach(([id, stream]) => console.log('TRACKS', stream.stream.stream.getAudioTracks()))
-    // console.log(streams)
-    //
-    // // @todo: dont use local streams
-    // streams.forEach((stream) => {
-    //   this.addStreamSource(stream)
-    // })
-
-    // const section = (content, classes="") => html`<div class="${classes}">${content}</div>`
 
     const slider = ({ label, value, oninput, labelClass="", inputClass="", description=""}) => html`<div class="db pv2" title=${description}>
           <div class="dib w3 v-mid ${labelClass}" title=${description}>${label}</div>
