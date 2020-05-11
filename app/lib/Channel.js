@@ -23,6 +23,7 @@ class Channel extends EventEmitter {
     super()
     this.opts = opts
     this.tag = opts.tag
+    if(opts.localData !== undefined) this.localData = opts.localData
     Object.entries(peers).forEach(([id, peer]) => {
       let channel = peer.addChannel(opts)
       channel.on('update', (data) => {
@@ -44,6 +45,13 @@ class Channel extends EventEmitter {
     this.listeners.push({
       address: address,
       callback: callback
+    })
+  }
+
+  updateLocalData(newData) {
+    this.localData = newData
+    Object.entries(this.peers).forEach(([id, peer]) => {
+      peer.channels[this.tag].send('update', newData)
     })
   }
 

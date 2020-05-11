@@ -40,6 +40,23 @@ npm run watch
 ```
 
 # Changelog
+## [1.3.0] - 2020-05-03
+  Major refactor
+### Changed
+  - All state related to media streams contained in MultiPeer.js
+  - choo stores only used for ui state
+  - login, media settings, chat are all stateful components that only rerender when needed
+
+### Fixed
+  - bug on page load in safari
+  
+### Added
+  - Audio mixer
+  - popout window button
+  - video mute
+  - adaptive layout + layout controls
+  - all users can see muted streams
+
 ## [1.2.5] - 2020-03-31
 ### Changed
  - scrollable track info

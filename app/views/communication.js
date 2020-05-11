@@ -10,27 +10,47 @@ const grid = require('./videogrid.js')
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
      let videoSettings = ''
+     let audioSettings = ''
      let windowOpen = ''
+     let mute = ''
+     let videoMute = ''
      if(stream.settings && stream.settings.video) {
        videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
+       videoMute = html `<i
+         class="mh1 fas ${stream.isVideoMuted ? 'fa-video light-red':'fa-video'}" title="">
+       </i>`
        windowOpen =
-       html `<i
+       html `
+       <span class="mh2"> | </span>
+       <i
          onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
-         style="margin-left:6px" class="far fa-clone dim pointer" title="open window">
+         class="far fa-clone dim pointer ma2" title="open video into it's own window">
        </i>`
      }
+     if(stream.settings && stream.settings.audio) {
+       audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
+       mute =
+       html `<i
+         class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
+       </i>`
+     }
+    //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
+    // <div class="absolute top-0 right-0">
+    // ${windowOpen}
+    // </div>
     return html`<div class='w-100 h-100'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: 'cover'})}
-      <div class="absolute pa1 ph2 ma1 bottom-0" style="background:rgba(0, 0, 0, 0.5)">
-        ${stream.peer.nickname} ${videoSettings} ${windowOpen}
+      <div class="absolute pa2 ph2 ma1 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
+       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen}
       </div>
+
      </div>`
    })
    //return html`<div>${elements}</div>`
    return html`<div>${grid({
      elements: elements,
-     stretchToFit: false,
-     ratio: '16:9'
+     stretchToFit: state.layout.menu.stretchToFit,
+     ratio: state.layout.menu.stretchToFit? '4:3': '16:9'
    }, emit)}</div>`
    //return html`<div>${grid(state, emit)}</div>`
 }

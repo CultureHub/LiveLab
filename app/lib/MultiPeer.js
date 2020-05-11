@@ -100,13 +100,21 @@ class MultiPeer extends EventEmitter {
     return this.channels[tag]
   }
 
-  addStream(stream) {
+  addStream(stream, { isAudioMuted = false, isVideoMuted = false, name ='default' } = {}) {
     var settings = getSettingsFromStream(stream)
     this._localStreams[stream.id] = stream
-    this.user.streamInfo[stream.id] = { settings: settings }
+    this.user.streamInfo[stream.id] = { settings: settings, isAudioMuted: isAudioMuted, isVideoMuted: isVideoMuted, name: name }
     Object.values(this.peers).forEach((peer) => {
       peer.addStream(stream)
     })
+    this._updateStreamsList()
+  }
+
+  updateLocalStreamInfo( streamId, updateObj) {
+    this.user.streamInfo[streamId] = Object.assign({}, this.user.streamInfo[streamId], updateObj)
+
+    // share local updates with peers
+    this.channels.userInfo.updateLocalData(this.user)
     this._updateStreamsList()
   }
 
@@ -130,7 +138,7 @@ class MultiPeer extends EventEmitter {
           //   peer: peer,
           //   stream: stream
           // })
-          if(peer.streamInfo[stream.id]) streamObj = Object.assign({}, peer.streamInfo[stream.id], streamObj)
+          if(peer.streamInfo[stream.id]) streamObj = Object.assign({}, streamObj, peer.streamInfo[stream.id])
           streams.push(streamObj)
       //  }
       })
@@ -151,7 +159,7 @@ class MultiPeer extends EventEmitter {
     this.signaller.emit('getPeers')
   }
 
-  _handleSignal = function (data) {
+  _handleSignal (data) {
     // if there is currently no peer object for a peer id, that peer is initiating a new connection.
     if (!this.peers[data.id]) {
     //  this.emit('new peer', data)
@@ -202,51 +210,6 @@ class MultiPeer extends EventEmitter {
   sendToAll(data) {
     Object.keys(this.peers).forEach( (id)  =>  { this.peers[id]._peer.send(data) })
   }
-
-  /*
-    Handling events related to specific peers
-   */
-   // sendLocalInfo
-   // _shareUserInfo (peer) {
-   //   // var streamInfo = {}
-   //   // Object.values(this._localStreams).forEach((stream) => {
-   //   //   streamInfo[stream.stream.id] = Object.assign({}, stream)
-   //   //   delete streamInfo[stream.stream.id].stream
-   //   // })
-   //   console.log('sharing info', this.user)
-   //   peer._peer.send(JSON.stringify({
-   //     type: 'userInfo',
-   //     data: Object.assign({}, this.user)
-   //   }))
-   //
-   //    if ( !this.user.sendOnly ) {
-   //      peer._peer.send(JSON.stringify({
-   //       type: 'requestMedia'
-   //     }))
-   //   }
-   // }
-
-  // _processData(data, peer) {
-  //     let payload = JSON.parse(data)
-  //     // assert.equal(typeof payload.data, 'object', 'Data should be of type object')
-  //
-  //       console.log('data', peer, JSON.parse(data))
-  //     if(payload.type === 'message'){
-  //        self.messenger.messageReceived(payload.data, id)
-  //     } else if(payload.type === 'userInfo') {
-  //       console.log('got info', peer, payload.data)
-  //       var newPeer = Object.assign(peer, payload.data)
-  //       //newPeer.streams = Object.assign({}, peer.streams)
-  //       peer = newPeer
-  //     } else if(payload.type === 'requestMedia') {
-  //       Object.values(this._localStreams).forEach((stream) => { peer._peer.addStream(stream) })
-  //       this._updateStreamsList()
-  //     }
-  //     // this.emit('data', {
-  //     //   id: id,
-  //     //   data: JSON.parse(data)
-  //     // })
-  // }
 
 }
 

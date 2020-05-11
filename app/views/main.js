@@ -14,7 +14,7 @@ const Audio = require( './audio.js')
 const floating = (content, isVisible) => {
   if(isVisible) {
     return html`
-      <div class="pa4 bg-mid-gray db w-100 mt2">
+      <div class="pa4 bg-mid-gray db w-100 mt2" style="pointer-events:all">
         ${content}
       </div>
     `
@@ -36,7 +36,7 @@ function mainView (state, emit) {
     console.log(state.multiPeer.streams)
     return html`<div>
         ${communication(state, emit)}
-        <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:25rem;">
+        <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:25rem;pointer-events:none">
           ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), state.layout.menu.audio)}
           ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), state.layout.menu.chat)}
         </div>

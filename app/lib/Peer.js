@@ -25,7 +25,7 @@ class Peer extends EventEmitter {
   //  console.log('USER INFO', parent.user)
     Object.entries(parent.channels).forEach(([tag, channel]) => {
       console.log('ADDING CHANNEL', tag, channel)
-      this.channels[tag] = new PeerChannel(Object.assign({}, {peer: this}, channel.opts))
+      this.channels[tag] = new PeerChannel(Object.assign({}, {peer: this, parentChannel: channel}, channel.opts))
       channel.attachEvents(this.channels[tag])
     })
 
@@ -36,7 +36,8 @@ class Peer extends EventEmitter {
       )
       this.nickname = data.nickname
       this.streamInfo = data.streamInfo
-      parent.emit('update')
+      //parent.emit('update')
+      parent._updateStreamsList()
     })
 
     if(!parent.user.sendOnly) this.channels.userInfo.send('requestMedia')
@@ -57,9 +58,12 @@ class Peer extends EventEmitter {
   }
 
   addStream(stream) {
-    this.channels.userInfo.updateLocalData(this._parent.user)
+    // this.channels.userInfo.updateLocalData(this._parent.user)
     console.log('ADDING', this.requestMedia)
-    if(this.requestedMedia === true) this._peer.addStream(stream)
+    if(this.requestedMedia === true) {
+      this._parent.channels.userInfo.updateLocalData(this._parent.user)
+      this._peer.addStream(stream)
+    }
   }
 
   // addChannel(tag, globalChannel) {

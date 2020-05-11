@@ -22,14 +22,14 @@ module.exports = class Audio extends Component {
   }
 
   update(streams) {
-    console.log('new streams', streams, this.streams, Date.now())
+  //  console.log('new streams', streams, this.streams, Date.now())
 
     // Find new streams that have been added
     const newIds = streams.map((stream) => {
      if(!(stream.stream.id in this.streams)) {
        if(!stream.isLocal) {
-         if(stream.settings.audio) {
-           console.log('adding stream', stream, Date.now())
+         if(stream.settings && stream.settings.audio) {
+        //   console.log('adding stream', stream, Date.now())
            const newStream = this.addStreamSource(stream)
          }
        }
@@ -69,19 +69,20 @@ module.exports = class Audio extends Component {
       stream: stream
     }
     this.streams[streamObj.id] = streamObj
-    Object.entries(this.streams).forEach(([id, stream]) => {
-      const tracks =  stream.stream.stream.getAudioTracks()
-      tracks.forEach((track) => track.onmute = (e)=> {
-        console.log('TRACK WAS MUTES')
-      })
-    })
+    // onmute event never calles
+    // Object.entries(this.streams).forEach(([id, stream]) => {
+    //   const tracks =  stream.stream.stream.getAudioTracks()
+    //   tracks.forEach((track) => track.onmute = (e)=> {
+    //     console.log('TRACK WAS MUTES')
+    //   })
+    // })
 
     return streamObj
   }
 
   createElement(streams) {
-    console.log('RENDERING', this)
-    Object.entries(this.streams).forEach(([id, stream]) => console.log('TRACKS', stream.stream.stream.getAudioTracks()))
+  //  console.log('RENDERING', this)
+  //  Object.entries(this.streams).forEach(([id, stream]) => console.log('TRACKS', stream.stream.stream.getAudioTracks()))
     // console.log(streams)
     //
     // // @todo: dont use local streams

@@ -11,12 +11,7 @@ menuItem = ({ title, onclick, icon, selected = false }) => html`
 //  title="Share Screen"
 //  onclick= ${() => emit('user:shareScreen')}
 //  ></i>
-//  <i
-//   class="fas fa-th-large dim pointer ma3 db"
-//   style="display:block"
-//   title="Stretch To Fit"
-//   onclick= ${() => emit('user:shareScreen')}
-//   ></i>
+
 
 
 
@@ -24,12 +19,12 @@ module.exports = (state, emit) => {
   return html`
   <div class="fixed bottom-0 right-0 pa2">
       ${menuItem({
-        icon:  state.user.videomuted ?'fa-video red':'fa-video',
+        icon:  state.user.isVideoMuted ?'fa-video red':'fa-video',
         title: "Mute your video",
         onclick: () => emit('user:toggleVideoMute')
       })}
       ${menuItem({
-        icon:  state.user.muted ?'fa-microphone-slash red':'fa-microphone',
+        icon:  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone',
         title: "Mute your microphone",
         onclick: () => emit('user:toggleAudioMute')
       })}
@@ -38,6 +33,13 @@ module.exports = (state, emit) => {
         title: "Share screen",
         onclick: () => emit('user:shareScreen')
       })}
+      ${menuItem({
+        icon: 'fa-th-large',
+        title: "Stretch videos to fit screen",
+        onclick: () => emit('layout:toggleMenuItem', 'stretchToFit'),
+        selected: state.layout.menu.stretchToFit
+      })}
+      <br>
       ${menuItem({
         icon: 'fa-sliders-h',
         title: "Toggle volume controls",

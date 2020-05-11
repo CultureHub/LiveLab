@@ -8,7 +8,7 @@ module.exports = (state, emitter) => {
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
     isOnline: true,
-    version: '1.2.5',
+    version: '1.3.0',
     loggedIn: false,
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
@@ -17,42 +17,14 @@ module.exports = (state, emitter) => {
     // server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true,
-    muted: false,
-    videomuted: false
+    isAudioMuted: false,
+    isVideoMuted: false
   }
 
 
   state.multiPeer = new MultiPeer({}, emitter)
 
-  const setMuted = (muteVal) => {
-    if(state.multiPeer.defaultStream) {
-      const tracks = state.multiPeer.defaultStream.getAudioTracks()
-      tracks.forEach((track) => {
-        track.enabled = !muteVal
-      })
-    }
-  }
 
-  const setVideoMuted = (muteVal) => {
-    if(state.multiPeer.defaultStream) {
-      const tracks = state.multiPeer.defaultStream.getVideoTracks()
-      tracks.forEach((track) => {
-        track.enabled = !muteVal
-      })
-    }
-  }
-
-  emitter.on('user:toggleAudioMute', () => {
-    state.user.muted = !state.user.muted
-    setMuted(state.user.muted)
-    emitter.emit('render')
-  })
-
-  emitter.on('user:toggleVideoMute', () => {
-    state.user.videomuted = !state.user.videomuted
-    setVideoMuted(state.user.videomuted)
-    emitter.emit('render')
-  })
 
   emitter.on('user:join', function ({ room, server, nickname, stream, requestMedia }) {
     console.log('room is ', state.query.room)
@@ -100,6 +72,40 @@ module.exports = (state, emitter) => {
 
   //  state.multiPeer.addStream(stream)
     state.user.loggedIn = true
+
+    const setAudioMuted = (muteVal) => {
+      if(state.multiPeer.defaultStream) {
+        const tracks = state.multiPeer.defaultStream.getAudioTracks()
+        tracks.forEach((track) => {
+          track.enabled = !muteVal
+        })
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isAudioMuted: state.user.isAudioMuted})
+
+      }
+    }
+
+    const setVideoMuted = (muteVal) => {
+      if(state.multiPeer.defaultStream) {
+        const tracks = state.multiPeer.defaultStream.getVideoTracks()
+        tracks.forEach((track) => {
+          track.enabled = !muteVal
+        })
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isVideoMuted: state.user.isVideoMuted})
+
+      }
+    }
+
+    emitter.on('user:toggleAudioMute', () => {
+      state.user.isAudioMuted = !state.user.isAudioMuted
+      setAudioMuted(state.user.isAudioMuted)
+      emitter.emit('render')
+    })
+
+    emitter.on('user:toggleVideoMute', () => {
+      state.user.isVideoMuted = !state.user.isVideoMuted
+      setVideoMuted(state.user.isVideoMuted)
+      emitter.emit('render')
+    })
 
     // to do: media addTracks
     emitter.emit('render')
