@@ -9,6 +9,7 @@ const grid = require('./videogrid.js')
 
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
+  //   let state.layout.menu.stretchToFit = state.layout.menu.state.layout.menu.stretchToFit
      let videoSettings = ''
      let audioSettings = ''
      let windowOpen = ''
@@ -38,9 +39,9 @@ module.exports = (state, emit) => {
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
-    return html`<div class='w-100 h-100'>
-      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: 'cover'})}
-      <div class="absolute pa2 ph2 ma1 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
+    return html`<div class='w-100 h-100 ${state.layout.menu.stretchToFit? '' : 'ba'}'>
+      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.menu.stretchToFit? 'cover': 'contain'})}
+      <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
        <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen}
       </div>
 
