@@ -8,7 +8,7 @@ module.exports = (state, emitter) => {
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
     isOnline: true,
-    version: '1.3.0',
+    version: '1.3.1',
     loggedIn: false,
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
