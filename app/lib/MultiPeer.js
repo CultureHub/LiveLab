@@ -1,5 +1,5 @@
 // to do --> add classes for stream and simple peer that add extra information to each?
-const Channel = require('./Channel.js')
+const LocalChannel = require('./LocalChannel.js')
 var io = require('socket.io-client')
 var Peer = require('./Peer.js')
 var EventEmitter = require('events').EventEmitter
@@ -96,7 +96,7 @@ class MultiPeer extends EventEmitter {
 
   // opts can be tag and localData
   addChannel(tag, opts) {
-    this.channels[tag] = new Channel(Object.assign({}, opts, {tag: tag}), this.peers)
+    this.channels[tag] = new LocalChannel(Object.assign({}, opts, {tag: tag}), this.peers)
     return this.channels[tag]
   }
 

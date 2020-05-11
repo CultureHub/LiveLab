@@ -18,7 +18,7 @@ const EventEmitter = require('events').EventEmitter
 
 // @todo: what happens when send is called before connection is initiated
 
-class Channel extends EventEmitter {
+class LocalChannel extends EventEmitter {
   constructor(opts, peers) {
     super()
     this.opts = opts
@@ -69,4 +69,4 @@ class Channel extends EventEmitter {
   }
 }
 
-module.exports = Channel
+module.exports = LocalChannel

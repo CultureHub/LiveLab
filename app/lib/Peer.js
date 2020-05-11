@@ -25,7 +25,7 @@ class Peer extends EventEmitter {
   //  console.log('USER INFO', parent.user)
     Object.entries(parent.channels).forEach(([tag, channel]) => {
       console.log('ADDING CHANNEL', tag, channel)
-      this.channels[tag] = new PeerChannel(Object.assign({}, {peer: this, parentChannel: channel}, channel.opts))
+      this.channels[tag] = new PeerChannel(Object.assign({}, {peer: this, localChannel: channel}, channel.opts))
       channel.attachEvents(this.channels[tag])
     })
 
