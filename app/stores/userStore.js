@@ -101,6 +101,11 @@ module.exports = (state, emitter) => {
       emitter.emit('render')
     })
 
+    emitter.on('user:endStream', (streamObj) => {
+      state.multiPeer.removeStream(streamObj)
+    //  emitter.emit('render')
+    })
+
     emitter.on('user:toggleVideoMute', () => {
       state.user.isVideoMuted = !state.user.isVideoMuted
       setVideoMuted(state.user.isVideoMuted)

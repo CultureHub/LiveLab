@@ -1,8 +1,11 @@
 const html = require('choo/html')
 
-menuItem = ({ title, onclick, icon, selected = false }) => html`
-<i class="fas ${icon} ${selected?"bg-mid-gray" : "bg-dark-gray"} dim pointer pa3 db" style="display:block" title=${title} onclick= ${onclick}
+menuItem = ({ title, onclick, icon, selected = false, info }) => html`
+<div class="db relative pointer" onclick= ${onclick}>
+<i class="fas ${icon} ${selected?"bg-mid-gray" : "bg-dark-gray"} dim pointer pa3" style="display:block" title=${title}
  ></i>
+${info?html`<div class="absolute right-0 top-0 b pa2">${info}</div>` : '' }
+</div>
 `
 
 // <i
@@ -54,9 +57,19 @@ module.exports = (state, emit) => {
         selected: state.layout.menu.chat
         // classes: state.layout.menu.chat ? "bg-mid-gray": ""
       })}
+      ${menuItem({
+        icon: 'fa-users',
+        title: "Show participant list",
+        onclick: () => emit('layout:toggleMenuItem', 'users'),
+        selected: state.layout.menu.users,
+        info: Object.keys(state.multiPeer.peers).length + 1
+        // classes: state.layout.menu.chat ? "bg-mid-gray": ""
+      })}
   </div>
   `
 }
+
+//fas fa-user-friends
 
 // <i
 //   style="margin-left:3px"

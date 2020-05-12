@@ -7,6 +7,7 @@ module.exports = (state, emitter) => {
     menu: {
       chat: true,
       audio: false,
+      users: false,
       stretchToFit: true
     }
   }

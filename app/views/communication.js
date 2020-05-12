@@ -35,6 +35,11 @@ module.exports = (state, emit) => {
          class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
        </i>`
      }
+
+    let endStream = stream.isLocal ? html` <i
+       onclick=${()=> emit('user:endStream', stream)}
+       class="fas fa-times-circle dim pointer ma2" title="end stream">
+     </i>` : ''
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
@@ -42,7 +47,7 @@ module.exports = (state, emit) => {
     return html`<div class='w-100 h-100 ${state.layout.menu.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.menu.stretchToFit? 'cover': 'contain'})}
       <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
-       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen}
+       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen} ${endStream}
       </div>
 
      </div>`

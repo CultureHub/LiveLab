@@ -40,6 +40,11 @@ npm run watch
 ```
 
 # Changelog
+
+## [1.3.1] - 2020-05-12
+### Added
+  - hangup buttons for individual streams
+  
 ## [1.3.0] - 2020-05-03
   Major refactor
 ### Changed
@@ -49,7 +54,7 @@ npm run watch
 
 ### Fixed
   - bug on page load in safari
-  
+
 ### Added
   - Audio mixer
   - popout window button

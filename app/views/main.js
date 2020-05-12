@@ -4,7 +4,7 @@ const html = require('choo/html')
 const Login = require('./login.js')
 const communication = require('./communication.js')
 const menu = require('./menu.js')
-//const peersList = require('./peersList.js')
+const peersList = require('./peersList.js')
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 
@@ -46,6 +46,7 @@ function mainView (state, emit) {
         <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:25rem;pointer-events:none">
           ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
           ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat', state, emit)}
+          ${floating(peersList(state.multiPeer), 'users', 'participants currently in room', state, emit)}
           <div></div>
         </div>
         ${menu(state, emit)}

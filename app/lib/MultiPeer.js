@@ -110,6 +110,20 @@ class MultiPeer extends EventEmitter {
     this._updateStreamsList()
   }
 
+  removeStream(streamObj) {
+    if (streamObj.isLocal) {
+      if (this.defaultStream !== null && this.defaultStream.id === streamObj.stream.id) this.defaultStream = null
+      delete this._localStreams[streamObj.stream.id]
+      delete this.user.streamInfo[streamObj.stream.id]
+      Object.values(this.peers).forEach((peer) => {
+        peer._peer.removeStream(streamObj.stream)
+      })
+      this._updateStreamsList()
+    } else {
+      console.warn('trying to remove non-local stream')
+    }
+  }
+
   updateLocalStreamInfo( streamId, updateObj) {
     this.user.streamInfo[streamId] = Object.assign({}, this.user.streamInfo[streamId], updateObj)
 
