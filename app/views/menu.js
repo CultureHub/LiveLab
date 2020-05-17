@@ -1,10 +1,11 @@
 const html = require('choo/html')
-
+ // ${selected?"bg-mid-gray" : "bg-dark-gray"}
+ // text-shadow:4px 4px #555
 menuItem = ({ title, onclick, icon, selected = false, info }) => html`
-<div class="db relative pointer" onclick= ${onclick}>
-<i class="fas ${icon} ${selected?"bg-mid-gray" : "bg-dark-gray"} dim pointer pa3" style="display:block" title=${title}
+<div class="db relative pointer pa3 ${selected?"bg-mid-gray" : "bg-dark-gray"}" title=${title} onclick= ${onclick}>
+<i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
-${info?html`<div class="absolute right-0 top-0 b pa2">${info}</div>` : '' }
+${info?html`<div class="absolute light-gray right-0 top-0 b pa2" style="text-shadow:3px 3px #555">${info}</div>` : '' }
 </div>
 `
 
@@ -37,33 +38,56 @@ module.exports = (state, emit) => {
         onclick: () => emit('user:shareScreen')
       })}
       ${menuItem({
+        icon: 'fa-phone',
+        title: "Leave call",
+        info: 'x',
+        onclick: () => emit('user:endCall')
+      })}
+      <br>
+      <br>
+      ${menuItem({
         icon: 'fa-th-large',
         title: "Stretch videos to fit screen",
-        onclick: () => emit('layout:toggleMenuItem', 'stretchToFit'),
-        selected: state.layout.menu.stretchToFit
+        onclick: () => emit('layout:toggleMenuItem', 'stretchToFit', 'settings'),
+        selected: state.layout.settings.stretchToFit
       })}
+      ${menuItem({
+        icon: 'fa-question',
+        title: "Info",
+        onclick: () => emit('layout:showInfo'),
+        // selected: state.layout.settings.stretchToFit
+      })}
+      <br>
       <br>
       ${menuItem({
         icon: 'fa-sliders-h',
         title: "Toggle volume controls",
-        onclick: () => emit('layout:toggleMenuItem', 'audio'),
-        selected: state.layout.menu.audio
-        // classes: state.layout.menu.audio ? "bg-mid-gray" : "bg-dark-gray"
+        onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
+        selected: state.layout.panels.audio
+        // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+      })}
+      ${menuItem({
+        icon: '',
+        title: "Open switcher A",
+        onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
+        selected: state.layout.panels.switcherA,
+        info: 'A'
+        // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
       })}
       ${menuItem({
         icon: 'fa-comment',
         title: "Toggle chat",
-        onclick: () => emit('layout:toggleMenuItem', 'chat'),
-        selected: state.layout.menu.chat
-        // classes: state.layout.menu.chat ? "bg-mid-gray": ""
+        onclick: () => emit('layout:toggleMenuItem', 'chat', 'panels'),
+        selected: state.layout.panels.chat
+        // classes: state.layout.panels.chat ? "bg-mid-gray": ""
       })}
       ${menuItem({
         icon: 'fa-users',
         title: "Show participant list",
-        onclick: () => emit('layout:toggleMenuItem', 'users'),
-        selected: state.layout.menu.users,
+        onclick: () => emit('layout:toggleMenuItem', 'users', 'panels'),
+        selected: state.layout.panels.users,
         info: Object.keys(state.multiPeer.peers).length + 1
-        // classes: state.layout.menu.chat ? "bg-mid-gray": ""
+        // classes: state.layout.panels.chat ? "bg-mid-gray": ""
       })}
   </div>
   `

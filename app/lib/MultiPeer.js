@@ -94,6 +94,13 @@ class MultiPeer extends EventEmitter {
     })
   }
 
+  endCall() {
+    Object.values(this.peers).forEach((peer) => {
+      peer._peer.destroy()
+    })
+    this.signaller.close()
+  }
+
   // opts can be tag and localData
   addChannel(tag, opts) {
     this.channels[tag] = new LocalChannel(Object.assign({}, opts, {tag: tag}), this.peers)

@@ -13,12 +13,13 @@ module.exports = (state, emitter) => {
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-   server: 'https://livelab.app:6643',
+    server: 'https://livelab.app:6643',
     // server: 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,
-    isVideoMuted: false
+    isVideoMuted: false,
+    callEnded: false
   }
 
 
@@ -103,7 +104,12 @@ module.exports = (state, emitter) => {
 
     emitter.on('user:endStream', (streamObj) => {
       state.multiPeer.removeStream(streamObj)
-    //  emitter.emit('render')
+    })
+
+    emitter.on('user:endCall', (streamObj) => {
+      state.multiPeer.endCall()
+      state.user.callEnded = true
+      emitter.emit('render')
     })
 
     emitter.on('user:toggleVideoMute', () => {

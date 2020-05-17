@@ -4,16 +4,27 @@ const debounce = require('./../lib/utils.js').debounce
 module.exports = (state, emitter) => {
 
   state.layout = {
-    menu: {
+    panels: {
       chat: true,
       audio: false,
       users: false,
-      stretchToFit: true
+      switcherA: true,
+      switcherB: false
+    },
+    settings: {
+      stretchToFit: true,
+      switcherA: null,
+      switcherB: null
     }
   }
 
-  emitter.on('layout:toggleMenuItem', (item) => {
-    state.layout.menu[item] = !state.layout.menu[item]
+  emitter.on('layout:toggleMenuItem', (item, type) => {
+    state.layout[type][item] = !state.layout[type][item]
+    emitter.emit('render')
+  })
+
+  emitter.on('layout:setSettings', (item, value) => {
+    state.layout.settings[item] = value
     emitter.emit('render')
   })
 

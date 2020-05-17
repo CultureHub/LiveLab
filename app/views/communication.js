@@ -9,7 +9,7 @@ const grid = require('./videogrid.js')
 
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
-  //   let state.layout.menu.stretchToFit = state.layout.menu.state.layout.menu.stretchToFit
+  //   let state.layout.settings.stretchToFit = state.layout.menu.state.layout.settings.stretchToFit
      let videoSettings = ''
      let audioSettings = ''
      let windowOpen = ''
@@ -26,7 +26,12 @@ module.exports = (state, emit) => {
        <i
          onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
          class="far fa-clone dim pointer ma2" title="open video into it's own window">
-       </i>`
+       </i>
+       <i
+         onclick=${()=> emit('layout:setSettings', 'switcherA', stream)}
+         class="dim pointer ma2" title="set video output to switcher a"> A
+       </i>
+       `
      }
      if(stream.settings && stream.settings.audio) {
        audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
@@ -44,19 +49,24 @@ module.exports = (state, emit) => {
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
-    return html`<div class='w-100 h-100 ${state.layout.menu.stretchToFit? '' : 'ba'}'>
-      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.menu.stretchToFit? 'cover': 'contain'})}
+    return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
+      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
       <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
        <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen} ${endStream}
       </div>
 
      </div>`
    })
-   //return html`<div>${elements}</div>`
+   //return html`<div>${elements}</div>`=
+   // let numOpenPanels = Object.values(state.layout.panels).filter((val) => val).length
+   // console.log(numOpenPanels)
+   // let sideMargin = numOpenPanels > 1 ? 400 : 0
+   let sideMargin = 0
    return html`<div>${grid({
      elements: elements,
-     stretchToFit: state.layout.menu.stretchToFit,
-     ratio: state.layout.menu.stretchToFit? '4:3': '16:9'
+     stretchToFit: state.layout.settings.stretchToFit,
+     outerWidth: window.innerWidth - sideMargin,
+     ratio: state.layout.settings.stretchToFit? '4:3': '16:9'
    }, emit)}</div>`
    //return html`<div>${grid(state, emit)}</div>`
 }
