@@ -20,77 +20,124 @@ ${info?html`<div class="absolute light-gray right-0 top-0 b pa2" style="text-sha
 
 
 module.exports = (state, emit) => {
-  return html`
-  <div class="fixed bottom-0 right-0 pa2">
-      ${menuItem({
-        icon:  state.user.isVideoMuted ?'fa-video red':'fa-video',
-        title: "Mute your video",
-        onclick: () => emit('user:toggleVideoMute')
-      })}
-      ${menuItem({
-        icon:  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone',
-        title: "Mute your microphone",
-        onclick: () => emit('user:toggleAudioMute')
-      })}
-      ${menuItem({
-        icon: 'fa-desktop',
-        title: "Share screen",
-        onclick: () => emit('user:shareScreen')
-      })}
-      ${menuItem({
-        icon: 'fa-phone',
-        title: "Leave call",
-        info: 'x',
-        onclick: () => emit('user:endCall')
-      })}
-      <br>
-      <br>
-      ${menuItem({
-        icon: 'fa-th-large',
-        title: "Stretch videos to fit screen",
-        onclick: () => emit('layout:toggleMenuItem', 'stretchToFit', 'settings'),
-        selected: state.layout.settings.stretchToFit
-      })}
-      ${menuItem({
-        icon: 'fa-question',
-        title: "Info",
-        onclick: () => emit('layout:showInfo'),
-        // selected: state.layout.settings.stretchToFit
-      })}
-      <br>
-      <br>
-      ${menuItem({
-        icon: 'fa-sliders-h',
-        title: "Toggle volume controls",
-        onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
-        selected: state.layout.panels.audio
-        // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-      })}
-      ${menuItem({
-        icon: '',
-        title: "Open switcher A",
-        onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
-        selected: state.layout.panels.switcherA,
-        info: 'A'
-        // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-      })}
-      ${menuItem({
-        icon: 'fa-comment',
-        title: "Toggle chat",
-        onclick: () => emit('layout:toggleMenuItem', 'chat', 'panels'),
-        selected: state.layout.panels.chat
-        // classes: state.layout.panels.chat ? "bg-mid-gray": ""
-      })}
-      ${menuItem({
-        icon: 'fa-users',
-        title: "Show participant list",
-        onclick: () => emit('layout:toggleMenuItem', 'users', 'panels'),
-        selected: state.layout.panels.users,
-        info: Object.keys(state.multiPeer.peers).length + 1
-        // classes: state.layout.panels.chat ? "bg-mid-gray": ""
-      })}
-  </div>
-  `
+  if(state.layout.collapsed) {
+    return html`
+    <div class="fixed bottom-0 right-0 pa2">
+    ${menuItem({
+      icon:  'fa-chevron-up',
+      title: "Show menu",
+      onclick: () => emit('layout:openMenu')
+    })}
+    </div>
+    `
+  } else {
+    return html`
+    <div class="fixed bottom-0 right-0 pa2">
+    ${menuItem({
+      icon: 'fa-share-alt',
+      title: "Share",
+      // info: 'x',
+      onclick: () => {}
+    })}
+    ${menuItem({
+      icon: 'fa-question',
+      title: "Info",
+      onclick: () => emit('layout:showInfo'),
+      // selected: state.layout.settings.stretchToFit
+    })}
+    <br>
+        ${menuItem({
+          icon:  state.user.isVideoMuted ?'fa-video red':'fa-video green',
+          title: "Mute your video",
+          onclick: () => emit('user:toggleVideoMute')
+        })}
+        ${menuItem({
+          icon:  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone green',
+          title: "Mute your microphone",
+          onclick: () => emit('user:toggleAudioMute')
+        })}
+        ${menuItem({
+          icon: 'fa-desktop',
+          title: "Add screen share",
+          onclick: () => emit('user:shareScreen'),
+          info: '+'
+        })}
+        ${menuItem({
+          icon: 'fa-video',
+          title: "Add video stream",
+          onclick: () => emit('user:shareScreen'),
+          info: '+'
+        })}
+        ${menuItem({
+          icon: 'fa-microphone',
+          title: "Add audio stream",
+          onclick: () => emit('user:shareScreen'),
+          info: '+'
+        })}
+
+        ${menuItem({
+          icon: 'fa-phone-slash',
+          title: "Leave call",
+          // info: 'x',
+          onclick: () => emit('user:endCall')
+        })}
+        <br>
+        <br>
+        ${menuItem({
+          icon: state.layout.settings.stretchToFit? 'fa-compress-alt': 'fa-expand-alt',
+          title: state.layout.settings.stretchToFit? 'Fit to bounding box':"Stretch videos to fit screen",
+          onclick: () => emit('layout:toggleMenuItem', 'stretchToFit', 'settings')
+        })}
+        <br>
+        <br>
+        ${menuItem({
+          icon: 'fa-sliders-h',
+          title: "Toggle volume controls",
+          onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
+          selected: state.layout.panels.audio
+          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+        })}
+        ${menuItem({
+          icon: 'fa-desktop',
+          title: "Open switcher A",
+          onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
+          selected: state.layout.panels.switcherA,
+          info: 'A'
+          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+        })}
+        ${menuItem({
+          icon: 'fa-desktop',
+          title: "Open switcher B",
+          onclick: () => emit('layout:toggleMenuItem', 'switcherB', 'panels'),
+          selected: state.layout.panels.switcherB,
+          info: 'B'
+          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+        })}
+        ${menuItem({
+          icon: 'fa-comment',
+          title: "Toggle chat",
+          onclick: () => emit('layout:toggleMenuItem', 'chat', 'panels'),
+          selected: state.layout.panels.chat
+          // classes: state.layout.panels.chat ? "bg-mid-gray": ""
+        })}
+        ${menuItem({
+          icon: 'fa-users',
+          title: "Show participant list",
+          onclick: () => emit('layout:toggleMenuItem', 'users', 'panels'),
+          selected: state.layout.panels.users,
+          info: Object.keys(state.multiPeer.peers).length + 1
+          // classes: state.layout.panels.chat ? "bg-mid-gray": ""
+        })}
+        <br>
+        ${menuItem({
+          icon:  'fa-chevron-down',
+          title: "Collapse menu",
+          onclick: () => emit('layout:collapseMenu')
+        })}
+
+    </div>
+    `
+  }
 }
 
 //fas fa-user-friends

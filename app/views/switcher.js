@@ -6,7 +6,7 @@ module.exports = class Switcher extends Component {
   constructor (id, state, emit) {
     super(id)
     this.stream = null
-    this.opacity = 50
+    this.opacity = 100
     this.window = null
     this.windowVideo = null
 
@@ -70,6 +70,7 @@ module.exports = class Switcher extends Component {
 
   createElement(name, state) {
     this.name = name
+    this.label = name === 'switcherA' ? 'Switcher A' : 'Switcher B'
     this.state = state
     const stream = state.layout.settings[name]
     if(stream !== this.stream) {
@@ -81,18 +82,18 @@ module.exports = class Switcher extends Component {
         ${state.cache(Video, `video-${name}`).render(stream?stream.stream:null, {objectFit: 'contain', background:'black', opacity: this.opacity/100, position: 'absolute', width:'calc(100%-20px)'})}
         <div class="absolute bottom-0 pa2">${stream ? `${stream.peer.nickname} -  ${stream.name}`: ''}</div>
         <div class='slider-container'>
-          <input type="range" orient="vertical" value=${this.opacity} min="1" max="100" class="slider" style='right:20px;top:0px;width:140px' onchange=${(e)=>{this.setOpacity(e.target.value)}}>
+          <input type="range" orient="vertical" value=${this.opacity} min="1" max="100" class="slider" style='right:20px;top:0px;width:140px' oninput=${(e)=>{this.setOpacity(e.target.value)}}>
         </div>
       </div>
-      Switcher A
+      ${this.label}
       <span class="mh2"> | </span>
       <i
-        onclick=${()=> this.openWindow('Live Lab - Output A')}
-        class="far fa-clone dim pointer ma2" title="open video into it's own window">
+        onclick=${()=> this.openWindow(`Live Lab - ${this.label}`)}
+        class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
       </i>
        <i
          onclick=${()=> this.clear()}
-         class="fas fa-times-circle dim pointer ma2" title="clear switcher">
+         class="fas fa-trash-alt dim pointer ma2" title="clear switcher">
        </i>
       </div>`
   }

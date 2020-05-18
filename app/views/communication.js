@@ -25,11 +25,15 @@ module.exports = (state, emit) => {
        <span class="mh2"> | </span>
        <i
          onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
-         class="far fa-clone dim pointer ma2" title="open video into it's own window">
+         class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
        </i>
        <i
          onclick=${()=> emit('layout:setSettings', 'switcherA', stream)}
-         class="dim pointer ma2" title="set video output to switcher a"> A
+         class="dim pointer ma2 b" title="send video to switcher a"> A
+       </i>
+       <i
+         onclick=${()=> emit('layout:setSettings', 'switcherB', stream)}
+         class="dim pointer ma2 b" title="send video to switcher b"> B
        </i>
        `
      }
@@ -43,15 +47,16 @@ module.exports = (state, emit) => {
 
     let endStream = stream.isLocal ? html` <i
        onclick=${()=> emit('user:endStream', stream)}
-       class="fas fa-times-circle dim pointer ma2" title="end stream">
+       class="fas fa-trash-alt dim pointer ma2" title="end stream">
      </i>` : ''
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
+      // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
     return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
-      <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
+      <div class="absolute pa2 ph2 ma2 bottom-0">
        <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen} ${endStream}
       </div>
 
@@ -61,6 +66,7 @@ module.exports = (state, emit) => {
    // let numOpenPanels = Object.values(state.layout.panels).filter((val) => val).length
    // console.log(numOpenPanels)
    // let sideMargin = numOpenPanels > 1 ? 400 : 0
+   // let sideMargin = state.layout.collapsed? 0: 62
    let sideMargin = 0
    return html`<div>${grid({
      elements: elements,

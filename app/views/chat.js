@@ -7,6 +7,7 @@ module.exports = class Chat extends Component {
   constructor (id, state, emit) {
     super(id)
     this.user = state.user
+    this.emit = emit
    this.channel = state.multiPeer.addChannel('chat', {})
     // console.log('added chat channel', id,state, emit)
     // this.messages = []
@@ -27,6 +28,7 @@ module.exports = class Chat extends Component {
       user: user,
       time: Date.now()
     })
+    this.emit('layout:openChat')
     this.rerender()
   }
 

@@ -14,7 +14,7 @@ const Switcher = require( './switcher.js')
 // const audio = new Audio()
 //const workspace = require('./workspace.js')
 const floating = (content, name, label, state, emit) => {
-  if(state.layout.panels[name]) {
+  if(state.layout.panels[name] && !state.layout.collapsed) {
     return html`
       <div class="pa4 bg-mid-gray db w-100 mt2 shadow-2" style="pointer-events:all">
       <i
@@ -51,6 +51,7 @@ function mainView (state, emit) {
           <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:25rem;pointer-events:none">
             ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
             ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
+            ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
             ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat', state, emit)}
             ${floating(peersList(state.multiPeer), 'users', 'participants currently in room', state, emit)}
             <div></div>

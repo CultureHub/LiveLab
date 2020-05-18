@@ -1,16 +1,17 @@
 var html = require('choo/html')
 var Component = require('choo/component')
 const input = require('./components/input.js')
-// var AudioContext = window.AudioContext || window.webkitAudioContext;
+var AudioContext = window.AudioContext || window.webkitAudioContext;
 
 
 module.exports = class Audio extends Component {
   constructor (id, state, emit) {
     super(id)
-    // this.ctx = new AudioContext()
+    this.ctx = new AudioContext()
     this.streams = {}
-    this.defaultGain = 1
-    this.masterGain = 1
+    this.defaultVolume = 1
+    this.masterGain = this.ctx.createGain()
+    this.masterGain.connect(this.ctx.destination)
 
     // explicitly listen to update because not always called
     state.multiPeer.on('update', () => {
@@ -53,43 +54,21 @@ module.exports = class Audio extends Component {
   }
 
   removeStreamSource(streamObj) {
-    document.body.removeChild(streamObj.el)
     delete this.streams[streamObj.id]
-    // streamObj.gain.disconnect()
-    // streamObj.src.disconnect()
-  }
-
-  updateStreamVolumes() {
-    Object.entries(this.streams).forEach(([id, streamObj]) => {
-      streamObj.el.volume = streamObj.streamGain * this.masterGain
-    })
+    streamObj.gain.disconnect()
+    streamObj.src.disconnect()
   }
 
   addStreamSource (stream) {
-    // const gain = this.ctx.createGain()
-    // const src = this.ctx.createMediaStreamSource(stream.stream)
-
-    var audio = document.createElement('audio')
-    audio.autoplay = true
-    // var tracks = []
-    // tracks.push(track)
-    // var stream = new MediaStream(tracks) // stream must be initialized with array of tracks, even though documentation says otherwise
-    audio.srcObject = stream.stream
-  //  console.log("setting volume", volume)
-  //  audio.volume = volume
-    audio.volume = this.defaultGain * this.masterGain
-    document.body.appendChild(audio)
-  //  return audio
-
-  //  src.connect(gain)
-    // gain.connect(this.masterGain)
-    // gain.gain.value = this.defaultGain
+    const gain = this.ctx.createGain()
+    const src = this.ctx.createMediaStreamSource(stream.stream)
+    src.connect(gain)
+    gain.connect(this.masterGain)
+    gain.gain.value = this.defaultVolume
     const streamObj = {
       id: stream.stream.id,
-        // gain: gain,
-        // src: src,
-      streamGain: this.defaultGain,
-      el: audio,
+      gain: gain,
+      src: src,
       stream: stream
     }
     this.streams[streamObj.id] = streamObj
@@ -115,11 +94,8 @@ module.exports = class Audio extends Component {
         ${slider({
           description: "master volume",
           label: "master volume",
-          value: this.masterGain*100,
-          oninput: (e) => {
-            this.masterGain = e.target.value/100
-            this.updateStreamVolumes()
-          },
+          value: this.masterGain.gain.value*100,
+          oninput: (e) => { this.masterGain.gain.value = e.target.value/100},
           labelClass: "w4",
           inputClass: "w5"
         })}
@@ -130,9 +106,9 @@ module.exports = class Audio extends Component {
           label: "default volume when new user joins",
           labelClass: "w-100 db",
           inputClass: "w5",
-          value: this.defaultGain*100,
+          value: this.defaultVolume*100,
           oninput: (e) => {
-            this.defaultGain = e.target.value/100
+            this.defaultVolume = e.target.value/100
             this.rerender()
           }
         })}
@@ -141,12 +117,9 @@ module.exports = class Audio extends Component {
         ${Object.entries(this.streams).map(([id, streamObj]) => slider({
           description: "volume control for individual streams",
           label: streamObj.stream.peer.nickname,
-          value: streamObj.el.volume*100,
+          value: streamObj.gain.gain.value*100,
           muted: streamObj.stream.isAudioMuted,
-          oninput: (e) => {
-            streamObj.streamGain = e.target.value/100
-            streamObj.el.volume = streamObj.streamGain * this.masterGain
-          }
+          oninput: (e) => { streamObj.gain.gain.value = e.target.value/100}
         }))}
       </div>`: ''}
     </div>`
