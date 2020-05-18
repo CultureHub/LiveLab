@@ -141,7 +141,7 @@ module.exports = class Audio extends Component {
         ${Object.entries(this.streams).map(([id, streamObj]) => slider({
           description: "volume control for individual streams",
           label: streamObj.stream.peer.nickname,
-          value: streamObj.el.volume*100,
+          value: streamObj.streamGain*100,
           muted: streamObj.stream.isAudioMuted,
           oninput: (e) => {
             streamObj.streamGain = e.target.value/100
