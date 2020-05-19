@@ -9,18 +9,19 @@ module.exports = (state, emitter) => {
       audio: false,
       users: false,
       switcherA: false,
-      switcherB: false
+      switcherB: false,
+      addAudio: false
     },
     settings: {
       stretchToFit: true,
       switcherA: null,
       switcherB: null
     },
-    collapsed: false
+    collapsed: 1   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
   }
 
-  emitter.on('layout:collapseMenu', () => {
-    state.layout.collapsed = true
+  emitter.on('layout:collapseMenu', (val) => {
+    state.layout.collapsed = val
     emitter.emit('render')
   })
 

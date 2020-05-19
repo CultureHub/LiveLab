@@ -8,7 +8,7 @@ module.exports = (state, emitter) => {
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
     isOnline: true,
-    version: '1.3.1',
+    version: '1.3.2',
     loggedIn: false,
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
@@ -24,7 +24,7 @@ module.exports = (state, emitter) => {
 
 
   state.multiPeer = new MultiPeer({}, emitter)
-
+  window.audioCtx = new AudioContext()
 
 
   emitter.on('user:join', function ({ room, server, nickname, stream, requestMedia }) {
@@ -134,6 +134,13 @@ module.exports = (state, emitter) => {
 
   emitter.on('user:shareScreen', () => {
     startCapture({})
+  })
+
+  emitter.on('user:addStream', (stream) => {
+    if(stream) {
+      state.multiPeer.addStream(stream)
+      emitter.emit('render')
+    }
   })
 
   async function startCapture(displayMediaOptions) {

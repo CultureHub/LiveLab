@@ -56,7 +56,7 @@ module.exports = (state, emit) => {
       // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
     return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
-      <div class="absolute pa2 ph2 ma2 bottom-0">
+      <div class="absolute pa2 ph2 ma2 bottom-0" style="text-shadow: 2px 2px 4px #000">
        <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen} ${endStream}
       </div>
 

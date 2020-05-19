@@ -1,13 +1,15 @@
 const html = require('choo/html')
  // ${selected?"bg-mid-gray" : "bg-dark-gray"}
  // text-shadow:4px 4px #555
-menuItem = ({ title, onclick, icon, selected = false, info }) => html`
+const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
 <div class="db relative pointer pa3 ${selected?"bg-mid-gray" : "bg-dark-gray"}" title=${title} onclick= ${onclick}>
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
-${info?html`<div class="absolute light-gray right-0 top-0 b pa2" style="text-shadow:3px 3px #555">${info}</div>` : '' }
+${info?html`<div class="absolute light-gray right-0 top-0 b pa2">${info}</div>` : '' }
 </div>
 `
+
+
 
 // <i
 //  class="fas fa-desktop dim pointer ma3 db"
@@ -20,13 +22,22 @@ ${info?html`<div class="absolute light-gray right-0 top-0 b pa2" style="text-sha
 
 
 module.exports = (state, emit) => {
-  if(state.layout.collapsed) {
+  const menuItem = (opts) => {
+  //  console.log()
+    if(state.layout.collapsed === 1 && opts.advanced ) {
+      return ''
+    } else {
+      return menuIcon(opts)
+    }
+  }
+
+  if(state.layout.collapsed === 0) {
     return html`
     <div class="fixed bottom-0 right-0 pa2">
-    ${menuItem({
+    ${menuIcon({
       icon:  'fa-chevron-up',
       title: "Show menu",
-      onclick: () => emit('layout:openMenu')
+      onclick: () => emit('layout:collapseMenu', 1)
     })}
     </div>
     `
@@ -66,12 +77,14 @@ module.exports = (state, emit) => {
           icon: 'fa-video',
           title: "Add video stream",
           onclick: () => emit('user:shareScreen'),
+          advanced: true,
           info: '+'
         })}
         ${menuItem({
           icon: 'fa-microphone',
           title: "Add audio stream",
-          onclick: () => emit('user:shareScreen'),
+          onclick: () =>  emit('layout:toggleMenuItem', 'addAudio', 'panels'),
+          advanced: true,
           info: '+'
         })}
 
@@ -94,6 +107,7 @@ module.exports = (state, emit) => {
           icon: 'fa-sliders-h',
           title: "Toggle volume controls",
           onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
+          advanced: true,
           selected: state.layout.panels.audio
           // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
         })}
@@ -101,6 +115,7 @@ module.exports = (state, emit) => {
           icon: 'fa-desktop',
           title: "Open switcher A",
           onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
+          advanced: true,
           selected: state.layout.panels.switcherA,
           info: 'A'
           // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
@@ -110,6 +125,7 @@ module.exports = (state, emit) => {
           title: "Open switcher B",
           onclick: () => emit('layout:toggleMenuItem', 'switcherB', 'panels'),
           selected: state.layout.panels.switcherB,
+          advanced: true,
           info: 'B'
           // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
         })}
@@ -129,10 +145,14 @@ module.exports = (state, emit) => {
           // classes: state.layout.panels.chat ? "bg-mid-gray": ""
         })}
         <br>
-        ${menuItem({
+        ${state.layout.collapsed === 2 ? menuItem({
           icon:  'fa-chevron-down',
           title: "Collapse menu",
-          onclick: () => emit('layout:collapseMenu')
+          onclick: () => emit('layout:collapseMenu', 0)
+        }) :  menuItem({
+          icon:  'fa-angle-double-up',
+          title: "Expand menu",
+          onclick: () => emit('layout:collapseMenu', 2)
         })}
 
     </div>

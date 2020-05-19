@@ -8,19 +8,37 @@ const peersList = require('./peersList.js')
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 const Switcher = require( './switcher.js')
-
+const AddAudio = require('./addAudio.js')
 
 // const chat = new Chat()
 // const audio = new Audio()
 //const workspace = require('./workspace.js')
 const floating = (content, name, label, state, emit) => {
-  if(state.layout.panels[name] && !state.layout.collapsed) {
+  if(state.layout.panels[name] && (state.layout.collapsed !== 0 || name === 'chat')) {
     return html`
       <div class="pa4 bg-mid-gray db w-100 mt2 shadow-2" style="pointer-events:all">
       <i
               class="fas fa-times relative fr dim pointer"
               title="close ${label}"
               style="top:-20px;right:-20px"
+              aria-hidden="true"
+              onclick=${() =>{ emit('layout:toggleMenuItem', name, 'panels')}} >
+      </i>
+        ${content}
+      </div>
+    `
+  } else {
+    return html`<div style="display:none">${content}</div>`
+  }
+}
+
+const modal = (content, name, label, state, emit) => {
+  if(state.layout.panels[name]) {
+    return html`
+      <div class="pa2 pa4-ns bg-mid-gray fixed w-100 h-100 top-0 left-0" style="pointer-events:all">
+      <i
+              class="fas fa-times absolute top-0 right-0 ma2 fr dim pointer"
+              title="close ${label}"
               aria-hidden="true"
               onclick=${() =>{ emit('layout:toggleMenuItem', name, 'panels')}} >
       </i>
@@ -57,6 +75,7 @@ function mainView (state, emit) {
             <div></div>
           </div>
           ${menu(state, emit)}
+          ${modal(state.cache(AddAudio, 'add-audio').render(state.layout.panels.addAudio, emit), 'addAudio', 'add audio', state, emit)}
       </div>`
     }
    }
