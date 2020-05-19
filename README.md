@@ -41,10 +41,25 @@ npm run watch
 
 # Changelog
 
+## [1.3.2] - 2020-05-17
+### Added
+  - Global hangup
+  - Switcher A and B
+  - buttons for share, add video, add audio, help/info (non-functional)
+  - Chat opens when a chat is received and window is closed
+  - collapsible menu
+  - 'advanced' and 'basic' menu
+  - add audio with mic visualization
+
+### Changed
+  - Icons for bounding box, end call, share window
+  - Audio mixer uses HTML elements rather than web audio ()
+
 ## [1.3.1] - 2020-05-12
 ### Added
   - hangup buttons for individual streams
-  
+  - indicator of number of users in room
+
 ## [1.3.0] - 2020-05-03
   Major refactor
 ### Changed

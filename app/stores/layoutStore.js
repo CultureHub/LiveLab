@@ -17,7 +17,7 @@ module.exports = (state, emitter) => {
       switcherA: null,
       switcherB: null
     },
-    collapsed: 1   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
+    collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
   }
 
   emitter.on('layout:collapseMenu', (val) => {
