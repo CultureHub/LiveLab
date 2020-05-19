@@ -95,13 +95,11 @@ module.exports = (state, emit) => {
           onclick: () => emit('user:endCall')
         })}
         <br>
-        <br>
         ${menuItem({
           icon: state.layout.settings.stretchToFit? 'fa-compress-alt': 'fa-expand-alt',
           title: state.layout.settings.stretchToFit? 'Fit to bounding box':"Stretch videos to fit screen",
           onclick: () => emit('layout:toggleMenuItem', 'stretchToFit', 'settings')
         })}
-        <br>
         <br>
         ${menuItem({
           icon: 'fa-sliders-h',
