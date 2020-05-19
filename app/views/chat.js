@@ -30,6 +30,12 @@ module.exports = class Chat extends Component {
     })
     this.emit('layout:openChat')
     this.rerender()
+
+    // for some reason this only works with getElementById??
+    setTimeout(() => {
+      let t = document.getElementById('scroll-container')
+      t.scrollTop = t.scrollHeight
+    }, 200)
   }
 
 
@@ -52,10 +58,12 @@ module.exports = class Chat extends Component {
       })}
     </div>`
     var container =  html
-    `<div  id="scroll-container" class="overflow-y-auto" style="max-height:340px;">
+    `<div  id="scroll-container" class="overflow-y-auto" style="max-height:200px;">
     ${scrollEl}
     </div>`
+    this.container = container
     container.scrollTop = container.scrollHeight
+
       // ${container}
     return html`  <div>
           ${container}
