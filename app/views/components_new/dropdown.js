@@ -36,7 +36,8 @@ Dropdown.prototype.createElement = function (props) {
   /* Styles */
   /*background: #9bc7de;
   color: #fff;*/
-  background: #555555;
+  /* background: #555555; */
+  background: none;
   outline: none;
   cursor: pointer;
 
@@ -66,7 +67,8 @@ Dropdown.prototype.createElement = function (props) {
   margin: 0px;
   padding: 0px;
   /* Styles */
-  background: #fff;
+  /* background: #fff; */
+  background: none;
   font-weight: normal; /* Overwrites previous font-weight: bold; */
 
   /* Hiding */
@@ -79,14 +81,15 @@ Dropdown.prototype.createElement = function (props) {
   list-style-type: none;
   display: block;
   text-decoration: none;
-  color: #9e9e9e;
+  /* color: #9e9e9e; */
   padding: 10px 20px;
 
  }
 
   /* Hover state */
   :host .dropdown li:hover {
-      background: #f3f8f8;
+      /* background: #f3f8f8; */
+      background: rgba(255, 255, 255, 0.9)
   }
 
   :host.active .dropdown {

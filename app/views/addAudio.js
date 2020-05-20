@@ -164,7 +164,7 @@ this.trackInfoEl =  html` <div class="mt2 mb4 i">
       </div>
       <!--buttons go here-->
       <div class="flex flex-wrap mt4">
-        <div class="f6 link dim ph3 pv2 mr2 white bg-dark-pink pointer" onclick=${() => {
+        <div class="f6 link dim ph3 pv2 mr2 dark-gray bg-white pointer" onclick=${() => {
           emit('user:addStream', this.stream, this.label)
           emit('layout:toggleMenuItem', 'addAudio', 'panels')
         }}>Add</div>

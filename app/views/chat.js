@@ -1,7 +1,7 @@
 var html = require('choo/html')
 var Component = require('choo/component')
 const input = require('./components/input.js')
-
+const anchorme = require("anchorme").default;
 
 module.exports = class Chat extends Component {
   constructor (id, state, emit) {
@@ -49,11 +49,19 @@ module.exports = class Chat extends Component {
   createElement(state) {
     var scrollEl = html`<div id="testScroll" style="bottom:0px">
       ${this.messages.map((obj)=>{
+        let msg = html`<span class="pa1"></span>`
+        msg.innerHTML = anchorme({ input: obj.message, options: {
+          truncate: 100,
+          attributes: {
+            target: '_blank',
+            class: 'white dim'
+          }
+        }})
         return html`
-          <tr>
-            <th class="pa1">${obj.user.nickname}:</th>
-            <td class="pa1">${obj.message}</td>
-          </tr>
+          <div class='mv2'>
+            <span class="pr1 pt1 b">${obj.user.nickname}:</span>
+            ${msg}
+          </div>
         `
       })}
     </div>`

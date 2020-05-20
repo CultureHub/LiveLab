@@ -4,6 +4,9 @@ div {
   /* background-color: #222; */
 }
 
+a {
+  word-break: break-all;
+}
 .active {
   color: #0f4;
 }

@@ -31,6 +31,7 @@
     "nwjs-builder-phoenix": "1.15.0"
   },
   "dependencies": {
+    "anchorme": "^2.1.2",
     "assert": "^2.0.0",
     "base-elements": "^2.2.1",
     "browserify-middleware": "^8.1.1",
