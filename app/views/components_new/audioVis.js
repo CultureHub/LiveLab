@@ -4,36 +4,38 @@ var Component = require('choo/component')
 module.exports = class AudioVis extends Component {
   constructor () {
     super()
-
+    this.stream = null
   }
 
-  update(stream, isActive) {
-    console.log('stream update', isActive)
-    if(isActive === true) {
-      if(!this.isActive) {
-      //  this.render()
-          this.visualize()
-          this.isActive = true
-      }
-    } else {
-      window.cancelAnimationFrame(this.animation)
-      this.isActive = isActive
-    }
-    if (stream !== this.stream) this.setStream(stream)
+  update(stream) {
+    this.setStream(stream)
     return false
   }
 
-  setStream(stream) {
-    if(this.source) this.source.disconnect()
-    this.source = this.audioCtx.createMediaStreamSource(stream)
-      console.log('setting stream', stream, this.analyser, this.source)
-    this.source.connect(this.analyser)
-    this.stream = stream
+  load() {
+    this.visualize()
+  }
 
+  unload() {
+    window.cancelAnimationFrame(this.animation)
+  }
+
+  setStream(stream) {
+    if(stream !== this.stream) {
+      if(this.source) this.source.disconnect()
+      if(stream !== null) {
+        if(stream.getAudioTracks().length > 0) {
+          this.source = this.audioCtx.createMediaStreamSource(stream)
+            console.log('setting stream', stream, this.analyser, this.source)
+          this.source.connect(this.analyser)
+          this.stream = stream
+        }
+      }
+    }
   }
 
   visualize() {
-    // console.log('visualizing')
+     console.log('visualizing')
     this.analyser.getByteFrequencyData(this.dataArray)
     this.animation = requestAnimationFrame(this.visualize.bind(this))
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -51,7 +53,7 @@ module.exports = class AudioVis extends Component {
       }
   }
 
-  createElement() {
+  createElement(stream) {
     this.audioCtx = window.audioCtx
     this.audioCtx.resume()
     this.analyser = this.audioCtx.createAnalyser()
@@ -62,7 +64,7 @@ module.exports = class AudioVis extends Component {
     var bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(bufferLength)
     this.isActive = false
-    this.stream = null
+    this.setStream(stream)
     return this.canvas
   }
 }

@@ -12,11 +12,16 @@ module.exports = class VideoObj extends Component {
     super(opts)
   }
 
-  update(srcObject = "", style = {}) {
-    if(srcObject !== this._el.srcObject) this._el.srcObject = srcObject
-    // console.log('video src2', srcObject)
+  update(srcObject = null, style = {}) {
+    console.log('video src2', srcObject, this._el.srcObject)
+    if(srcObject !== this._el.srcObject) {
+      console.log('setting src object')
+      this._el.srcObject = srcObject
+      this._el.play()
+    }
+    window.stream = srcObject
+  //  if(srcObject !== null) console.log('video src2 tracks', srcObject.getVideoTracks())
     css(style, this._el)
-
     return false
   }
 

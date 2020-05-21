@@ -75,7 +75,7 @@ function mainView (state, emit) {
             <div></div>
           </div>
           ${menu(state, emit)}
-          ${modal(state.cache(AddAudio, 'add-audio').render(state.layout.panels.addAudio, emit), 'addAudio', 'add audio', state, emit)}
+          ${modal(state.cache(AddAudio, 'add-audio').render(state.layout.panels.addAudio, state, emit), 'addAudio', 'add audio', state, emit)}
       </div>`
     }
    }
