@@ -51,14 +51,14 @@ module.exports = class AddMedia extends Component {
     enumerateDevices().then((devices) => {
       this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
       this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
-      // this.devices.audio.push({label: 'no audio', deviceId: 'false'})
-      // this.devices.video.push({label: 'no video', deviceId: 'false'})
+      this.devices.audio.push({label: 'no audio', deviceId: 'false'})
+      this.devices.video.push({label: 'no video', deviceId: 'false'})
       if(this.devices.audio.length > 0) {
-        this.selectedDevices.audio = this.devices.audio[0]
+        this.selectedDevices.audio = this.devices.audio[this.devices.audio.length - 1]
         this.getMedia('audio')
       }
       if(this.devices.video.length > 0) {
-        this.selectedDevices.video = this.devices.video[0]
+        this.selectedDevices.video = this.devices.video[this.devices.video.length - 1]
         this.getMedia('video')
       }
       this.rerender()
@@ -108,7 +108,7 @@ module.exports = class AddMedia extends Component {
   For audio, seems to work better to apply constraints when get user media is called */
   getMedia(kind) {
     let initialConstraints = { audio: false, video: false}
-    if(this.isActive[kind].deviceId !== false) {
+    if(this.isActive[kind]) {
       initialConstraints[kind] =  { deviceId: this.selectedDevices[kind].deviceId }
       if(kind === 'audio') {
         initialConstraints[kind] = Object.assign({}, initialConstraints[kind], this.constraints[kind])
@@ -136,8 +136,13 @@ module.exports = class AddMedia extends Component {
 
   createElement (isOpen, state, emit) {
     var self = this
-    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="dim w-100 pa2 white ttu ba b--white pointer" style="background:none" onchange=${(e)=>{
+    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="w-100 pa2 white ttu ba b--white pointer" style="background:none" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
+      if(this.selectedDevices[kind].deviceId === 'false') {
+        this.isActive[kind] = false
+      } else {
+        this.isActive[kind] = true
+      }
       this.getMedia(kind)
     }}>
     ${dropdown(
@@ -146,7 +151,7 @@ module.exports = class AddMedia extends Component {
     )}
     </select>`)
 
-    let vid = this.previewVideo.render(this.streams.video, {objectPosition: 'left'})
+    let vid = this.previewVideo.render(this.streams.video, {objectPosition: 'center'})
 
     var audioSettings = Object.keys(this.constraints.audio).map((constraint) =>
     html`<div class="flex w-100 justify-between">
@@ -171,7 +176,7 @@ module.exports = class AddMedia extends Component {
   <br>${Object.keys(this.constraints.audio).map((key) => `${key}: ${this.trackInfo.audio[key]}`).join(', ')}
   </div>`
 
-  const mediaSelected = this.isActive.audio && this.isActive.video ? true : false
+  const mediaSelected = this.isActive.audio || this.isActive.video ? true : false
   //  console.log('rendering',this.trackInfoEl)
   //  ${Object.keys(this.trackInfo.audio).map((key) => html`${key}: ${this.trackInfo.audio[key]}`)}
   // flex-row-l
@@ -179,40 +184,29 @@ module.exports = class AddMedia extends Component {
   <div class="h-100 flex flex-column center overflow-y-auto ttu lh-title pa1 pa2-ns b">
     <!--audio settings -->
     <div class="flex flex-column mw6 w-100">
-      <div class="flex justify-between">
-        <div>Audio input</div>
-        <br>
-        <div> ${toggle(this.isActive.audio, (e) => {
-            this.isActive.audio = e.target.checked
-            this.rerender()
-          })} </div>
-      </div>
-      ${this.isActive.audio ? html`
-        <div>
-          <div class="">${dropdowns[0]}</div>
+      <div>Audio input</div>
+      <div class="">${dropdowns[0]}</div>
+
+        <div class="overflow-hidden" style="transition: max-height 1s;max-height:${this.isActive.audio? '300px':0}">
+
           <div class="mt4">Audio meter</div>
           <div class="ba b--white">${this.audioVis.render(this.streams.audio, this.isOpen)}</div>
-          <div class="mv4 flex flex-column">
+          <div class="mt4 flex flex-column">
             <div class="flex flex-wrap">${audioSettings}</div>
           </div>
         </div>
-        ` : ''}
+
     </div>
     <!-- video settings -->
-    <div class="flex flex-column mw6 w-100 mt2">
-      <div class="flex justify-between">
-        <div>Video input</div>
-        <div> ${toggle(this.isActive.video, (e) => {
-            this.isActive.video = e.target.checked
-            this.rerender()
-          })} </div>
-      </div>
-    <div class = ${this.isActive.video ? 'inherit' : 'dn'}>
+    <div class="flex flex-column mw6 w-100 mt4">
+      <div>Video input</div>
       <div>${dropdowns[1]}</div>
-      <div class="mt4">Video preview</div>
-      <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
-      <div class="flex flex-wrap mt4">${videoSettings} </div>
-    </div>
+        <div class="overflow-hidden" style="transition: max-height 1s;max-height:${this.isActive.video? '500px':0}">
+
+        <div class="mt4">Video preview</div>
+        <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
+        <div class="flex flex-wrap mt4">${videoSettings} </div>
+      </div>
 
 
   <!--buttons go here-->
@@ -222,7 +216,7 @@ module.exports = class AddMedia extends Component {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           emit('user:addStream', new MediaStream(tracks), this.label)
           emit('layout:toggleMenuItem', 'addMedia', 'panels')
-        }}>Add</div>
+        }}>Add Media Stream</div>
       ` :''}
       <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${() => emit('layout:toggleMenuItem', 'addMedia', 'panels')}>Cancel</div>
     </div>
