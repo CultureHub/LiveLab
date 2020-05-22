@@ -18,6 +18,13 @@ const toggle = (val, onChange) => html`
   <input type="checkbox" checked=${val} onchange=${onChange} />
 `
 
+const expandable = (isOpen, content, maxHeight = '300px') => html`
+  <div class="overflow-hidden" style="transition: max-height 1s;max-height:${isOpen?maxHeight:0}">
+    ${content}
+  </div>
+`
+const constraintNames = { 'echoCancellation': 'echo cancellation', 'autoGainControl': 'auto gain', 'noiseSuppression': 'noise suppression'}
+
 module.exports = class AddMedia extends Component {
   constructor (opts) {
     super(opts)
@@ -30,6 +37,7 @@ module.exports = class AddMedia extends Component {
     this.devices = { audio: [], video: [] }
     this.selectedDevices = { audio: {label: 'initial', deviceId: ''}, video:  {label: 'initial', deviceId: ''} }
     this.tracks = { audio: null, video: null }
+    this.trackInfo = { audio: {}, video: {}}
     this.streams = { audio: null, video: null}
     this.isActive = { audio: false, video: false }
     // this.stream = null
@@ -69,26 +77,7 @@ module.exports = class AddMedia extends Component {
     console[type](message)
   }
 
-  load (element) {
-
-  }
-
   update (isOpen, opts = {}) {
-    console.log('loading add audio', isOpen, this.isOpen)
-    // if(isOpen && this.stream == null) {
-    //   //  if(isOpen == true)
-    //   //  this.updateVideo()
-    //   //  this.tracks = Object.assign({}, this.tracks, opts.tracks)
-    //   //  this.selectedDevices = Object.assign({}, this.selectedDevices, opts.selectedDevices)
-    //   // this.getMedia('video')
-    //   this.getMedia('video')
-    //   this.getMedia('audio')
-    //
-    //   //  }
-    //
-    //   //return true
-    // }
-    this.isOpen = isOpen
     return true
   }
 
@@ -97,9 +86,6 @@ module.exports = class AddMedia extends Component {
     console.log(`%c applying ${kind} constraints `, 'background: #ff9900; color: #fff', this.constraints[kind])
     this.tracks[kind].applyConstraints(this.constraints[kind])
     this.trackInfo[kind] = this.tracks[kind].getSettings()
-    console.log('settings', this.tracks[kind].getSettings())
-    console.log('constraints', this.tracks[kind].getConstraints()) // not always consistent with settings
-    // this.trackInfoEl.innerHTML = `Actual video dimensions:  ${this.trackInfo.video.width}x${this.trackInfo.video.height}, ${this.trackInfo.video.frameRate}fps`
     this.rerender()
   }
 
@@ -113,18 +99,14 @@ module.exports = class AddMedia extends Component {
       if(kind === 'audio') {
         initialConstraints[kind] = Object.assign({}, initialConstraints[kind], this.constraints[kind])
       }
-      console.log(initialConstraints)
-      // initialConstraints = {audio: false, video: true} //TESTING
       navigator.mediaDevices.getUserMedia(initialConstraints)
       .then((stream) => {
         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
         this.streams[kind] = stream
         window.stream = stream
         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
-        // this.rerender()
         this.applyConstraints(kind)
       }).catch((err) => {
-        //this.emit('log:error', err)
         this.log('error', err)
       })
     } else {
@@ -155,7 +137,7 @@ module.exports = class AddMedia extends Component {
 
     var audioSettings = Object.keys(this.constraints.audio).map((constraint) =>
     html`<div class="flex w-100 justify-between">
-    <div class="">${constraint}</div>
+    <div class="">${constraintNames[constraint]}</div>
     <input type="checkbox" id=${constraint} name=${constraint} checked=${this.constraints.audio[constraint]}
     onchange=${(e) => {
       this.constraints.audio[constraint] = e.target.checked
@@ -163,55 +145,47 @@ module.exports = class AddMedia extends Component {
     }}>
     </div>`
   )
+   // class="pa2 ba b--white white w-100" style="background:none"
+  //  onkeypress=${(e) => {
+  //   console.log('applying', e.srcElement.value, constraint)
+  //   if(parseInt(e.srcElement.value)) { this.applyConstraints('video', { [constraint]: parseInt(e.srcElement.value) })}}
+  // }}
   var videoSettings = Object.keys(this.constraints.video).map((constraint) => html `
   <div class="flex-auto w3 mt2">
-  <div>${constraint === 'framerate' ? 'fps': constraint}</div>
+  <div>${constraint === 'frameRate' ? 'fps': constraint}</div>
   <input type="text" value=${this.constraints.video[constraint]} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => {
-    if(parseInt(e.srcElement.value)) { this.applyConstraints('video', { [constraint]: parseInt(e.srcElement.value) })}}
-  }} />
+    console.log('clicking', e)
+    if(parseInt(e.srcElement.value)) { this.applyConstraints('video', { [constraint]: parseInt(e.srcElement.value) }) }
+  }}> </input>
   </div>`)
 
+  let vidInfo = this.trackInfo.video.width? `${this.trackInfo.video.width}x${this.trackInfo.video.height}@${this.trackInfo.video.frameRate}fps`:''
 
-  this.trackInfoEl =  html` <div class="mt2 mb4 i">
-  <br>${Object.keys(this.constraints.audio).map((key) => `${key}: ${this.trackInfo.audio[key]}`).join(', ')}
-  </div>`
-
-  const mediaSelected = this.isActive.audio || this.isActive.video ? true : false
-  //  console.log('rendering',this.trackInfoEl)
-  //  ${Object.keys(this.trackInfo.audio).map((key) => html`${key}: ${this.trackInfo.audio[key]}`)}
-  // flex-row-l
-  var popup = html`
+  return html`
   <div class="h-100 flex flex-column center overflow-y-auto ttu lh-title pa1 pa2-ns b">
     <!--audio settings -->
     <div class="flex flex-column mw6 w-100">
       <div>Audio input</div>
       <div class="">${dropdowns[0]}</div>
-
-        <div class="overflow-hidden" style="transition: max-height 1s;max-height:${this.isActive.audio? '300px':0}">
-
-          <div class="mt4">Audio meter</div>
+      ${expandable(this.isActive.audio,
+        html`<div class="mt4">Audio meter</div>
           <div class="ba b--white">${this.audioVis.render(this.streams.audio, this.isOpen)}</div>
           <div class="mt4 flex flex-column">
             <div class="flex flex-wrap">${audioSettings}</div>
-          </div>
-        </div>
-
+          </div>`)}
     </div>
     <!-- video settings -->
     <div class="flex flex-column mw6 w-100 mt4">
-      <div>Video input</div>
-      <div>${dropdowns[1]}</div>
-        <div class="overflow-hidden" style="transition: max-height 1s;max-height:${this.isActive.video? '500px':0}">
-
-        <div class="mt4">Video preview</div>
-        <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
-        <div class="flex flex-wrap mt4">${videoSettings} </div>
-      </div>
-
-
+    <div>Video input</div>
+    <div>${dropdowns[1]}</div>
+    ${expandable(this.isActive.video, html`
+      <div class="mt4 flex justify-between"><div>Video preview</div><div>${vidInfo}</div></div>
+      <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
+      <div class="flex flex-wrap mt4">${videoSettings} </div>`, '500px'
+    )}
   <!--buttons go here-->
     <div class="flex flex-wrap mt4">
-      ${mediaSelected ? html`
+      ${this.isActive.audio || this.isActive.video ? html`
       <div class="f6 link dim ph3 pv2 mr2 white bg-dark-gray pointer" onclick=${() => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           emit('user:addStream', new MediaStream(tracks), this.label)
@@ -222,9 +196,5 @@ module.exports = class AddMedia extends Component {
     </div>
     </div>
   </div>`
-  //  console.log(popup)
-//   ${mediaSelected ? input('Label', 'Label', {  style:'border:solid 2px', value: this.label,  onkeyup: (e) => { this.label = e.target.value } })}
-
-  return popup
 }
 }

@@ -71,7 +71,7 @@ module.exports = (state, emit) => {
           icon: 'fa-desktop',
           title: "Add screen share",
           onclick: () => emit('user:shareScreen'),
-          info: '+'
+          // info: '+'
         })}
         ${menuItem({
           icon: 'fa-plus-circle',
