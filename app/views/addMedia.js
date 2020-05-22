@@ -5,7 +5,7 @@ const Component = require('choo/component')
 const input = require('./components/input.js')
 const enumerateDevices = require('enumerate-devices')
 const AudioVis = require('./components_new/audioVis.js')
-const OldVideo = require('./components/funvideocontainer.js')
+// const OldVideo = require('./components/funvideocontainer.js')
 
 
 const dropdown = (options, selected) => html`
@@ -107,16 +107,15 @@ module.exports = class AddMedia extends Component {
         initialConstraints[kind] = Object.assign({}, initialConstraints[kind], this.constraints[kind])
       }
       console.log(initialConstraints)
-      initialConstraints = {audio: false, video: true} //TESTING
+      // initialConstraints = {audio: false, video: true} //TESTING
       navigator.mediaDevices.getUserMedia(initialConstraints)
       .then((stream) => {
         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
         this.streams[kind] = stream
         window.stream = stream
         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
-
-        this.rerender()
-      //  this.applyConstraints(kind)
+        // this.rerender()
+        this.applyConstraints(kind)
       }).catch((err) => {
         //this.emit('log:error', err)
         this.log('error', err)
@@ -157,15 +156,6 @@ module.exports = class AddMedia extends Component {
     //     //this.updateVideo()
     //   }
     // })
-    // this.previewVideo = OldVideo({
-    //   htmlProps: {
-    //     class: 'w-100 h-100 mt2',
-    //     style: 'object-fit: contain; max-width: 400px;position:absolute;z-index:100;width:200px; height:200px'
-    //   },
-    //   index: "login-settings-video",
-    //   track: this.tracks.video,
-    //   id: this.tracks.video === null ? null : this.tracks.video.id
-    // })
 
     let vid = this.previewVideo.render(this.streams.video, {objectPosition: 'left'})
     // console.log('preview video is', this.previewVideo)
@@ -176,7 +166,7 @@ module.exports = class AddMedia extends Component {
     onchange=${(e) => {
       //  this.applyConstraints('audio', { [constraint]: e.target.checked } ) // bug, seems that applyConstraints does not work for audio. must retrigger call to getUserMedia()
       this.constraints.audio[constraint] = e.target.checked
-      this.getMedia('audio', true)
+      this.getMedia('audio')
     }}>
     <span class="pl1">${constraint}</span>
     </div>`
@@ -212,7 +202,7 @@ module.exports = class AddMedia extends Component {
     <div class="mw6">
     </div>
     <div>${dropdowns[1]}</div>
-    <div class = ${this.selectedDevices.video.deviceId === 'false' ? 'inherit' : 'inherit'}>
+    <div class = ${this.selectedDevices.video.deviceId === 'false' ? 'dn' : 'inherit'}>
       ${vid}
       <div class="flex flex-wrap">${videoSettings} </div>
     </div>
