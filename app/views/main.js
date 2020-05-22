@@ -37,7 +37,7 @@ const modal = (content, name, label, state, emit) => {
     return html`
       <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(213, 0, 143, 0.8)">
       <i
-              class="fas fa-times absolute top-0 right-0 ma1 ma4-ns fr dim pointer"
+              class="fas fa-times absolute top-0 right-0 ma1 ma4-ns fr f4 dim pointer"
               title="close ${label}"
               aria-hidden="true"
               onclick=${() =>{ emit('layout:toggleMenuItem', name, 'panels')}} >

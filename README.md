@@ -40,7 +40,10 @@ npm run watch
 ```
 
 # Changelog
-
+## [1.3.3] - 2020-05-22
+### Changed
+ - Add Media instead of addAudio()
+ 
 ## [1.3.2] - 2020-05-17
 ### Added
   - Global hangup
