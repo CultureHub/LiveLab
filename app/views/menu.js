@@ -74,18 +74,11 @@ module.exports = (state, emit) => {
           info: '+'
         })}
         ${menuItem({
-          icon: 'fa-video',
-          title: "Add video stream",
-          onclick: () => emit('user:shareScreen'),
+          icon: 'fa-plus-circle',
+          title: "Add media stream",
+          onclick: () =>  emit('layout:toggleMenuItem', 'addMedia', 'panels'),
           advanced: true,
-          info: '+'
-        })}
-        ${menuItem({
-          icon: 'fa-microphone',
-          title: "Add audio stream",
-          onclick: () =>  emit('layout:toggleMenuItem', 'addAudio', 'panels'),
-          advanced: true,
-          info: '+'
+          // info: '+'
         })}
 
         ${menuItem({

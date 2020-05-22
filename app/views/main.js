@@ -8,7 +8,7 @@ const peersList = require('./peersList.js')
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 const Switcher = require( './switcher.js')
-const AddAudio = require('./addAudio.js')
+const AddMedia = require('./addMedia.js')
 
 // const chat = new Chat()
 // const audio = new Audio()
@@ -75,7 +75,7 @@ function mainView (state, emit) {
             <div></div>
           </div>
           ${menu(state, emit)}
-          ${modal(state.cache(AddAudio, 'add-audio').render(state.layout.panels.addAudio, state, emit), 'addAudio', 'add audio', state, emit)}
+          ${modal(state.cache(AddMedia, 'add-audio').render(state.layout.panels.addMedia, state, emit), 'addMedia', 'add media', state, emit)}
       </div>`
     }
    }

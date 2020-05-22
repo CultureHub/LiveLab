@@ -26,7 +26,7 @@ module.exports = class AudioVis extends Component {
       if(stream !== null) {
         if(stream.getAudioTracks().length > 0) {
           this.source = this.audioCtx.createMediaStreamSource(stream)
-            console.log('setting stream', stream, this.analyser, this.source)
+            // console.log('setting stream', stream, this.analyser, this.source)
           this.source.connect(this.analyser)
           this.stream = stream
         }
@@ -35,7 +35,7 @@ module.exports = class AudioVis extends Component {
   }
 
   visualize() {
-     console.log('visualizing')
+     // console.log('visualizing')
     this.analyser.getByteFrequencyData(this.dataArray)
     this.animation = requestAnimationFrame(this.visualize.bind(this))
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)

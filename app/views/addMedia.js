@@ -5,6 +5,8 @@ const Component = require('choo/component')
 const input = require('./components/input.js')
 const enumerateDevices = require('enumerate-devices')
 const AudioVis = require('./components_new/audioVis.js')
+const OldVideo = require('./components/funvideocontainer.js')
+
 
 const dropdown = (options, selected) => html`
   ${options.map((opt) => html`
@@ -12,12 +14,13 @@ const dropdown = (options, selected) => html`
   `)}
 `
 
-module.exports = class AddAudio extends Component {
+module.exports = class AddMedia extends Component {
   constructor (opts) {
     super(opts)
     this.previewVideo = null
     this.onSave = opts.onSave
     this.onClose = opts.onClose
+    this.previewVideo = new Video()
     this.isOpen = false
     this.audioVis = new AudioVis()
     this.devices = { audio: [], video: [] }
@@ -93,23 +96,27 @@ module.exports = class AddAudio extends Component {
     this.rerender()
   }
 
-  getMedia(kind, applyConstraintsOnInit) {
-    const initialConstraints = { audio: false, video: false}
+  /* Inconsistent behavior between audio and video for applying constraints.
+  For video, appears to work better to apply constraints once stream is received.
+  For audio, seems to work better to apply constraints when get user media is called */
+  getMedia(kind) {
+    let initialConstraints = { audio: false, video: false}
     if(this.selectedDevices[kind].deviceId !== 'false') {
       initialConstraints[kind] =  { deviceId: this.selectedDevices[kind].deviceId }
-      if(applyConstraintsOnInit) {
+      if(kind === 'audio') {
         initialConstraints[kind] = Object.assign({}, initialConstraints[kind], this.constraints[kind])
       }
       console.log(initialConstraints)
+      initialConstraints = {audio: false, video: true} //TESTING
       navigator.mediaDevices.getUserMedia(initialConstraints)
       .then((stream) => {
-        console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks())
         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
         this.streams[kind] = stream
-        this.applyConstraints(kind)
-        // this.rerender()
-        // console.log('settings', this.tracks[kind].getSettings())
-        // console.log('constraints', this.tracks[kind].getConstraints())
+        window.stream = stream
+        console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
+
+        this.rerender()
+      //  this.applyConstraints(kind)
       }).catch((err) => {
         //this.emit('log:error', err)
         this.log('error', err)
@@ -122,22 +129,21 @@ module.exports = class AddAudio extends Component {
   }
 
   createElement (isOpen, state, emit) {
-    console.log('rerendering', this.selectedDevices.audio, this.devices.audio)
+    console.log('rerendering', this.tracks)
     //  this.isOpen = isOpen
 
     var self = this
-    this.audioDropdown = html`<select onchange=${(e)=>{
-
-      this.selectedDevices.audio = this.devices.audio.filter((device) => device.deviceId === e.target.value)[0]
-      this.getMedia('audio')
+    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} onchange=${(e)=>{
+      this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
+      this.getMedia(kind)
     }}>
     ${dropdown(
-      this.devices.audio.map((device, index) => (  { value: device.deviceId,  label: device.label })),
-      this.selectedDevices.audio.deviceId
+      this.devices[kind].map((device, index) => (  { value: device.deviceId,  label: device.label })),
+      this.selectedDevices[kind].deviceId
     )}
-    </select>`
+    </select>`)
 
-    this.videoDropdown = ''
+    //this.videoDropdown = ''
 
     // this.videoDropdown = VideoDropdown.render({
     //   value: 'Video:  ' + (this.selectedDevices.video === null ? '' : this.selectedDevices.video.label),
@@ -151,7 +157,19 @@ module.exports = class AddAudio extends Component {
     //     //this.updateVideo()
     //   }
     // })
+    // this.previewVideo = OldVideo({
+    //   htmlProps: {
+    //     class: 'w-100 h-100 mt2',
+    //     style: 'object-fit: contain; max-width: 400px;position:absolute;z-index:100;width:200px; height:200px'
+    //   },
+    //   index: "login-settings-video",
+    //   track: this.tracks.video,
+    //   id: this.tracks.video === null ? null : this.tracks.video.id
+    // })
 
+    let vid = this.previewVideo.render(this.streams.video, {objectPosition: 'left'})
+    // console.log('preview video is', this.previewVideo)
+      // <div class="mw6 h6">${state.cache(Video, 'settings-preview').render(this.streams.video, {objectPosition: 'left'})}</div>
     var audioSettings = Object.keys(this.constraints.audio).map((constraint) =>
     html`<div class="pv1 dib mr3">
     <input type="checkbox" id=${constraint} name=${constraint} checked=${this.constraints.audio[constraint]}
@@ -182,7 +200,7 @@ module.exports = class AddAudio extends Component {
   var popup = html`
   <div class="mw7 h-100 flex flex-column center overflow-y-auto">
     <h3> Add media </h3>
-    <div>${this.audioDropdown}</div>
+    <div>${dropdowns[0]}</div>
     ${this.selectedDevices.audio.deviceId === 'false' ? '' : html`
     ${this.audioVis.render(this.streams.audio, this.isOpen)}
     <div class="flex flex-column">
@@ -193,11 +211,11 @@ module.exports = class AddAudio extends Component {
 
     <div class="mw6">
     </div>
-    <div>${this.videoDropdown}</div>
-    ${this.selectedDevices.video.deviceId === 'false' ? '' : html`
-      <div class="mw6 h6">${state.cache(Video, 'settings-preview').render(this.streams.video, {objectPosition: 'left'})}</div>
-      <div class="flex flex-wrap">${videoSettings} </div>`
-    }
+    <div>${dropdowns[1]}</div>
+    <div class = ${this.selectedDevices.video.deviceId === 'false' ? 'inherit' : 'inherit'}>
+      ${vid}
+      <div class="flex flex-wrap">${videoSettings} </div>
+    </div>
 
   <!--buttons go here-->
     <div class="flex flex-wrap mt4">

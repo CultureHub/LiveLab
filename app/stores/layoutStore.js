@@ -10,7 +10,7 @@ module.exports = (state, emitter) => {
       users: false,
       switcherA: false,
       switcherB: false,
-      addAudio: false
+      addMedia: false
     },
     settings: {
       stretchToFit: true,
