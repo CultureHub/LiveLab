@@ -10,8 +10,12 @@ const AudioVis = require('./components_new/audioVis.js')
 
 const dropdown = (options, selected) => html`
   ${options.map((opt) => html`
-    <option value=${opt.value} ${opt.value === selected? 'selected':''}>${opt.label}</option>
+    <option class="dark-gray" value=${opt.value} ${opt.value === selected? 'selected':''}>${opt.label}</option>
   `)}
+`
+
+const toggle = (val, onChange) => html`
+  <input type="checkbox" checked=${val} onchange=${onChange} />
 `
 
 module.exports = class AddMedia extends Component {
@@ -27,6 +31,7 @@ module.exports = class AddMedia extends Component {
     this.selectedDevices = { audio: {label: 'initial', deviceId: ''}, video:  {label: 'initial', deviceId: ''} }
     this.tracks = { audio: null, video: null }
     this.streams = { audio: null, video: null}
+    this.isActive = { audio: false, video: false }
     // this.stream = null
     this.label = ''
     this.trackInfo = { audio: {}, video: {} }
@@ -46,13 +51,15 @@ module.exports = class AddMedia extends Component {
     enumerateDevices().then((devices) => {
       this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
       this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
-      this.devices.audio.push({label: 'no audio', deviceId: 'false'})
-      this.devices.video.push({label: 'no video', deviceId: 'false'})
+      // this.devices.audio.push({label: 'no audio', deviceId: 'false'})
+      // this.devices.video.push({label: 'no video', deviceId: 'false'})
       if(this.devices.audio.length > 0) {
-        this.selectedDevices.audio = this.devices.audio[this.devices.audio.length-1]
+        this.selectedDevices.audio = this.devices.audio[0]
+        this.getMedia('audio')
       }
       if(this.devices.video.length > 0) {
-        this.selectedDevices.video = this.devices.video[this.devices.video.length-1]
+        this.selectedDevices.video = this.devices.video[0]
+        this.getMedia('video')
       }
       this.rerender()
     }).catch((err) =>this.log('error', err))
@@ -101,7 +108,7 @@ module.exports = class AddMedia extends Component {
   For audio, seems to work better to apply constraints when get user media is called */
   getMedia(kind) {
     let initialConstraints = { audio: false, video: false}
-    if(this.selectedDevices[kind].deviceId !== 'false') {
+    if(this.isActive[kind].deviceId !== false) {
       initialConstraints[kind] =  { deviceId: this.selectedDevices[kind].deviceId }
       if(kind === 'audio') {
         initialConstraints[kind] = Object.assign({}, initialConstraints[kind], this.constraints[kind])
@@ -128,11 +135,8 @@ module.exports = class AddMedia extends Component {
   }
 
   createElement (isOpen, state, emit) {
-    console.log('rerendering', this.tracks)
-    //  this.isOpen = isOpen
-
     var self = this
-    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} onchange=${(e)=>{
+    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="dim w-100 pa2 white ttu ba b--white pointer" style="background:none" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
       this.getMedia(kind)
     }}>
@@ -142,41 +146,24 @@ module.exports = class AddMedia extends Component {
     )}
     </select>`)
 
-    //this.videoDropdown = ''
-
-    // this.videoDropdown = VideoDropdown.render({
-    //   value: 'Video:  ' + (this.selectedDevices.video === null ? '' : this.selectedDevices.video.label),
-    //   options: this.devices.video.map((device, index) => ({
-    //     value: index,
-    //     label: device.label
-    //   })),
-    //   onchange: (value) => {
-    //     this.selectedDevices.video = this.devices.video[value]
-    //     this.getMedia('video')
-    //     //this.updateVideo()
-    //   }
-    // })
-
     let vid = this.previewVideo.render(this.streams.video, {objectPosition: 'left'})
-    // console.log('preview video is', this.previewVideo)
-      // <div class="mw6 h6">${state.cache(Video, 'settings-preview').render(this.streams.video, {objectPosition: 'left'})}</div>
+
     var audioSettings = Object.keys(this.constraints.audio).map((constraint) =>
-    html`<div class="pv1 dib mr3">
+    html`<div class="flex w-100 justify-between">
+    <div class="">${constraint}</div>
     <input type="checkbox" id=${constraint} name=${constraint} checked=${this.constraints.audio[constraint]}
     onchange=${(e) => {
-      //  this.applyConstraints('audio', { [constraint]: e.target.checked } ) // bug, seems that applyConstraints does not work for audio. must retrigger call to getUserMedia()
       this.constraints.audio[constraint] = e.target.checked
       this.getMedia('audio')
     }}>
-    <span class="pl1">${constraint}</span>
     </div>`
   )
   var videoSettings = Object.keys(this.constraints.video).map((constraint) => html `
-  <div class="flex-auto">
-  ${input(constraint, "", { value: this.constraints.video[constraint],
-  onkeyup: (e) => {
+  <div class="flex-auto w3 mt2">
+  <div>${constraint === 'framerate' ? 'fps': constraint}</div>
+  <input type="text" value=${this.constraints.video[constraint]} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => {
     if(parseInt(e.srcElement.value)) { this.applyConstraints('video', { [constraint]: parseInt(e.srcElement.value) })}}
-  })}
+  }} />
   </div>`)
 
 
@@ -184,39 +171,61 @@ module.exports = class AddMedia extends Component {
   <br>${Object.keys(this.constraints.audio).map((key) => `${key}: ${this.trackInfo.audio[key]}`).join(', ')}
   </div>`
 
-  const mediaSelected = this.selectedDevices.audio.deviceId === 'false' && this.selectedDevices.video.deviceId === 'false'? false : true
+  const mediaSelected = this.isActive.audio && this.isActive.video ? true : false
   //  console.log('rendering',this.trackInfoEl)
   //  ${Object.keys(this.trackInfo.audio).map((key) => html`${key}: ${this.trackInfo.audio[key]}`)}
+  // flex-row-l
   var popup = html`
-  <div class="mw7 h-100 flex flex-column center overflow-y-auto">
-    <h3> Add media </h3>
-    <div>${dropdowns[0]}</div>
-    ${this.selectedDevices.audio.deviceId === 'false' ? '' : html`
-    ${this.audioVis.render(this.streams.audio, this.isOpen)}
-    <div class="flex flex-column">
-      <h3>Settings</h3>
-      <div class="flex flex-wrap">${audioSettings}</div>
+  <div class="h-100 flex flex-column center overflow-y-auto ttu lh-title pa1 pa2-ns b">
+    <!--audio settings -->
+    <div class="flex flex-column mw6 w-100">
+      <div class="flex justify-between">
+        <div>Audio input</div>
+        <br>
+        <div> ${toggle(this.isActive.audio, (e) => {
+            this.isActive.audio = e.target.checked
+            this.rerender()
+          })} </div>
+      </div>
+      ${this.isActive.audio ? html`
+        <div>
+          <div class="">${dropdowns[0]}</div>
+          <div class="mt4">Audio meter</div>
+          <div class="ba b--white">${this.audioVis.render(this.streams.audio, this.isOpen)}</div>
+          <div class="mv4 flex flex-column">
+            <div class="flex flex-wrap">${audioSettings}</div>
+          </div>
+        </div>
+        ` : ''}
     </div>
-    `}
+    <!-- video settings -->
+    <div class="flex flex-column mw6 w-100 mt2">
+      <div class="flex justify-between">
+        <div>Video input</div>
+        <div> ${toggle(this.isActive.video, (e) => {
+            this.isActive.video = e.target.checked
+            this.rerender()
+          })} </div>
+      </div>
+    <div class = ${this.isActive.video ? 'inherit' : 'dn'}>
+      <div>${dropdowns[1]}</div>
+      <div class="mt4">Video preview</div>
+      <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
+      <div class="flex flex-wrap mt4">${videoSettings} </div>
+    </div>
 
-    <div class="mw6">
-    </div>
-    <div>${dropdowns[1]}</div>
-    <div class = ${this.selectedDevices.video.deviceId === 'false' ? 'dn' : 'inherit'}>
-      ${vid}
-      <div class="flex flex-wrap">${videoSettings} </div>
-    </div>
 
   <!--buttons go here-->
     <div class="flex flex-wrap mt4">
       ${mediaSelected ? html`
-      <div class="f6 link dim ph3 pv2 mr2 dark-gray bg-white pointer" onclick=${() => {
+      <div class="f6 link dim ph3 pv2 mr2 white bg-dark-gray pointer" onclick=${() => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           emit('user:addStream', new MediaStream(tracks), this.label)
-          emit('layout:toggleMenuItem', 'addAudio', 'panels')
+          emit('layout:toggleMenuItem', 'addMedia', 'panels')
         }}>Add</div>
       ` :''}
-      <div class="f6 link dim ph3 pv2 white bg-gray pointer" onclick=${() => emit('layout:toggleMenuItem', 'addAudio', 'panels')}>Cancel</div>
+      <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${() => emit('layout:toggleMenuItem', 'addMedia', 'panels')}>Cancel</div>
+    </div>
     </div>
   </div>`
   //  console.log(popup)

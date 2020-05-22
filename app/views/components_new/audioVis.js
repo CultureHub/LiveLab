@@ -60,6 +60,7 @@ module.exports = class AudioVis extends Component {
     this.analyser.smoothingTimeConstant = 0.8
     this.analyser.fftSize = 512
     this.canvas = html`<canvas></canvas>`
+    this.canvas.height = 100
     this.ctx = this.canvas.getContext('2d')
     var bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(bufferLength)
