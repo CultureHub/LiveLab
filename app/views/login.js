@@ -31,7 +31,7 @@ const modal = (content, isOpen, onClose) => {
       </div>
     `
   } else {
-    return html`<div style="display:none">${content}</div>`
+    return html`<div style="display:none"></div>`
   }
 }
 
@@ -69,10 +69,10 @@ module.exports = class Login extends Component {
       video: {}
     }
     this.settingsIsOpen = false
-    this.mediaSettings = new AddMedia({
-      onSave: this.updateMedia.bind(this),
-      onClose: this.closeSettings.bind(this)
-    })
+    // this.mediaSettings = new AddMedia({
+    //   onSave: this.updateMedia.bind(this),
+    //   onClose: this.closeSettings.bind(this)
+    // })
     enumerateDevices().then((devices) => {
       console.log('devicces', devices)
       this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
@@ -104,12 +104,13 @@ module.exports = class Login extends Component {
 
   }
 
-  updateMedia() {
+  updateMedia(mediaObj) {
+    console.log('UPDATING', this, mediaObj)
     //    console.log(this.mediaSettings)
-    this.tracks = Object.assign({}, this.mediaSettings.tracks)
-    this.trackInfo = Object.assign({}, this.mediaSettings.trackInfo)
-    this.selectedDevices = Object.assign({}, this.mediaSettings.selectedDevices)
-    this.devices = Object.assign({}, this.mediaSettings.devices)
+    this.tracks = Object.assign({}, mediaObj.tracks)
+    this.trackInfo = Object.assign({}, mediaObj.trackInfo)
+    this.selectedDevices = Object.assign({}, mediaObj.selectedDevices)
+    this.devices = Object.assign({}, mediaObj.devices)
     this.settingsIsOpen = false
     this.rerender()
   }
@@ -191,6 +192,7 @@ module.exports = class Login extends Component {
     //  this.local.center = center
     //  this.dropDownEl =
     //  console.log('creating element', this)
+    let self = this
     const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="w-100 pa2 white ttu ba b--white pointer" style="background:none;/*font-size:3vw*/" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
       if(this.selectedDevices[kind].deviceId === 'false') {
@@ -239,10 +241,15 @@ module.exports = class Login extends Component {
       ${modal(state.cache(AddMedia, 'login-settings').render({
           selectedDevices: this.selectedDevices,
           isActive: this.isActive,
-          tracks: this.tracks
+          tracks: this.tracks,
+          onSave: ({stream, mediaObj})  => {
+            console.log('saving', this, mediaObj)
+            this.updateMedia(mediaObj)
+          }
         }), this.settingsIsOpen, () => {
-        this.settingsIsOpen = ! this.settingsIsOpen
-        this.rerender()
+          window.audioCtx.resume()
+          this.settingsIsOpen = ! this.settingsIsOpen
+          this.rerender()
       })}
     </div>
     `

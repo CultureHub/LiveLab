@@ -85,13 +85,21 @@ module.exports = class AddMedia extends Component {
         console.log('REREMDERING', opts.isActive, this.isActive)
           this.isActive =Object.assign({}, this.isActive, opts.isActive)
           // @ todo: only update if new information
-        // if(opts.isActive.video && opts.isActive.video !== this.isActive.video) this.getMedia('video')
-        // if(opts.isActive.audio && opts.isActive.audio !== this.isActive.audio) this.getMedia('audio')
-         this.getMedia('audio')
-        this.getMedia('video')
+         if(opts.isActive.video && opts.isActive.video !== this.isActive.video) this.getMedia('video')
+         if(opts.isActive.audio && opts.isActive.audio !== this.isActive.audio) this.getMedia('audio')
+      //   this.getMedia('audio')
+      //   this.getMedia('video')
       }
     }
     return false
+  }
+
+  load(el) {
+  //  console.log('loaded', opts)
+     this.selectedDevices = Object.assign({}, this.selectedDevices, this.parentOpts.selectedDevices)
+    this.isActive =Object.assign({}, this.isActive, this.parentOpts.isActive)
+    this.getMedia('audio')
+    this.getMedia('video')
   }
 
   applyConstraints(kind, obj = {}) {
@@ -129,7 +137,8 @@ module.exports = class AddMedia extends Component {
     }
   }
 
-  createElement (isOpen, state, emit) {
+  createElement (opts) {
+   this.parentOpts = opts
     var self = this
     const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="w-100 pa2 white ttu ba b--white pointer" style="background:none" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
@@ -167,7 +176,6 @@ module.exports = class AddMedia extends Component {
   <div class="flex-auto w3 mt2">
   <div>${constraint === 'frameRate' ? 'fps': constraint}</div>
   <input type="text" value=${this.constraints.video[constraint]} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => {
-    console.log('clicking', e)
     if(parseInt(e.srcElement.value)) { this.applyConstraints('video', { [constraint]: parseInt(e.srcElement.value) }) }
   }}> </input>
   </div>`)
@@ -201,8 +209,9 @@ module.exports = class AddMedia extends Component {
       ${this.isActive.audio || this.isActive.video ? html`
       <div class="f6 link dim ph3 pv2 mr2 white bg-dark-gray pointer" onclick=${() => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
-          emit('user:addStream', new MediaStream(tracks), this.label)
-          emit('layout:toggleMenuItem', 'addMedia', 'panels')
+          // emit('user:addStream', new MediaStream(tracks), this.label)
+          // emit('layout:toggleMenuItem', 'addMedia', 'panels')
+           opts.onSave({stream: new MediaStream(tracks), mediaObj: this})
         }}>Add Media Stream</div>
       ` :''}
       <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${() => emit('layout:toggleMenuItem', 'addMedia', 'panels')}>Cancel</div>
