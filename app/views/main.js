@@ -66,7 +66,7 @@ function mainView (state, emit) {
       //console.log(state.multiPeer.streams)
       return html`<div>
           ${communication(state, emit)}
-          <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:25rem;pointer-events:none">
+          <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:28rem;pointer-events:none">
             ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
             ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
             ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}

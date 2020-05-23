@@ -5,7 +5,7 @@ const input = require('./components/input.js')
 // const Dropdown = require('./components/dropdown.js')
 const Video = require('./components/funvideocontainer.js')
 const enumerateDevices = require('enumerate-devices')
-const MediaSettings = require('./mediaSettings.js')
+// const MediaSettings = require('./mediaSettings.js')
 const AddMedia = require('./addMedia.js')
 
 
@@ -17,15 +17,15 @@ const dropdown = (options, selected) => html`
     <option class="dark-gray" value=${opt.value} ${opt.value === selected? 'selected':''}>${opt.label}</option>
   `)}
 `
-const modal = (content, name, label, state, emit) => {
-  if(state.layout.panels[name]) {
+const modal = (content, isOpen, onClose) => {
+  if(isOpen) {
     return html`
-      <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(213, 0, 143, 0.8)">
+      <div class="pa0 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(213, 0, 143, 1">
       <i
-              class="fas fa-times absolute top-0 right-0 ma1 ma4-ns fr f4 dim pointer"
-              title="close ${label}"
+              class="fas fa-times absolute top-0 right-0 ma1 ma2-ns fr f4 dim pointer"
+              title="close settings"
               aria-hidden="true"
-              onclick=${() =>{ emit('layout:toggleMenuItem', name, 'panels')}} >
+              onclick=${onClose} >
       </i>
         ${content}
       </div>
@@ -69,7 +69,7 @@ module.exports = class Login extends Component {
       video: {}
     }
     this.settingsIsOpen = false
-    this.mediaSettings = new MediaSettings({
+    this.mediaSettings = new AddMedia({
       onSave: this.updateMedia.bind(this),
       onClose: this.closeSettings.bind(this)
     })
@@ -93,7 +93,7 @@ module.exports = class Login extends Component {
         this.isActive.video = true
         this.getMedia('video')
       }
-      this.rerender
+      this.rerender()
   //    this.createElement(state, emit)
       //  console.log(this, this.devices.audio)
     }).catch((err) => emit('log:error', err))
@@ -236,10 +236,14 @@ module.exports = class Login extends Component {
           </div>
         </div>
       </div>
-      ${this.mediaSettings.render(this.settingsIsOpen, {
+      ${modal(state.cache(AddMedia, 'login-settings').render({
           selectedDevices: this.selectedDevices,
+          isActive: this.isActive,
           tracks: this.tracks
-        })}
+        }), this.settingsIsOpen, () => {
+        this.settingsIsOpen = ! this.settingsIsOpen
+        this.rerender()
+      })}
     </div>
     `
   }

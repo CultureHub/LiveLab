@@ -63,13 +63,13 @@ module.exports = class AddMedia extends Component {
       this.devices.video.push({label: 'no video', deviceId: 'false'})
       if(this.devices.audio.length > 0) {
         this.selectedDevices.audio = this.devices.audio[this.devices.audio.length - 1]
-        this.getMedia('audio')
+      //  this.getMedia('audio')
       }
       if(this.devices.video.length > 0) {
         this.selectedDevices.video = this.devices.video[this.devices.video.length - 1]
-        this.getMedia('video')
+      //  this.getMedia('video')
       }
-      this.rerender()
+    //  this.rerender()
     }).catch((err) =>this.log('error', err))
   }
 
@@ -77,8 +77,21 @@ module.exports = class AddMedia extends Component {
     console[type](message)
   }
 
-  update (isOpen, opts = {}) {
-    return true
+  update (opts) {
+    if(opts) {
+      //this.tracks = opts.tracks
+      this.selectedDevices = Object.assign({}, this.selectedDevices, opts.selectedDevices)
+      if(opts.isActive != this.isActive) {
+        console.log('REREMDERING', opts.isActive, this.isActive)
+          this.isActive =Object.assign({}, this.isActive, opts.isActive)
+          // @ todo: only update if new information
+        // if(opts.isActive.video && opts.isActive.video !== this.isActive.video) this.getMedia('video')
+        // if(opts.isActive.audio && opts.isActive.audio !== this.isActive.audio) this.getMedia('audio')
+         this.getMedia('audio')
+        this.getMedia('video')
+      }
+    }
+    return false
   }
 
   applyConstraints(kind, obj = {}) {
