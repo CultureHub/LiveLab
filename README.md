@@ -2,11 +2,6 @@
 
 [demo (Chrome environment needed)](https://livelab.app)
 
-### Desktop capture
-To use screen capture or a browser tab as an input source, you must first install the chrome extension for screensharing, and restart chrome.
-
-To install, go to chrome://extensions/
-Click "Load unpacked extension", and select the "extensions" folder in "screen-capture-extension" in this repo. Restart chrome. The extension should work from now on without needing to reinstall.
 
 ### Running locally
 
