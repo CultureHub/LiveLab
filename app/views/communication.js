@@ -54,12 +54,12 @@ module.exports = (state, emit) => {
     // ${windowOpen}
     // </div>
       // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
+      //background:rgba(213, 0, 143, 0.8);
     return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
-      <div class="absolute pa2 ph2 ma2 bottom-0" style="text-shadow: 2px 2px 4px #000">
+      <div class="absolute pa2 ph2 ma2 bottom-0 f4" style="text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);/*mix-blend-mode:difference*/">
        <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
       </div>
-
      </div>`
    })
    //return html`<div>${elements}</div>`=
