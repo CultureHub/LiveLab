@@ -40,10 +40,22 @@ npm run watch
 ```
 
 # Changelog
+## [1.3.4] - 2020-05-26
+### Added
+ - New layout for login
+ - user info in 'peer list'
+ - video grid adjusts to mobile layout
+ - dedicated column for menu
+
+### Changed
+ - updated media settings
+ - moved unused files to 'older'
+ - media info removed from grid and added to peerslist
+
 ## [1.3.3] - 2020-05-22
 ### Changed
  - Add Media instead of addAudio()
- 
+
 ## [1.3.2] - 2020-05-17
 ### Added
   - Global hangup

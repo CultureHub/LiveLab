@@ -56,11 +56,7 @@ module.exports = class AddMedia extends Component {
       }
     }
 
-    enumerateDevices().then((devices) => {
-      this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
-      this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
-      this.devices.audio.push({label: 'no audio', deviceId: 'false'})
-      this.devices.video.push({label: 'no video', deviceId: 'false'})
+    this.updateDeviceList(() => {
       if(this.devices.audio.length > 0) {
         this.selectedDevices.audio = this.devices.audio[this.devices.audio.length - 1]
       //  this.getMedia('audio')
@@ -69,6 +65,31 @@ module.exports = class AddMedia extends Component {
         this.selectedDevices.video = this.devices.video[this.devices.video.length - 1]
       //  this.getMedia('video')
       }
+    })
+    // enumerateDevices().then((devices) => {
+    //   this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
+    //   this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
+    //   this.devices.audio.push({label: 'no audio', deviceId: 'false'})
+    //   this.devices.video.push({label: 'no video', deviceId: 'false'})
+    //   if(this.devices.audio.length > 0) {
+    //     this.selectedDevices.audio = this.devices.audio[this.devices.audio.length - 1]
+    //   //  this.getMedia('audio')
+    //   }
+    //   if(this.devices.video.length > 0) {
+    //     this.selectedDevices.video = this.devices.video[this.devices.video.length - 1]
+    //   //  this.getMedia('video')
+    //   }
+    // //  this.rerender()
+    // }).catch((err) =>this.log('error', err))
+  }
+
+  updateDeviceList(callback) {
+    enumerateDevices().then((devices) => {
+      this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
+      this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
+      this.devices.audio.push({label: 'no audio', deviceId: 'false'})
+      this.devices.video.push({label: 'no video', deviceId: 'false'})
+      callback()
     //  this.rerender()
     }).catch((err) =>this.log('error', err))
   }
@@ -78,7 +99,7 @@ module.exports = class AddMedia extends Component {
   }
 
   update (opts) {
-    if(opts) {
+    if(opts && opts.isActive) {
       //this.tracks = opts.tracks
       this.selectedDevices = Object.assign({}, this.selectedDevices, opts.selectedDevices)
       if(opts.isActive != this.isActive) {
@@ -96,10 +117,12 @@ module.exports = class AddMedia extends Component {
 
   load(el) {
   //  console.log('loaded', opts)
-     this.selectedDevices = Object.assign({}, this.selectedDevices, this.parentOpts.selectedDevices)
-    this.isActive =Object.assign({}, this.isActive, this.parentOpts.isActive)
-    this.getMedia('audio')
-    this.getMedia('video')
+    this.updateDeviceList( () => {
+      this.selectedDevices = Object.assign({}, this.selectedDevices, this.parentOpts.selectedDevices)
+      this.isActive =Object.assign({}, this.isActive, this.parentOpts.isActive)
+      this.getMedia('audio')
+      this.getMedia('video')
+    })
   }
 
   applyConstraints(kind, obj = {}) {
@@ -212,9 +235,9 @@ module.exports = class AddMedia extends Component {
           // emit('user:addStream', new MediaStream(tracks), this.label)
           // emit('layout:toggleMenuItem', 'addMedia', 'panels')
            opts.onSave({stream: new MediaStream(tracks), mediaObj: this})
-        }}>Add Media Stream</div>
+        }}>${opts.saveText}</div>
       ` :''}
-      <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${() => emit('layout:toggleMenuItem', 'addMedia', 'panels')}>Cancel</div>
+      <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${opts.onCancel}>Cancel</div>
     </div>
     </div>
   </div>`

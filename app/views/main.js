@@ -16,7 +16,7 @@ const AddMedia = require('./addMedia.js')
 const floating = (content, name, label, state, emit) => {
   if(state.layout.panels[name] && (state.layout.collapsed !== 0 || name === 'chat')) {
     return html`
-      <div class="pa4 bg-mid-gray db w-100 mt2 shadow-2" style="pointer-events:all">
+      <div class="pa4 bg-mid-gray w-100 ma2 shadow-2" style="pointer-events:all; flex:0">
       <i
               class="fas fa-times relative fr dim pointer"
               title="close ${label}"
@@ -64,18 +64,28 @@ function mainView (state, emit) {
       return html`<div class="pa5 f-headline">bye .... :] </div>`
     } else {
       //console.log(state.multiPeer.streams)
-      return html`<div>
+      return html`<div class="w-100 h-100">
           ${communication(state, emit)}
-          <div class="fixed bottom-0 pb2 right-0 pr5 h-100 flex flex-column justify-end" style="width:28rem;pointer-events:none">
-            ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
-            ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
-            ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
-            ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat', state, emit)}
-            ${floating(peersList(state.multiPeer), 'users', 'participants currently in room', state, emit)}
-            <div></div>
+          <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
+            ${menu(state, emit)}
+            <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
+              ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
+              ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
+              ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
+              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat', state, emit)}
+              ${floating(peersList(state.multiPeer), 'users', 'participants currently in room', state, emit)}
+              <div></div>
+            </div>
+
+            ${modal(state.cache(AddMedia, 'add-audio').render({
+              saveText: "add media stream",
+              onCancel: () => { emit('layout:toggleMenuItem', 'addMedia', 'panels')},
+              onSave: ({ stream, mediaObj }) => {
+                emit('layout:toggleMenuItem', 'addMedia', 'panels')
+                emit('user:addStream', stream)
+              }
+            }), 'addMedia', 'add media', state, emit)}
           </div>
-          ${menu(state, emit)}
-          ${modal(state.cache(AddMedia, 'add-audio').render(state.layout.panels.addMedia, state, emit), 'addMedia', 'add media', state, emit)}
       </div>`
     }
    }

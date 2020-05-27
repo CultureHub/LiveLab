@@ -242,6 +242,9 @@ module.exports = class Login extends Component {
           selectedDevices: this.selectedDevices,
           isActive: this.isActive,
           tracks: this.tracks,
+          saveText: "save",
+          onCancel: () => {this.settingsIsOpen = ! this.settingsIsOpen
+          this.rerender()},
           onSave: ({stream, mediaObj})  => {
             console.log('saving', this, mediaObj)
             this.updateMedia(mediaObj)

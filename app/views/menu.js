@@ -2,7 +2,7 @@ const html = require('choo/html')
  // ${selected?"bg-mid-gray" : "bg-dark-gray"}
  // text-shadow:4px 4px #555
 const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
-<div class="db relative pointer pa3 ${selected?"bg-mid-gray" : "bg-dark-gray"}" title=${title} onclick= ${onclick}>
+<div class="relative pointer pa3 ${selected?"bg-mid-gray" : "bg-dark-gray"}" style="flex:0" title=${title} onclick= ${onclick}>
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
 ${info?html`<div class="absolute light-gray right-0 top-0 b pa2">${info}</div>` : '' }
@@ -33,7 +33,7 @@ module.exports = (state, emit) => {
 
   if(state.layout.collapsed === 0) {
     return html`
-    <div class="fixed bottom-0 right-0 pa2">
+    <div class="fixed bottom-0 right-0 pa2 " style="pointer-events:all;">
     ${menuIcon({
       icon:  'fa-chevron-up',
       title: "Show menu",
@@ -43,7 +43,7 @@ module.exports = (state, emit) => {
     `
   } else {
     return html`
-    <div class="fixed bottom-0 right-0 pa2">
+    <div class="flex flex-column-ns flex-row justify-end flex-wrap-reverse" style="pointer-events:all;">
     ${menuItem({
       icon: 'fa-share-alt',
       title: "Share",

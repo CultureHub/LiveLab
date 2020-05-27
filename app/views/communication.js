@@ -57,7 +57,7 @@ module.exports = (state, emit) => {
     return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
       <div class="absolute pa2 ph2 ma2 bottom-0" style="text-shadow: 2px 2px 4px #000">
-       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen} ${endStream}
+       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
       </div>
 
      </div>`
@@ -66,12 +66,25 @@ module.exports = (state, emit) => {
    // let numOpenPanels = Object.values(state.layout.panels).filter((val) => val).length
    // console.log(numOpenPanels)
    // let sideMargin = numOpenPanels > 1 ? 400 : 0
-   // let sideMargin = state.layout.collapsed? 0: 62
+
+   // resize video grid based on screen dimensions
    let sideMargin = 0
-   return html`<div>${grid({
+   let bottomMargin = 0
+
+   if(!(state.layout.collapsed === 0)) {
+     // if on small screen, make margin on bottom rather than side  @todo: use EM rather than pixels
+     if(window.innerWidth < 480) {
+       bottomMargin = 54*2
+     } else {
+       sideMargin  = 54
+     }
+   }
+
+   return html`<div class="w-100 h-100 fixed top-0 left-0">${grid({
      elements: elements,
      stretchToFit: state.layout.settings.stretchToFit,
      outerWidth: window.innerWidth - sideMargin,
+     outerHeight: window.innerHeight - bottomMargin,
      ratio: state.layout.settings.stretchToFit? '4:3': '16:9'
    }, emit)}</div>`
    //return html`<div>${grid(state, emit)}</div>`

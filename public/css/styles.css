@@ -3,6 +3,8 @@ body,
 div {
   /* background-color: #222; */
 }
+/* Tachyons extensions */
+.w5 { width: 16rem; }
 
 a {
   word-break: break-all;
