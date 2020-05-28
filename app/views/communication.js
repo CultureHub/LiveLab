@@ -33,14 +33,6 @@ module.exports = (state, emit) => {
          class="dim pointer ma2 b ttu" title="send video to switcher a">${switcher}
        </i>`
        )}
-       <!-- <i
-         onclick=${()=> emit('layout:setSettings', 'switcherA', stream)}
-         class="dim pointer ma2 b" title="send video to switcher a"> A
-       </i>
-       <i
-         onclick=${()=> emit('layout:setSettings', 'switcherB', stream)}
-         class="dim pointer ma2 b" title="send video to switcher b"> B
-       </i> -->
        `
      }
      if(stream.settings && stream.settings.audio) {

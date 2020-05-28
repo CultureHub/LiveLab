@@ -5,10 +5,12 @@ const Login = require('./login.js')
 const communication = require('./communication.js')
 const menu = require('./menu.js')
 const peersList = require('./peersList.js')
+const settings = require('./settings.js')
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 const Switcher = require( './switcher.js')
 const AddMedia = require('./addMedia.js')
+
 
 // const chat = new Chat()
 // const audio = new Audio()
@@ -89,7 +91,7 @@ function mainView (state, emit) {
                 emit('user:addStream', stream)
               }
             }), 'addMedia', 'add media', state, emit)}
-             ${modal('', 'settings', 'settings', state, emit)}
+             ${modal(settings(state, emit), 'settings', 'settings', state, emit)}
           </div>
       </div>`
     }
