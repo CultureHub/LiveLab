@@ -33,7 +33,8 @@ module.exports = class Switcher extends Component {
   }
 
   clear() {
-    this.state.layout.settings[this.name] = null
+    console.log('setting switcher', this.name, this.state)
+    this.state.layout.settings.switchers[this.name] = null
     this.rerender()
   }
 
@@ -70,9 +71,9 @@ module.exports = class Switcher extends Component {
 
   createElement(name, state) {
     this.name = name
-    this.label = name === 'switcherA' ? 'Switcher A' : 'Switcher B'
+    this.label = `switcher ${name}`
     this.state = state
-    const stream = state.layout.settings[name]
+    const stream = state.layout.settings.switchers[name]
     if(stream !== this.stream) {
       this.stream = stream
       this.setWindowVideo()

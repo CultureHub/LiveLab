@@ -74,7 +74,7 @@ function mainView (state, emit) {
             <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls')}
               ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => floating(
-                state.cache(Switcher, `switcher-${switcher}`).render(`switcher-${switcher}`, state), switcher, `switcher ${switcher}`, 'switchers')
+                state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), switcher, `switcher ${switcher}`, 'switchers')
               )}
               ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat')}
               ${floating(peersList(state.multiPeer), 'users', 'participants currently in room')}

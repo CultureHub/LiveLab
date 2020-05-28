@@ -27,14 +27,20 @@ module.exports = (state, emit) => {
          onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
          class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
        </i>
-       <i
+       ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => html
+       `<i
+         onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
+         class="dim pointer ma2 b ttu" title="send video to switcher a">${switcher}
+       </i>`
+       )}
+       <!-- <i
          onclick=${()=> emit('layout:setSettings', 'switcherA', stream)}
          class="dim pointer ma2 b" title="send video to switcher a"> A
        </i>
        <i
          onclick=${()=> emit('layout:setSettings', 'switcherB', stream)}
          class="dim pointer ma2 b" title="send video to switcher b"> B
-       </i>
+       </i> -->
        `
      }
      if(stream.settings && stream.settings.audio) {

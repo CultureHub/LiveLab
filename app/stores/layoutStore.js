@@ -14,7 +14,8 @@ module.exports = (state, emitter) => {
     settings: {
       stretchToFit: true,
       switchers: { a: null, b: null, c: null, d: null}, // stream values of each switcher
-      numberOfSwitchers: 4 // number of switchers to display in ui
+      numberOfSwitchers: 4, // number of switchers to display in ui
+      columnLayout: false
     },
     collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
   }
@@ -41,6 +42,11 @@ module.exports = (state, emitter) => {
 
   emitter.on('layout:setSettings', (item, value) => {
     state.layout.settings[item] = value
+    emitter.emit('render')
+  })
+
+  emitter.on('layout:setSwitcher', (item, value) => {
+    state.layout.settings.switchers[item] = value
     emitter.emit('render')
   })
 
