@@ -89,11 +89,12 @@ function mainView (state, emit) {
                 emit('user:addStream', stream)
               }
             }), 'addMedia', 'add media', state, emit)}
+             ${modal('', 'settings', 'settings', state, emit)}
           </div>
       </div>`
     }
    }
-
+//    ${modal(html`<div>SETTINGS</div>`, 'settings', 'settings', state, emit)}
    // ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
    // ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
      // ${peersList(state, emit)}

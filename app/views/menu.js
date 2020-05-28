@@ -1,6 +1,5 @@
 const html = require('choo/html')
- // ${selected?"bg-mid-gray" : "bg-dark-gray"}
- // text-shadow:4px 4px #555
+
 const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
 <div class="relative pointer pa3 ${selected?"bg-mid-gray" : "bg-dark-gray"}" style="flex:0" title=${title} onclick= ${onclick}>
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
@@ -8,17 +7,6 @@ const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
 ${info?html`<div class="absolute light-gray right-0 top-0 b pa2">${info}</div>` : '' }
 </div>
 `
-
-
-
-// <i
-//  class="fas fa-desktop dim pointer ma3 db"
-//  style="display:block"
-//  title="Share Screen"
-//  onclick= ${() => emit('user:shareScreen')}
-//  ></i>
-
-
 
 
 module.exports = (state, emit) => {
@@ -44,19 +32,13 @@ module.exports = (state, emit) => {
   } else {
     return html`
     <div class="flex flex-column-ns flex-row justify-end flex-wrap-reverse" style="pointer-events:all;">
-    ${menuItem({
-      icon: 'fa-share-alt',
-      title: "Share",
-      // info: 'x',
-      onclick: () => {}
-    })}
-    ${menuItem({
-      icon: 'fa-question',
-      title: "Info",
-      onclick: () => emit('layout:showInfo'),
-      // selected: state.layout.settings.stretchToFit
-    })}
-    <br>
+        ${menuItem({
+          icon: 'fa-cog',
+          title: "Settings",
+          // info: 'x',
+          onclick: () =>  emit('layout:toggleMenuItem', 'settings', 'panels'),
+        })}
+        <br>
         ${menuItem({
           icon:  state.user.isVideoMuted ?'fa-video red':'fa-video green',
           title: "Mute your video",
@@ -142,32 +124,3 @@ module.exports = (state, emit) => {
     `
   }
 }
-
-
-// ${menuItem({
-//   icon: 'fa-desktop',
-//   title: "Open switcher A",
-//   onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
-//   advanced: true,
-//   selected: state.layout.panels.switcherA,
-//   info: 'A'
-//   // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-// })}
-// ${menuItem({
-//   icon: 'fa-desktop',
-//   title: "Open switcher B",
-//   onclick: () => emit('layout:toggleMenuItem', 'switcherB', 'panels'),
-//   selected: state.layout.panels.switcherB,
-//   advanced: true,
-//   info: 'B'
-//   // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-// })}
-//fas fa-user-friends
-
-// <i
-//   style="margin-left:3px"
-//   class="fas fa-plus-circle dim pointer fr"
-//   onclick=${() => emit('devices:addNewMedia', true)}
-//   title="Add Media Broadcast"
-// >
-// </i>
