@@ -225,7 +225,7 @@ module.exports = class Login extends Component {
         </div>
         <div class="fixed w-100 h-100">
           <div style=""> LiveLab ...................</div>
-          <div style=""> An Experimental <br> Interface <br> For Web-based <br> Performance </div>
+          <div style="">Browser-based<br>media router<br>for collaborative<br>performance </div>
           <div class="mt4 w-100">
             ${dropdowns[0]}
             ${dropdowns[1]}

@@ -102,24 +102,16 @@ module.exports = (state, emit) => {
           selected: state.layout.panels.audio
           // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
         })}
-        ${menuItem({
-          icon: 'fa-desktop',
-          title: "Open switcher A",
-          onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
-          advanced: true,
-          selected: state.layout.panels.switcherA,
-          info: 'A'
-          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-        })}
-        ${menuItem({
-          icon: 'fa-desktop',
-          title: "Open switcher B",
-          onclick: () => emit('layout:toggleMenuItem', 'switcherB', 'panels'),
-          selected: state.layout.panels.switcherB,
-          advanced: true,
-          info: 'B'
-          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-        })}
+        ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => menuItem({
+            icon: 'fa-desktop',
+            title: `Open switcher ${switcher}`,
+            onclick: () => emit('layout:toggleMenuItem', switcher, 'switchers'),
+            advanced: true,
+            selected: state.layout.switchers[switcher],
+            info: switcher
+            // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+          })
+        )}
         ${menuItem({
           icon: 'fa-comment',
           title: "Toggle chat",
@@ -151,6 +143,25 @@ module.exports = (state, emit) => {
   }
 }
 
+
+// ${menuItem({
+//   icon: 'fa-desktop',
+//   title: "Open switcher A",
+//   onclick: () => emit('layout:toggleMenuItem', 'switcherA', 'panels'),
+//   advanced: true,
+//   selected: state.layout.panels.switcherA,
+//   info: 'A'
+//   // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+// })}
+// ${menuItem({
+//   icon: 'fa-desktop',
+//   title: "Open switcher B",
+//   onclick: () => emit('layout:toggleMenuItem', 'switcherB', 'panels'),
+//   selected: state.layout.panels.switcherB,
+//   advanced: true,
+//   info: 'B'
+//   // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+// })}
 //fas fa-user-friends
 
 // <i

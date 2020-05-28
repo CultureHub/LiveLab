@@ -8,14 +8,13 @@ module.exports = (state, emitter) => {
       chat: false,
       audio: false,
       users: false,
-      switcherA: false,
-      switcherB: false,
       addMedia: false
     },
+    switchers: { a: false, b: false, c: false, d: false}, // whether switcher panels are open
     settings: {
       stretchToFit: true,
-      switcherA: null,
-      switcherB: null
+      switchers: { a: null, b: null, c: null, d: null}, // stream values of each switcher
+      numberOfSwitchers: 4 // number of switchers to display in ui
     },
     collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
   }

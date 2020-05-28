@@ -40,6 +40,13 @@ npm run watch
 ```
 
 # Changelog
+## [1.3.5] - 2020-05-28
+### Added
+ - dev and production builds to specify different server address
+ - version number included as environmental variable
+
+### Changed
+
 ## [1.3.4] - 2020-05-26
 ### Added
  - New layout for login

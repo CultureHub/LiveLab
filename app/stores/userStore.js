@@ -2,19 +2,18 @@ const shortid = require('shortid')
 const MultiPeer = require('./../lib/MultiPeer.js')
 
 module.exports = (state, emitter) => {
-
+console.log('process', process, 'env', process.env, process.env.NODE_ENV, process.version, process.env.version)
   state.user = {
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
     isOnline: true,
-    version: '1.3.4',
+    version: process.env.version,
     loggedIn: false,
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-    server: 'https://livelab.app:6643',
-    // server: 'https://live-lab-v1.glitch.me',
+    server: process.env.NODE_ENV === 'production' ? 'https://livelab.app:6643' : 'https://live-lab-v1.glitch.me',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,

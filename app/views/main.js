@@ -13,24 +13,7 @@ const AddMedia = require('./addMedia.js')
 // const chat = new Chat()
 // const audio = new Audio()
 //const workspace = require('./workspace.js')
-const floating = (content, name, label, state, emit) => {
-  if(state.layout.panels[name] && (state.layout.collapsed !== 0 || name === 'chat')) {
-    return html`
-      <div class="pa4 bg-mid-gray w-100 ma2 shadow-2" style="pointer-events:all; flex:0">
-      <i
-              class="fas fa-times relative fr dim pointer"
-              title="close ${label}"
-              style="top:-20px;right:-20px"
-              aria-hidden="true"
-              onclick=${() =>{ emit('layout:toggleMenuItem', name, 'panels')}} >
-      </i>
-        ${content}
-      </div>
-    `
-  } else {
-    return html`<div style="display:none">${content}</div>`
-  }
-}
+
 
 const modal = (content, name, label, state, emit) => {
   if(state.layout.panels[name]) {
@@ -52,6 +35,26 @@ const modal = (content, name, label, state, emit) => {
 
 module.exports = mainView
 function mainView (state, emit) {
+
+  const floating = (content, name, label, type = 'panels') => {
+    if(state.layout[type][name] && (state.layout.collapsed !== 0 || name === 'chat')) {
+      return html`
+        <div class="pa4 bg-mid-gray w-100 ma2 shadow-2" style="pointer-events:all; flex:0">
+        <i
+                class="fas fa-times relative fr dim pointer"
+                title="close ${label}"
+                style="top:-20px;right:-20px"
+                aria-hidden="true"
+                onclick=${() =>{ emit('layout:toggleMenuItem', name, type)}} >
+        </i>
+          ${content}
+        </div>
+      `
+    } else {
+      return html`<div style="display:none">${content}</div>`
+    }
+  }
+
   if (!state.user.loggedIn) {
     return html`
     <div>
@@ -69,11 +72,12 @@ function mainView (state, emit) {
           <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
             ${menu(state, emit)}
             <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
-              ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls', state, emit)}
-              ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
-              ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
-              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat', state, emit)}
-              ${floating(peersList(state.multiPeer), 'users', 'participants currently in room', state, emit)}
+              ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls')}
+              ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => floating(
+                state.cache(Switcher, `switcher-${switcher}`).render(`switcher-${switcher}`, state), switcher, `switcher ${switcher}`, 'switchers')
+              )}
+              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat')}
+              ${floating(peersList(state.multiPeer), 'users', 'participants currently in room')}
               <div></div>
             </div>
 
@@ -89,6 +93,9 @@ function mainView (state, emit) {
       </div>`
     }
    }
+
+   // ${floating(state.cache(Switcher, 'switcher-a').render('switcherA', state), 'switcherA', 'switcher A', state, emit)}
+   // ${floating(state.cache(Switcher, 'switcher-b').render('switcherB', state), 'switcherB', 'switcher B', state, emit)}
      // ${peersList(state, emit)}
   // return html`<div>${grid(state, emit)}</div>`
 }
