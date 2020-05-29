@@ -7,12 +7,13 @@ var MultiPeer = require('./../lib/MultiPeer.js')
 
 module.exports = userModel
 
-function userModel (state, bus) {
+function userModel(state, bus) {
   state.user = xtend({
     //uuid: localStorage.getItem('uuid') || shortid.generate(), // persistent local user id. If none is present in local storage, generate new one
     uuid: shortid.generate(), // for dev purposes, always regenerate id
     room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     server: 'https://livelab.app:6643',
+    //server: 'https://localhost:6643',
     version: '1.2.5',
     loggedIn: false,
     nickname: localStorage.getItem('livelab-nickname') || '',
@@ -27,8 +28,8 @@ function userModel (state, bus) {
   //
   // })
   //osc.on
-//login page ui events
-// @todo: move this to ui state or somewhere else
+  //login page ui events
+  // @todo: move this to ui state or somewhere else
   bus.emit('peers:updatePeer', {
     peerId: state.user.uuid,
     nickname: state.user.nickname
@@ -54,15 +55,15 @@ function userModel (state, bus) {
   })
 
   // @ to do: dont update state within function, move to ui model
-  bus.on('user:toggleMute', function() {
+  bus.on('user:toggleMute', function () {
     var defaultStreamId = state.peers.byId[state.user.uuid].defaultStream
     var defaultStream = state.media.byId[defaultStreamId].stream
     var audioTracks = defaultStream.getAudioTracks()
-    if(state.user.muted===true) {
+    if (state.user.muted === true) {
       audioTracks.forEach((track) => track.enabled = true)
       state.user.muted = false
     } else {
-    //  track.enabled = false
+      //  track.enabled = false
       audioTracks.forEach((track) => track.enabled = false)
       state.user.muted = true
     }
@@ -71,21 +72,21 @@ function userModel (state, bus) {
 
   bus.on('user:disconnect', () => {
     state.user.isOnline = false
-  //  bus.emit('render')
+    //  bus.emit('render')
   })
   bus.on('user:reconnect', () => {
     state.user.isOnline = true
-  //  bus.emit('render')
+    //  bus.emit('render')
   })
 
 
   // Initiate connection with signalling server
   bus.on('user:join', function (opts) {
-  //  localStorage.setItem('uuid', state.user.uuid)
+    //  localStorage.setItem('uuid', state.user.uuid)
     localStorage.setItem('livelab-nickname', state.user.nickname)
     localStorage.setItem('livelab-room', state.user.room)
     window.history.pushState({}, 'room', '?room=' + state.user.room + window.location.hash)
-  //  document.location = window.location.origin + window.location.pathname + '?room=' + state.user.room + window.location.hash
+    //  document.location = window.location.origin + window.location.pathname + '?room=' + state.user.room + window.location.hash
 
     bus.emit('peers:updatePeer', {
       peerId: state.user.uuid,
@@ -104,7 +105,7 @@ function userModel (state, bus) {
         offerOptions: {
           offerToReceiveAudio: true,
           offerToReceiveVideo: true
-         }
+        }
       }
     }, bus)
 
@@ -138,20 +139,29 @@ function userModel (state, bus) {
     // })
 
     //when first connected to remote peer, send user information
-    multiPeer.on('connect', function ({id, pc}) {
+    multiPeer.on('connect', function ({
+      id,
+      pc
+    }) {
 
       state.user.statusMessage += 'Connected to peer ' + id + '\n'
-      bus.emit('peers:updatePeer', {peerId: id, pc: pc})
+      bus.emit('peers:updatePeer', {
+        peerId: id,
+        pc: pc
+      })
       // if user is set to receive media, request from remote peer
       if (state.peers.byId[state.user.uuid].requestMedia === true) {
-        multiPeer.sendToPeer(id, JSON.stringify({ type: 'requestMedia', message: null }))
+        multiPeer.sendToPeer(id, JSON.stringify({
+          type: 'requestMedia',
+          message: null
+        }))
       }
       var userInfo = state.peers.byId[state.user.uuid]
       var infoObj = {}
       //
       userInfo.streams.forEach((streamId) => {
         infoObj[streamId] = xtend({}, state.media.byId[streamId])
-      //  multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
+        //  multiPeer.sendStreamToPeer(infoObj[streamId].stream, id)
         delete infoObj[streamId].stream
       })
 
@@ -163,79 +173,88 @@ function userModel (state, bus) {
     })
 
     //received data from remote peer
-      multiPeer.on('data', function (data) {
-        if (data.data){
-          if (data.data.type === 'updatePeerInfo') {
-            if('peer' in data.data.message) bus.emit('peers:updatePeer', data.data.message.peer)
-            if('streams' in data.data.message) bus.emit('media:updateStreamInfo', data.data.message.streams)
-            if('osc' in data.data.message) bus.emit('osc:updateRemoteOscInfo', {
-              osc: data.data.message.osc,
-              peerId: data.id
-            })
-          } else if (data.data.type === 'requestMedia') {
-            var userInfo = state.peers.byId[state.user.uuid]
-            var infoObj = {}
-            userInfo.streams.forEach((streamId) => {
-          //    infoObj[streamId] = xtend({}, state.media.byId[streamId])
-              multiPeer.sendStreamToPeer(state.media.byId[streamId].stream, data.id)
-        //      delete infoObj[streamId].stream
-            })
-          } else if(data.data.type=== 'chatMessage'){
-           bus.emit('ui:receivedNewChat', data.data.message)
-         } else if (data.data.type === 'osc'){
+    multiPeer.on('data', function (data) {
+      if (data.data) {
+        if (data.data.type === 'updatePeerInfo') {
+          if ('peer' in data.data.message) bus.emit('peers:updatePeer', data.data.message.peer)
+          if ('streams' in data.data.message) bus.emit('media:updateStreamInfo', data.data.message.streams)
+          if ('osc' in data.data.message) bus.emit('osc:updateRemoteOscInfo', {
+            osc: data.data.message.osc,
+            peerId: data.id
+          })
+        } else if (data.data.type === 'requestMedia') {
+          var userInfo = state.peers.byId[state.user.uuid]
+          var infoObj = {}
+          userInfo.streams.forEach((streamId) => {
+            //    infoObj[streamId] = xtend({}, state.media.byId[streamId])
+            multiPeer.sendStreamToPeer(state.media.byId[streamId].stream, data.id)
+            //      delete infoObj[streamId].stream
+          })
+        } else if (data.data.type === 'chatMessage') {
+          bus.emit('ui:receivedNewChat', data.data.message)
+        } else if (data.data.type === 'osc') {
           bus.emit('osc:processRemoteOsc', data)
           bus.emit('render')
-         }
-       }
-     })
+        }
+      }
+    })
 
     state.user.statusMessage = 'Contacting server ' + state.user.server + '\n'
 
     bus.emit('render')
   })
 
-   bus.on('user:addStream', function(stream){
-    if(multiPeer !== null) {
+  bus.on('user:addStream', function (stream) {
+    if (multiPeer !== null) {
       multiPeer.addStream(stream)
       updateLocalInfo()
       bus.emit('render')
     }
   })
 
-  bus.on('user:sendChatMessage', function(msg){
-     multiPeer.sendToAll(JSON.stringify({type: 'chatMessage', message: msg}))
-   })
+  bus.on('user:sendChatMessage', function (msg) {
+    multiPeer.sendToAll(JSON.stringify({
+      type: 'chatMessage',
+      message: msg
+    }))
+  })
 
-   bus.on('user:sendToAll', function (msg) {
-     multiPeer.sendToAll(msg)
-   })
+  bus.on('user:sendToAll', function (msg) {
+    multiPeer.sendToAll(msg)
+  })
 
 
-   bus.on('user:updateLocalInfo', () => {
-     updateLocalInfo()
-   })
+  bus.on('user:updateLocalInfo', () => {
+    updateLocalInfo()
+  })
 
-//share local updates to track or user information with peers
-function updateLocalInfo(id){
-  if(multiPeer){
-    var userInfo = state.peers.byId[state.user.uuid]
-    var streamInfo = {}
-    userInfo.streams.forEach((streamId) => {
-      streamInfo[streamId] = xtend({}, state.media.byId[streamId])
-      delete streamInfo[streamId].stream
-    })
-    var updateObj = {
-      peer: userInfo,
-      streams: streamInfo,
-      osc: state.osc.local
+  //share local updates to track or user information with peers
+  function updateLocalInfo(id) {
+    if (multiPeer) {
+      var userInfo = state.peers.byId[state.user.uuid]
+      var streamInfo = {}
+      userInfo.streams.forEach((streamId) => {
+        streamInfo[streamId] = xtend({}, state.media.byId[streamId])
+        delete streamInfo[streamId].stream
+      })
+      var updateObj = {
+        peer: userInfo,
+        streams: streamInfo,
+        osc: state.osc.local
+      }
+      if (id) {
+        multiPeer.sendToPeer(id, JSON.stringify({
+          type: 'updatePeerInfo',
+          message: updateObj
+        }))
+      } else {
+        multiPeer.sendToAll(JSON.stringify({
+          type: 'updatePeerInfo',
+          message: updateObj
+        }))
+      }
+
     }
-    if (id) {
-      multiPeer.sendToPeer(id, JSON.stringify({ type: 'updatePeerInfo', message: updateObj }))
-    } else {
-      multiPeer.sendToAll(JSON.stringify({ type: 'updatePeerInfo', message: updateObj }))
-    }
-
   }
-}
 
 }

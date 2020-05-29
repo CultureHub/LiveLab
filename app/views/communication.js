@@ -9,6 +9,7 @@ const grid = require('./videogrid.js')
 
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
+  //   let state.layout.settings.stretchToFit = state.layout.menu.state.layout.settings.stretchToFit
      let videoSettings = ''
      let audioSettings = ''
      let windowOpen = ''
@@ -24,8 +25,17 @@ module.exports = (state, emit) => {
        <span class="mh2"> | </span>
        <i
          onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
-         class="far fa-clone dim pointer ma2" title="open video into it's own window">
-       </i>`
+         class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
+       </i>
+       <i
+         onclick=${()=> emit('layout:setSettings', 'switcherA', stream)}
+         class="dim pointer ma2 b" title="send video to switcher a"> A
+       </i>
+       <i
+         onclick=${()=> emit('layout:setSettings', 'switcherB', stream)}
+         class="dim pointer ma2 b" title="send video to switcher b"> B
+       </i>
+       `
      }
      if(stream.settings && stream.settings.audio) {
        audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
@@ -34,23 +44,48 @@ module.exports = (state, emit) => {
          class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
        </i>`
      }
+
+    let endStream = stream.isLocal ? html` <i
+       onclick=${()=> emit('user:endStream', stream)}
+       class="fas fa-trash-alt dim pointer ma2" title="end stream">
+     </i>` : ''
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
-    return html`<div class='w-100 h-100'>
-      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: 'cover'})}
-      <div class="absolute pa2 ph2 ma1 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
-       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${videoSettings} ${mute} ${audioSettings} ${windowOpen}
+      // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
+      //background:rgba(213, 0, 143, 0.8);
+    return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
+      ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
+      <div class="absolute pa2 ph2 ma2 bottom-0 f4" style="text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);/*mix-blend-mode:difference*/">
+       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
       </div>
-
      </div>`
    })
-   //return html`<div>${elements}</div>`
-   return html`<div>${grid({
+   //return html`<div>${elements}</div>`=
+   // let numOpenPanels = Object.values(state.layout.panels).filter((val) => val).length
+   // console.log(numOpenPanels)
+   // let sideMargin = numOpenPanels > 1 ? 400 : 0
+
+   // resize video grid based on screen dimensions
+   let sideMargin = 0
+   let bottomMargin = 0
+
+   if(!(state.layout.collapsed === 0)) {
+     // if on small screen, make margin on bottom rather than side  @todo: use EM rather than pixels
+     if(window.innerWidth < 480) {
+       bottomMargin = 54*2
+     } else {
+       sideMargin  = 54
+     }
+   }
+
+   return html`<div class="w-100 h-100 fixed top-0 left-0">${grid({
      elements: elements,
-     stretchToFit: state.layout.menu.stretchToFit,
-     ratio: state.layout.menu.stretchToFit? '4:3': '16:9'
+     stretchToFit: state.layout.settings.stretchToFit,
+     outerWidth: window.innerWidth - sideMargin,
+     outerHeight: window.innerHeight - bottomMargin,
+     ratio: state.layout.settings.stretchToFit? '4:3': '16:9'
    }, emit)}</div>`
    //return html`<div>${grid(state, emit)}</div>`
 }

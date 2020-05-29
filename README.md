@@ -1,7 +1,12 @@
 ### LiveLab
 
-[demo (Chrome environment needed)](https://livelab.app)
+[demo (right now only works in Chrome)](https://livelab.glitch.me/)
 
+### Desktop capture
+To use screen capture or a browser tab as an input source, you must first install the chrome extension for screensharing, and restart chrome.
+
+To install, go to chrome://extensions/
+Click "Load unpacked extension", and select the "extensions" folder in "screen-capture-extension" in this repo. Restart chrome. The extension should work from now on without needing to reinstall.
 
 ### Running locally
 
@@ -35,6 +40,41 @@ npm run watch
 ```
 
 # Changelog
+## [1.3.4] - 2020-05-26
+### Added
+ - New layout for login
+ - user info in 'peer list'
+ - video grid adjusts to mobile layout
+ - dedicated column for menu
+
+### Changed
+ - updated media settings
+ - moved unused files to 'older'
+ - media info removed from grid and added to peerslist
+
+## [1.3.3] - 2020-05-22
+### Changed
+ - Add Media instead of addAudio()
+
+## [1.3.2] - 2020-05-17
+### Added
+  - Global hangup
+  - Switcher A and B
+  - buttons for share, add video, add audio, help/info (non-functional)
+  - Chat opens when a chat is received and window is closed
+  - collapsible menu
+  - 'advanced' and 'basic' menu
+  - add audio with mic visualization
+
+### Changed
+  - Icons for bounding box, end call, share window
+  - Audio mixer uses HTML elements rather than web audio ()
+
+## [1.3.1] - 2020-05-12
+### Added
+  - hangup buttons for individual streams
+  - indicator of number of users in room
+
 ## [1.3.0] - 2020-05-03
   Major refactor
 ### Changed
@@ -44,7 +84,7 @@ npm run watch
 
 ### Fixed
   - bug on page load in safari
-  
+
 ### Added
   - Audio mixer
   - popout window button

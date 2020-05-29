@@ -29,11 +29,13 @@ const css = (el, style) => {
 module.exports = ({
   elements = [],
   ratio = '4:3',
-  stretchToFit = true
+  stretchToFit = true,
+  outerWidth = window.innerWidth,
+  outerHeight = window.innerHeight
 } = {}, emit) => {
   let num = elements.length
-  let outerWidth = window.innerWidth
-  let outerHeight = window.innerHeight
+  // let outerWidth = window.innerWidth
+  // let outerHeight = window.innerHeight
   let _ratio = ratio.split(':')
   let grid = getGrid(num, _ratio[0]/_ratio[1], outerWidth, outerHeight)
 

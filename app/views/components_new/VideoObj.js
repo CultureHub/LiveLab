@@ -13,24 +13,32 @@ module.exports = class VideoObj extends Component {
   }
 
   update(srcObject = "", style = {}) {
-    if(srcObject !== this._el.srcObject) this._el.srcObject = srcObject
-    // console.log('video src2', srcObject)
-    css(style, this._el)
-
+  //  console.log('video src2', srcObject, this.element.srcObject)
+    if(srcObject !== this.element.srcObject) {
+  //    console.log('setting src object', srcObject, this._el)
+      this.element.srcObject = srcObject
+      this.element.oncanplay = () => {
+        this.element.muted = true
+        this.element.play()
+      }
+    }
+    window.stream = srcObject
+    css(style, this.element)
     return false
+  }
+
+  load(){
+    this.element.oncanplay = () => {
+      this.element.muted = true
+      this.element.play()
+    }
   }
 
   createElement(srcObject = "", style = {}) {
     //this.srcObject = srcObject
-    this._el = html`<video autoplay=true loop=true controls=false muted=true class="w-100 h-100"></video>`
-    this._el.srcObject = srcObject
-    css(style, this._el)
-
-    // console.log('video src', srcObject)
-    this._el.oncanplay = () => {
-      this._el.muted = true
-      this._el.play()
-    }
-    return this._el
+    let el = html`<video autoplay=true loop=true controls=false muted=true class="w-100 h-100"></video>`
+    if(srcObject !== "")  el.srcObject = srcObject
+    css(style, el)
+    return el
   }
 }

@@ -8,27 +8,34 @@ module.exports = (state, emitter) => {
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
     isOnline: true,
-    version: '1.3.0',
+    version: '1.3.4',
     loggedIn: false,
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-   server: 'https://livelab.app:6643',
-    // server: 'https://live-lab-v1.glitch.me',
+    server: 'https://livelab.app:6643',
+    //server: 'https://localhost:6643',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,
-    isVideoMuted: false
+    isVideoMuted: false,
+    callEnded: false
   }
 
 
   state.multiPeer = new MultiPeer({}, emitter)
+  window.audioCtx = new AudioContext()
 
 
-
-  emitter.on('user:join', function ({ room, server, nickname, stream, requestMedia }) {
+  emitter.on('user:join', function ({
+    room,
+    server,
+    nickname,
+    stream,
+    requestMedia
+  }) {
     console.log('room is ', state.query.room)
-    if (state.query.room){
+    if (state.query.room) {
       state.user.room = state.query.room
     } else {
       state.user.room = shortid.generate()
@@ -45,14 +52,14 @@ module.exports = (state, emitter) => {
     //   nickname: state.user.nickname
     // })
 
-  //   state.peers[state.user.uuid] = {
-  //     peerId: state.user.uuid,
-  //     nickname: state.user.nickname,
-  //     streams: []
-  // //    requestMedia: requestMedia
-  //   }
+    //   state.peers[state.user.uuid] = {
+    //     peerId: state.user.uuid,
+    //     nickname: state.user.nickname,
+    //     streams: []
+    // //    requestMedia: requestMedia
+    //   }
 
-  //  emitter.emit('media:initLocalMedia', { peerId: state.user.uuid, stream: stream, nickname: state.user.nickname })
+    //  emitter.emit('media:initLocalMedia', { peerId: state.user.uuid, stream: stream, nickname: state.user.nickname })
 
     state.multiPeer.init({
       room: state.user.room,
@@ -65,32 +72,36 @@ module.exports = (state, emitter) => {
         offerOptions: {
           offerToReceiveAudio: true,
           offerToReceiveVideo: true
-         }
+        }
       },
       stream: stream
     })
 
-  //  state.multiPeer.addStream(stream)
+    //  state.multiPeer.addStream(stream)
     state.user.loggedIn = true
 
     const setAudioMuted = (muteVal) => {
-      if(state.multiPeer.defaultStream) {
+      if (state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getAudioTracks()
         tracks.forEach((track) => {
           track.enabled = !muteVal
         })
-        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isAudioMuted: state.user.isAudioMuted})
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, {
+          isAudioMuted: state.user.isAudioMuted
+        })
 
       }
     }
 
     const setVideoMuted = (muteVal) => {
-      if(state.multiPeer.defaultStream) {
+      if (state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getVideoTracks()
         tracks.forEach((track) => {
           track.enabled = !muteVal
         })
-        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isVideoMuted: state.user.isVideoMuted})
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, {
+          isVideoMuted: state.user.isVideoMuted
+        })
 
       }
     }
@@ -98,6 +109,16 @@ module.exports = (state, emitter) => {
     emitter.on('user:toggleAudioMute', () => {
       state.user.isAudioMuted = !state.user.isAudioMuted
       setAudioMuted(state.user.isAudioMuted)
+      emitter.emit('render')
+    })
+
+    emitter.on('user:endStream', (streamObj) => {
+      state.multiPeer.removeStream(streamObj)
+    })
+
+    emitter.on('user:endCall', (streamObj) => {
+      state.multiPeer.endCall()
+      state.user.callEnded = true
       emitter.emit('render')
     })
 
@@ -119,10 +140,19 @@ module.exports = (state, emitter) => {
     emitter.emit('render')
   })
 
-  state.multiPeer.on('update', () => { emitter.emit('render')})
+  state.multiPeer.on('update', () => {
+    emitter.emit('render')
+  })
 
   emitter.on('user:shareScreen', () => {
     startCapture({})
+  })
+
+  emitter.on('user:addStream', (stream) => {
+    if (stream) {
+      state.multiPeer.addStream(stream)
+      emitter.emit('render')
+    }
   })
 
   async function startCapture(displayMediaOptions) {
@@ -130,9 +160,9 @@ module.exports = (state, emitter) => {
     try {
       stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
       state.multiPeer.addStream(stream)
-    //  var settings = getSettingsFromStream(stream)
+      //  var settings = getSettingsFromStream(stream)
       emitter.emit('render')
-    } catch(err) {
+    } catch (err) {
       emitter.emit('log:warn', err)
     }
     return stream;

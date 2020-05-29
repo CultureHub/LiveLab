@@ -1,10 +1,22 @@
-html, body, div {
+html,
+body,
+div {
   /* background-color: #222; */
+}
+
+/* Tachyons extensions */
+.w5 {
+  width: 16rem;
+}
+
+a {
+  word-break: break-all;
 }
 
 .active {
   color: #0f4;
 }
+
 .workspace {
   background-color: #222;
 }
@@ -12,6 +24,7 @@ html, body, div {
 .tab-header {
   background-color: #000;
 }
+
 .tab-element {
   display: inline-block;
   padding: 4px;
@@ -24,6 +37,7 @@ html, body, div {
 .tab-element:hover {
   color: #999;
 }
+
 .tab-element.selected {
   background-color: #222;
 }
@@ -46,11 +60,13 @@ html, body, div {
   min-width: 180px;
   padding: 10px;
 }
+
 .content-scrollable {
   flex: 8;
   display: flex;
 
 }
+
 .col-sticky {
   flex: 1;
   display: flex;
@@ -62,10 +78,11 @@ html, body, div {
 
 .col-scrollable {
   flex: 8;
-/*  overflow: scroll;*/
+  /*  overflow: scroll;*/
   flex-direction: column;
   margin-left: 4px;
 }
+
 /*https://stackoverflow.com/questions/41426872/flexbox-with-rotated-text*/
 
 .row {
@@ -79,9 +96,7 @@ html, body, div {
 
 }
 
-.row > div {
-
-}
+.row>div {}
 
 .display {
   position: relative;
@@ -95,7 +110,7 @@ html, body, div {
   width: 180px;
   background-color: #000;
   position: relative;
-   margin: 2px;
+  margin: 2px;
   padding: 0px;
   /*flex-grow: 1;*/
   display: flex;
@@ -119,6 +134,7 @@ html, body, div {
 .display-title {
   font-style: italic;
 }
+
 .selectable:hover {
   cursor: pointer;
   border: 2px solid #666;
@@ -130,7 +146,7 @@ html, body, div {
 }
 
 .slider-container {
-   width: 20px;
+  width: 20px;
 
 
 }
@@ -153,27 +169,75 @@ html, body, div {
 }
 
 .slider:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #666;
-    border: 2px solid #333;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #666;
+  border: 2px solid #333;
+  cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb:hover {
 
-    background: #999;
+  background: #999;
 }
 
 .slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #4CAF50;
-    cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+/*Colors in Use*/
+
+.livelab-pink {
+  color: rgb(213, 0, 143);
+}
+
+.bg-livelab-pink {
+  background-color: rgb(213, 0, 143);
+}
+
+.livelab-gray {
+  color: rgba(51, 51, 51)
+}
+
+.bg-livelab-gray {
+  background-color: rgba(51, 51, 51)
+}
+
+.livelab-yellow {
+  color: #EEC643;
+}
+
+.bg-livelab-yellow {
+  background-color: #EEC643;
+}
+
+.livelab-orange {
+  background-color: #FA744F;
+}
+
+
+
+/*customized font-weight:250*/
+
+.fw-text {
+  font-weight: 250;
+}
+
+/*customized letter-spacing*/
+
+.livelab-letterSpace {
+  letter-spacing: 0.15em;
+}
+
+.bg-none {
+  background: none;
 }
