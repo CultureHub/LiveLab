@@ -198,6 +198,8 @@ a {
   background-color: #FA744F;
 }
 
+/* hover styles */
+
 /* Outside wrapping block for the initiation content */
 
 #iniContBlock {
@@ -258,6 +260,15 @@ a {
   flex-direction: row;
   line-height: 2;
   /*border-radius: 10px;*/
+}
+
+.video-container div  {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.video-container:hover div {
+  opacity: 1;
 }
 
 .w-5r {

@@ -10,64 +10,70 @@ const grid = require('./videogrid.js')
 module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
   //   let state.layout.settings.stretchToFit = state.layout.menu.state.layout.settings.stretchToFit
-     let videoSettings = ''
-     let audioSettings = ''
-     let windowOpen = ''
-     let mute = ''
-     let videoMute = ''
-     if(stream.settings && stream.settings.video) {
-       videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
-       videoMute = html `<i
-         class="mh1 fas ${stream.isVideoMuted ? 'fa-video light-red':'fa-video'}" title="">
-       </i>`
-       windowOpen =
-       html `
-       <span class="mh2"> | </span>
-       <i
-         onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
-         class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
-       </i>
-       ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => html
-       `<i
-         onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
-         class="dim pointer ma2 b ttu" title="send video to switcher a">${switcher}
-       </i>`
-       )}
-       `
-     }
-     if(stream.settings && stream.settings.audio) {
-       audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
-       mute =
-       html `<i
-         class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
-       </i>`
-     }
+     let info = ''
+     if(state.layout.settings.showCommunicationInfo === true) {
+       let videoSettings = ''
+       let audioSettings = ''
+       let windowOpen = ''
+       let mute = ''
+       let videoMute = ''
+       if(stream.settings && stream.settings.video) {
+         videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
+         videoMute = html `<i
+           class="mh1 fas ${stream.isVideoMuted ? 'fa-video light-red':'fa-video'}" title="">
+         </i>`
+         windowOpen =
+         html `
+         <span class="mh2"> | </span>
+         <i
+           onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
+           class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
+         </i>
+         ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => html
+         `<i
+           onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
+           class="dim pointer ma2 b ttu" title="send video to switcher a">${switcher}
+         </i>`
+         )}
+         `
+       }
+       if(stream.settings && stream.settings.audio) {
+         audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
+         mute =
+         html `<i
+           class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
+         </i>`
+       }
 
-    let endStream = stream.isLocal ? html` <i
-       onclick=${()=> emit('user:endStream', stream)}
-       class="fas fa-trash-alt dim pointer ma2" title="end stream">
-     </i>` : ''
+      let endStream = stream.isLocal ? html` <i
+         onclick=${()=> emit('user:endStream', stream)}
+         class="fas fa-trash-alt dim pointer ma2" title="end stream">
+       </i>` : ''
+       info = html`  <div class="absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);/*mix-blend-mode:difference*/">
+          <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
+         </div>`
+    }
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
       // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
       //background:rgba(213, 0, 143, 0.8);
-    return html`<div class='w-100 h-100 ${state.layout.settings.stretchToFit? '' : 'ba'}'>
+    return html`<div class='w-100 h-100 video-container ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
-      <div class="absolute pa2 ph2 ma2 bottom-0 f4" style="text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);/*mix-blend-mode:difference*/">
-       <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
-      </div>
+      ${info}
      </div>`
    })
    //return html`<div>${elements}</div>`=
-   // let numOpenPanels = Object.values(state.layout.panels).filter((val) => val).length
-   // console.log(numOpenPanels)
+   let numOpenPanels = Object.values(state.layout.panels).filter((val) => val == true).length
+   console.log(numOpenPanels)
    // let sideMargin = numOpenPanels > 1 ? 400 : 0
 
    // resize video grid based on screen dimensions
    let sideMargin = 0
    let bottomMargin = 0
+
+
 
    if(!(state.layout.collapsed === 0)) {
      // if on small screen, make margin on bottom rather than side  @todo: use EM rather than pixels
@@ -75,6 +81,7 @@ module.exports = (state, emit) => {
        bottomMargin = 54*2
      } else {
        sideMargin  = 54
+       if(state.layout.settings.columnLayout && numOpenPanels > 0) sideMargin += 384
      }
    }
 

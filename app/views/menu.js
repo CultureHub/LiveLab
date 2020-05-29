@@ -76,14 +76,6 @@ module.exports = (state, emit) => {
           onclick: () => emit('layout:toggleMenuItem', 'stretchToFit', 'settings')
         })}
         <br>
-        ${menuItem({
-          icon: 'fa-sliders-h',
-          title: "Toggle volume controls",
-          onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
-          advanced: true,
-          selected: state.layout.panels.audio
-          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
-        })}
         ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => menuItem({
             icon: 'fa-desktop',
             title: `Open switcher ${switcher}`,
@@ -94,6 +86,14 @@ module.exports = (state, emit) => {
             // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
           })
         )}
+        ${menuItem({
+          icon: 'fa-sliders-h',
+          title: "Toggle volume controls",
+          onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
+          advanced: true,
+          selected: state.layout.panels.audio
+          // classes: state.layout.panels.audio ? "bg-mid-gray" : "bg-dark-gray"
+        })}
         ${menuItem({
           icon: 'fa-comment',
           title: "Toggle chat",
