@@ -94,7 +94,7 @@ module.exports = (state, emit) => {
            }
          }
          // const panelX =  panels[panels.length -1].getBoundingClientRect().x
-         sideMargin  = window.innerWidth -panelX
+         sideMargin  = Math.max(window.innerWidth -panelX, 52)
        }
       // if(state.layout.settings.columnLayout && numOpenPanels > 0) sideMargin += 384
      }

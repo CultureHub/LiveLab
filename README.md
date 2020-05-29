@@ -40,7 +40,7 @@ npm run watch
 ```
 
 # Changelog
-## [1.3.5] - 2020-05-28
+## [1.3.6] - 2020-05-28
 ### Added
  - dev and production builds to specify different server address
  - version number included as environmental variable

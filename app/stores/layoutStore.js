@@ -12,12 +12,12 @@ module.exports = (state, emitter) => {
       addMedia: false,
       settings: false
     },
-   // switchers: { a: false, b: false, c: false, d: false}, // whether switcher panels are open
-    switchers: { a: true, b: true, c: true, d: true}, // whether switcher panels are open
+    switchers: { a: false, b: false, c: false, d: false}, // whether switcher panels are open
+    // switchers: { a: true, b: true, c: true, d: true}, // whether switcher panels are open
     settings: {
       stretchToFit: true,
       switchers: { a: null, b: null, c: null, d: null}, // stream values of each switcher
-      numberOfSwitchers: 4, // number of switchers to display in ui
+      numberOfSwitchers: 0, // number of switchers to display in ui
       columnLayout: true,
       showCommunicationInfo: true
     },

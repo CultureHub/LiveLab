@@ -97,7 +97,7 @@ function mainView (state, emit) {
           <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
             ${menu(state, emit)}
             <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
-              ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => floating(
+              ${['a', 'b', 'c', 'd'].map((switcher) => floating(
                 state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), switcher, `switcher ${switcher}`, 'switchers')
               )}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls')}
