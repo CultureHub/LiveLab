@@ -45,6 +45,7 @@ module.exports = ({
      width: `${width}px`,
      height: `${height}px`,
      textAlign: 'center',
+     transition: 'width 0.3s, height 0.3s, top 0.3s, left 0.3s'
      // transition: 'all 0.3s',
      // resize: 'both',
      // overflow: 'auto'

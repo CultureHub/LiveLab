@@ -1,8 +1,9 @@
 const debounce = require('./../lib/utils.js').debounce
+const hooks = require('choo-hooks')
 
 
 module.exports = (state, emitter) => {
-
+  const hook = hooks(emitter)
   state.layout = {
     panels: {
       chat: false,
@@ -11,17 +12,21 @@ module.exports = (state, emitter) => {
       addMedia: false,
       settings: false
     },
-  //  switchers: { a: false, b: false, c: false, d: false}, // whether switcher panels are open
+   // switchers: { a: false, b: false, c: false, d: false}, // whether switcher panels are open
     switchers: { a: true, b: true, c: true, d: true}, // whether switcher panels are open
     settings: {
       stretchToFit: true,
       switchers: { a: null, b: null, c: null, d: null}, // stream values of each switcher
-      numberOfSwitchers: 0, // number of switchers to display in ui
+      numberOfSwitchers: 4, // number of switchers to display in ui
       columnLayout: true,
       showCommunicationInfo: true
     },
-    collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu
+    collapsed: 2,   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,
   }
+
+  emitter.on('render', () => {
+    console.log('render was called')
+  })
 
   emitter.on('layout:collapseMenu', (val) => {
     state.layout.collapsed = val

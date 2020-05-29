@@ -44,6 +44,9 @@ npm run watch
 ### Added
  - dev and production builds to specify different server address
  - version number included as environmental variable
+ - settings panel
+ - setting to configure number of switchers
+ - column layout
 
 ### Changed
 

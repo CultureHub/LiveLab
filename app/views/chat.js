@@ -75,7 +75,7 @@ module.exports = class Chat extends Component {
       // ${container}
     return html`  <div>
           ${container}
-          ${input('', 'message', {
+          ${input('', 'send a message', {
             value: this.inputValue,
             onkeyup: (e) => {
               if(e.keyCode=== 13){

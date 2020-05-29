@@ -6,6 +6,8 @@ const communication = require('./communication.js')
 const menu = require('./menu.js')
 const peersList = require('./peersList.js')
 const settingsPanel = require('./settings.js')
+const onload = require('on-load')
+
 const Chat = require( './chat.js')
 const Audio = require( './audio.js')
 const Switcher = require( './switcher.js')
@@ -44,19 +46,35 @@ function mainView (state, emit) {
     let showPanel = (state.layout[type][name] && (state.layout.collapsed !== 0 || name === 'chat'))
     let hidden = showPanel ? 'max-height:1000px;' :  "max-height:0px;overflow:hidden;border:none;"
     // if(showPanel) {
-      return html`
-        <div class="pa3 ${showPanel?'':'pv0'} pt3 bg-dark-gray ba w-100 ma0 flex flex-column"
-         style="transition:max-height 0.5s, padding 0.5s;pointer-events:all;flex:${settings.columnLayout?'1':'0'};${hidden}">
-        <i
-                class="fas fa-times relative fr dim pointer"
-                title="close ${label}"
-                style="top:0px;right:0px"
-                aria-hidden="true"
-                onclick=${() =>{ emit('layout:toggleMenuItem', name, type)}} >
-        </i>
-          ${content}
+       const panel = html`
+        <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba ma0 flex flex-column"
+         style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?'1':'0'};${hidden}">
+          <div class="flex justify-between pa1">
+            <div class="ttu">   <!-- my title  -->  </div>
+            <i
+                  class="fas fa-times self-end dim pointer pa1 mid-gray"
+                  title="close ${label}"
+                  aria-hidden="true"
+                  onclick=${() =>{ emit('layout:toggleMenuItem', name, type)}} >
+            </i>
+          </div>
+          <div class="pa3 pt0">
+            ${content}
+          </div>
         </div>
       `
+      // listen for panel resize events in order to calculate panel margin
+      onload(panel, () => {
+        console.log('PANEL LOADED')
+        const resizeObserver = new ResizeObserver(entries => {
+          for (let entry of entries) {
+          //  emit('layout:panelResize')
+             emit('render')
+          }
+        })
+        resizeObserver.observe(panel)
+      })
+      return panel
     // } else {
     //   return html`<div style="display:none">${content}</div>`
     // }
@@ -74,7 +92,7 @@ function mainView (state, emit) {
       return html`<div class="pa5 f-headline">bye .... :] </div>`
     } else {
       //console.log(state.multiPeer.streams)
-      return html`<div class="w-100 h-100">
+      return html`<div class="w-100 h-100 courier">
           ${communication(state, emit)}
           <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
             ${menu(state, emit)}
@@ -83,6 +101,7 @@ function mainView (state, emit) {
                 state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), switcher, `switcher ${switcher}`, 'switchers')
               )}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls')}
+               ${floating(settingsPanel(state, emit), 'settings', 'settings')}
               ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat')}
               ${floating(peersList(state.multiPeer), 'users', 'participants currently in room')}
               <div></div>
@@ -96,7 +115,7 @@ function mainView (state, emit) {
                 emit('user:addStream', stream)
               }
             }), 'addMedia', 'add media', state, emit)}
-             ${modal(settingsPanel(state, emit), 'settings', 'settings', state, emit)}
+
           </div>
       </div>`
     }

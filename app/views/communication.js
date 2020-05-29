@@ -78,10 +78,25 @@ module.exports = (state, emit) => {
    if(!(state.layout.collapsed === 0)) {
      // if on small screen, make margin on bottom rather than side  @todo: use EM rather than pixels
      if(window.innerWidth < 480) {
-       bottomMargin = 54*2
+       bottomMargin = 52*2
      } else {
-       sideMargin  = 54
-       if(state.layout.settings.columnLayout && numOpenPanels > 0) sideMargin += 384
+       // get position of last panel in order to calculate grid space
+       const panels = document.getElementsByClassName('panel')
+      // panels[panels.length -1].getBoundingClientRect().x
+       if(panels.length > 0) {
+         console.log('panels are', panels)
+         let panelX = window.innerWidth
+         for(let panel of panels) {
+           const bounds = panel.getBoundingClientRect()
+           // get element in top left corner
+           if (bounds.y <= 0) {
+             if(bounds.x < panelX) panelX = bounds.x
+           }
+         }
+         // const panelX =  panels[panels.length -1].getBoundingClientRect().x
+         sideMargin  = window.innerWidth -panelX
+       }
+      // if(state.layout.settings.columnLayout && numOpenPanels > 0) sideMargin += 384
      }
    }
 
