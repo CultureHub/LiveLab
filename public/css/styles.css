@@ -9,6 +9,16 @@ div {
 a {
   word-break: break-all;
 }
+
+.video-container div,i  {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.video-container:hover div,i {
+  opacity: 1;
+}
+
 .active {
   color: #0f4;
 }
@@ -262,14 +272,7 @@ a {
   /*border-radius: 10px;*/
 }
 
-.video-container div  {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
 
-.video-container:hover div {
-  opacity: 1;
-}
 
 .w-5r {
   width: 5rem;

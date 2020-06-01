@@ -11,6 +11,7 @@ module.exports = (state, emit) => {
    const elements = state.multiPeer.streams.map((stream, index) => {
   //   let state.layout.settings.stretchToFit = state.layout.menu.state.layout.settings.stretchToFit
      let info = ''
+     let endStream = ''
      if(state.layout.settings.showCommunicationInfo === true) {
        let videoSettings = ''
        let audioSettings = ''
@@ -44,13 +45,14 @@ module.exports = (state, emit) => {
            class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
          </i>`
        }
-
-      let endStream = stream.isLocal ? html` <i
+//text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);
+      endStream = stream.isLocal ? html` <div class="absolute top-0 right-0"><i
          onclick=${()=> emit('user:endStream', stream)}
-         class="fas fa-trash-alt dim pointer ma2" title="end stream">
-       </i>` : ''
-       info = html`  <div class="absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);/*mix-blend-mode:difference*/">
-          <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen} ${endStream}
+         class="fas fa-times dim pointer f3 pa3" title="end stream" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);">
+       </i></div>` : ''
+
+       info = html`  <div class="f4 absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);/*mix-blend-mode:difference*/">
+          <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen}
          </div>`
     }
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
@@ -62,6 +64,7 @@ module.exports = (state, emit) => {
     return html`<div class='w-100 h-100 video-container ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
       ${info}
+      ${endStream}
      </div>`
    })
    //return html`<div>${elements}</div>`=

@@ -207,8 +207,17 @@ module.exports = class AddMedia extends Component {
 
   return html`
   <div class="h-100 flex flex-column center overflow-y-auto ttu lh-title pa1 pa2-ns b">
-    <!--audio settings -->
+    <!-- video settings -->
     <div class="flex flex-column mw6 w-100">
+    <div>Video input</div>
+    <div>${dropdowns[1]}</div>
+    ${expandable(this.isActive.video, html`
+      <div class="mt4 flex justify-between"><div>Video preview</div><div>${vidInfo}</div></div>
+      <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
+      <div class="flex flex-wrap mt4">${videoSettings} </div>`, '500px'
+    )}
+    <!--audio settings -->
+    <div class="flex flex-column mw6 w-100 mt4">
       <div>Audio input</div>
       <div class="">${dropdowns[0]}</div>
       ${expandable(this.isActive.audio,
@@ -218,19 +227,10 @@ module.exports = class AddMedia extends Component {
             <div class="flex flex-wrap">${audioSettings}</div>
           </div>`)}
     </div>
-    <!-- video settings -->
-    <div class="flex flex-column mw6 w-100 mt4">
-    <div>Video input</div>
-    <div>${dropdowns[1]}</div>
-    ${expandable(this.isActive.video, html`
-      <div class="mt4 flex justify-between"><div>Video preview</div><div>${vidInfo}</div></div>
-      <div class="w-100 h4 h5-ns ba b--white">${vid}</div>
-      <div class="flex flex-wrap mt4">${videoSettings} </div>`, '500px'
-    )}
   <!--buttons go here-->
     <div class="flex flex-wrap mt4">
       ${this.isActive.audio || this.isActive.video ? html`
-      <div class="f6 link dim ph3 pv2 mr2 white bg-dark-gray pointer" onclick=${() => {
+      <div class="f6 link dim ph3 pv2 mr2 white bg-dark-pink pointer" onclick=${() => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           // emit('user:addStream', new MediaStream(tracks), this.label)
           // emit('layout:toggleMenuItem', 'addMedia', 'panels')
