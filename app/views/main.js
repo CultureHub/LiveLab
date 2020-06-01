@@ -22,7 +22,7 @@ const AddMedia = require('./addMedia.js')
 const modal = (content, name, label, state, emit) => {
   if(state.layout.panels[name]) {
     return html`
-      <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(213, 0, 143, 0.8);">
+      <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(51, 51, 51, 0.8);">
       <i
               class="fas fa-times absolute top-0 right-0 ma1 ma4-ns fr f4 dim pointer"
               title="close ${label}"
@@ -112,7 +112,7 @@ function mainView (state, emit) {
               onCancel: () => { emit('layout:toggleMenuItem', 'addMedia', 'panels')},
               onSave: ({ stream, mediaObj }) => {
                 emit('layout:toggleMenuItem', 'addMedia', 'panels')
-                emit('user:addStream', stream)
+                emit('user:addStream', stream, mediaObj.label)
               }
             }), 'addMedia', 'add media', state, emit)}
 

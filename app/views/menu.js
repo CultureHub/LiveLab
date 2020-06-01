@@ -33,16 +33,17 @@ module.exports = (state, emit) => {
     return html`
     <div class="flex flex-column justify-between flex-wrap-reverse" style="pointer-events:all;">
       <div class="flex flex-column-ns flex-row justify-center">
-        ${menuItem({
-          icon:  state.user.isVideoMuted ?'fa-video red':'fa-video green',
-          title: "Mute your video",
-          onclick: () => emit('user:toggleVideoMute')
-        })}
-        ${menuItem({
-          icon:  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone green',
-          title: "Mute your microphone",
-          onclick: () => emit('user:toggleAudioMute')
-        })}
+        ${state.multiPeer.defaultStream !== null ? html`${menuItem({
+            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isVideoMuted ?'fa-video red':'fa-video green',
+            title: "Mute your video",
+            onclick: () => emit('user:toggleVideoMute')
+          })}
+          ${menuItem({
+            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isAudioMuted ?'fa-microphone-slash red':'fa-microphone green',
+            title: "Mute your microphone",
+            onclick: () => emit('user:toggleAudioMute')
+          })}` : ''}
+
         ${menuItem({
           icon: 'fa-desktop',
           title: "Add screen share",
@@ -84,7 +85,7 @@ module.exports = (state, emit) => {
           })}
           ${menuItem({
             icon: 'fa-sliders-h',
-            title: "Toggle volume controls",
+            title: "Output volume controls",
             onclick: () => emit('layout:toggleMenuItem', 'audio', 'panels'),
             advanced: true,
             selected: state.layout.panels.audio

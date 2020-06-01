@@ -74,26 +74,25 @@ console.log('process', process, 'env', process.env, process.env.NODE_ENV, proces
     state.user.loggedIn = true
 
     const setAudioMuted = (muteVal) => {
-      let stream = state.multiPeer.streams[state.multiPeer.defaultStream.id]
+      let streamInfo = state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id]
       if(state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getAudioTracks()
         tracks.forEach((track) => {
-          track.enabled = stream.isAudioMuted
+          track.enabled = streamInfo.isAudioMuted
         })
-        state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isAudioMuted: state.user.isAudioMuted})
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isAudioMuted: !streamInfo.isAudioMuted})
 
       }
     }
 
     const setVideoMuted = (muteVal) => {
-      let stream = state.multiPeer.streams[state.multiPeer.defaultStream.id]
+      let streamInfo = state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id]
       if(state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getVideoTracks()
         tracks.forEach((track) => {
-          track.enabled = stream.isVideoMuted
+          track.enabled = streamInfo.isVideoMuted
         })
-        state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isVideoMuted: state.user.isVideoMuted})
-
+        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isVideoMuted:  !streamInfo.isVideoMuted})
       }
     }
 
@@ -137,9 +136,9 @@ console.log('process', process, 'env', process.env, process.env.NODE_ENV, proces
     startCapture({})
   })
 
-  emitter.on('user:addStream', (stream) => {
+  emitter.on('user:addStream', (stream, label = '') => {
     if(stream) {
-      state.multiPeer.addStream(stream)
+      state.multiPeer.addStream(stream, {name: label})
       emitter.emit('render')
     }
   })

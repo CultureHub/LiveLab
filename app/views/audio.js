@@ -100,12 +100,23 @@ module.exports = class Audio extends Component {
 
   createElement(streams) {
     console.log('STREAM rendering', streams)
-    const slider = ({ label, value, oninput, labelClass="", inputClass="", description="", muted=null}) => {
-      console.log('MUTE', muted)
-      return html`<div class="db pv2" title=${description}>
-           ${muted==null?'': html`<i class="fas mr1 ${muted ? 'fa-microphone-slash red':'fa-microphone'}"></i>`}
-          <div class="dib w3 v-mid ${labelClass}" title=${description}>${label}</div>
-          <input class="v-mid ${inputClass}" type="range" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}>
+    // const slider = ({ label, value, oninput, labelClass="", inputClass="", description="", muted=null}) => {
+    //   console.log('MUTE', muted)
+    //   return html`<div class="db pv2" title=${description}>
+    //       <div class="dib w3 v-mid ${labelClass}" title=${description}>${label}</div>
+    //       ${muted==null?'': html`<i class="fas mr1 ${muted ? 'fa-microphone-slash red':'fa-microphone'}"></i>`}
+    //       <input class="v-mid w3 ${inputClass}" type="range" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}>
+    //       <i class="fas fa-volume-up"></i>
+    //     </div>
+    //   `
+    // }
+
+    const slider = ({ label, value, oninput, onmute, description="", muted=null}) => {
+      // ${muted==null?'': html`<i class="fas mr1 ${muted ? 'fa-microphone-slash red':'fa-microphone'}"></i>`}
+      return html`<div class="db pv0 flex items-center" title=${description}>
+          <div class="dib w4 v-mid pa1 " title=${description}>${label}  </div>
+          <div class="pa2" style="flex:1"><input type="range" class="w-100" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}></div>
+          <i class="pa2 pointer fas ${value==0 ?'fa-volume-mute':'fa-volume-up'}" onclick=${onmute}></i>
         </div>
       `
     }
@@ -113,30 +124,38 @@ module.exports = class Audio extends Component {
     return html`<div>
       <div class="pb2" title="master volume">
         ${slider({
-          description: "master volume",
-          label: "master volume",
+          description: "master output volume",
+          label: "output volume",
           value: this.masterGain*100,
           oninput: (e) => {
             this.masterGain = e.target.value/100
             this.updateStreamVolumes()
+            this.rerender()
           },
-          labelClass: "w4",
-          inputClass: "w5"
+          onmute: () => {
+            console.log('calling ')
+            this.masterGain = this.masterGain === 0 ? 1 : 0
+            console.log('gain', this.masterGain)
+            this.updateStreamVolumes()
+            this.rerender()
+          }
+          // labelClass: "w4",
+          // inputClass: "w5"
         })}
       </div>
-      <div class="pt0">
+      <!-- <div class="pt0">
         ${slider({
           description: "default volume for new streams",
           label: "default volume when new user joins",
-          labelClass: "w-100 db",
-          inputClass: "w5",
+          // labelClass: "w-100 db",
+          // inputClass: "w5",
           value: this.defaultGain*100,
           oninput: (e) => {
             this.defaultGain = e.target.value/100
             this.rerender()
           }
         })}
-      </div>
+      </div> -->
       ${Object.entries(this.streams).length > 0 ? html`<div class="pv1">
         ${Object.entries(this.streams).map(([id, streamObj]) => slider({
           description: "volume control for individual streams",
@@ -146,6 +165,12 @@ module.exports = class Audio extends Component {
           oninput: (e) => {
             streamObj.streamGain = e.target.value/100
             streamObj.el.volume = streamObj.streamGain * this.masterGain
+            this.rerender()
+          },
+          onmute: () => {
+            streamObj.streamGain = streamObj.streamGain === 0 ? 1 : 0
+            streamObj.el.volume = streamObj.streamGain * this.masterGain
+            this.rerender()
           }
         }))}
       </div>`: ''}

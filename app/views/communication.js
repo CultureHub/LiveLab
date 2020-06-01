@@ -64,7 +64,7 @@ module.exports = (state, emit) => {
        </i></div>` : ''
 
        info = html`  <div class="f4 absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);/*mix-blend-mode:difference*/">
-          <span class="b mh2">${stream.peer.nickname}</span> ${videoMute} ${mute} ${windowOpen}
+          <span class="b mh2">${stream.peer.nickname}${stream.name !== ""? ` - ${stream.name}`:''}</span> ${videoMute} ${mute} ${windowOpen}
          </div>`
     }
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
