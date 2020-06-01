@@ -74,23 +74,25 @@ console.log('process', process, 'env', process.env, process.env.NODE_ENV, proces
     state.user.loggedIn = true
 
     const setAudioMuted = (muteVal) => {
+      let stream = state.multiPeer.streams[state.multiPeer.defaultStream.id]
       if(state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getAudioTracks()
         tracks.forEach((track) => {
-          track.enabled = !muteVal
+          track.enabled = stream.isAudioMuted
         })
-        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isAudioMuted: state.user.isAudioMuted})
+        state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isAudioMuted: state.user.isAudioMuted})
 
       }
     }
 
     const setVideoMuted = (muteVal) => {
+      let stream = state.multiPeer.streams[state.multiPeer.defaultStream.id]
       if(state.multiPeer.defaultStream) {
         const tracks = state.multiPeer.defaultStream.getVideoTracks()
         tracks.forEach((track) => {
-          track.enabled = !muteVal
+          track.enabled = stream.isVideoMuted
         })
-        state.multiPeer.updateLocalStreamInfo(state.multiPeer.defaultStream.id, { isVideoMuted: state.user.isVideoMuted})
+        state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isVideoMuted: state.user.isVideoMuted})
 
       }
     }

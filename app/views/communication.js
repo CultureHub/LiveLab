@@ -21,7 +21,13 @@ module.exports = (state, emit) => {
        if(stream.settings && stream.settings.video) {
          videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
          videoMute = html `<i
-           class="mh1 fas ${stream.isVideoMuted ? 'fa-video light-red':'fa-video'}" title="">
+           class="mh1 fas ${stream.isVideoMuted ? 'fa-video red':'fa-video'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
+             let tracks = stream.stream.getVideoTracks()
+             tracks.forEach((track) => {
+               track.enabled = stream.isVideoMuted
+             })
+             state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isVideoMuted: !stream.isVideoMuted})
+           } : ''}>
          </i>`
          windowOpen =
          html `
@@ -42,7 +48,13 @@ module.exports = (state, emit) => {
          audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
          mute =
          html `<i
-           class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash light-red':'fa-microphone'}" title="">
+           class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
+             let tracks = stream.stream.getAudioTracks()
+             tracks.forEach((track) => {
+               track.enabled = stream.isAudioMuted
+             })
+             state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isAudioMuted: !stream.isAudioMuted})
+           } : ''}>
          </i>`
        }
 //text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);
