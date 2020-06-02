@@ -12,12 +12,23 @@ module.exports = (state, emit) => {
   //   let state.layout.settings.stretchToFit = state.layout.menu.state.layout.settings.stretchToFit
      let info = ''
      let endStream = ''
+     let activeSwitchers = []
      if(state.layout.settings.showCommunicationInfo === true) {
        let videoSettings = ''
        let audioSettings = ''
        let windowOpen = ''
        let mute = ''
        let videoMute = ''
+       //let activeSwitchers = ''
+
+       let switcherControls = ''
+       //
+       // ['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).forEach((switcher) => {
+       //   if(state.layout.settings.switchers[switcher] !== null && state.layout.settings.switchers[switcher].stream.id === stream.stream.id) {
+       //     console.log(' switch stream', state.layout.settings.switchers[switcher].stream, stream.stream)
+       //     activeSwitchers.push(switcher)
+       //   }
+       // })
        if(stream.settings && stream.settings.video) {
          videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
          videoMute = html `<i
@@ -29,6 +40,18 @@ module.exports = (state, emit) => {
              state.multiPeer.updateLocalStreamInfo(stream.stream.id, { isVideoMuted: !stream.isVideoMuted})
            } : ''}>
          </i>`
+         switcherControls = ['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => {
+           let isActive = false
+            if(state.layout.settings.switchers[switcher] !== null && state.layout.settings.switchers[switcher].stream.id === stream.stream.id) {
+              activeSwitchers.push(switcher)
+              isActive = true
+            }
+           return html
+             `<i
+               onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
+               class="dim pointer ma2 b ttu ${isActive? 'dark-pink' :''}" title="send video to switcher a">${switcher}
+             </i>`
+         })
          windowOpen =
          html `
          <span class="mh2"> | </span>
@@ -36,12 +59,7 @@ module.exports = (state, emit) => {
            onclick=${()=> openWindow(stream.stream, stream.peer.nickname, stream.settings.video)}
            class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
          </i>
-         ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => html
-         `<i
-           onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
-           class="dim pointer ma2 b ttu" title="send video to switcher a">${switcher}
-         </i>`
-         )}
+         ${switcherControls}
          `
        }
        if(stream.settings && stream.settings.audio) {
@@ -69,14 +87,7 @@ module.exports = (state, emit) => {
     }
 
     // let switcherOverlay = html`<container class="absolute w-100 h-100 top-0 left-0" style="font-size:60vmin;line-height:100vh">A</container>`
-    let activeSwitchers = [];
 
-    ['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).forEach((switcher) => {
-      if(state.layout.settings.switchers[switcher] !== null && state.layout.settings.switchers[switcher].stream.id === stream.stream.id) {
-        console.log(' switch stream', state.layout.settings.switchers[switcher].stream, stream.stream)
-        activeSwitchers.push(switcher)
-      }
-    })
 
     let switcherOverlay = html`
     <container class="absolute h-100 w-100 top-0 left-0 flex" style="pointer-events:none"><svg viewBox="0 0 ${10*activeSwitchers.length} 10" class= "h-60 w-60 ttu" style="fill:rgba(255, 255, 255, 0.5);margin:auto">

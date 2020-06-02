@@ -54,7 +54,11 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('layout:setSwitcher', (item, value) => {
-    state.layout.settings.switchers[item] = value
+    if(state.layout.settings.switchers[item] !== null && state.layout.settings.switchers[item].stream.id === value.stream.id) {
+      state.layout.settings.switchers[item] = null
+    } else {
+      state.layout.settings.switchers[item] = value
+    }
     emitter.emit('render')
   })
 
