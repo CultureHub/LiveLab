@@ -21,7 +21,18 @@ module.exports = (state, emitter) => {
       columnLayout: true,
       showCommunicationInfo: true
     },
-    collapsed: 2,   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,
+    collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,
+  }
+
+  state.style = {
+    colors: {
+      text0: '#eee',
+      text1: '#ccc', // nearly white
+      text2: '#999', // gray
+      accent0: '#FFD700', // yellow
+      background0: '#333', // drak gray
+      background1: '#555' // mid gray
+    }
   }
 
   emitter.on('render', () => {

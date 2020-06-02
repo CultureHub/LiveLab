@@ -114,8 +114,8 @@ module.exports = class Audio extends Component {
     const slider = ({ label, value, oninput, onmute, description="", muted=null}) => {
       // ${muted==null?'': html`<i class="fas mr1 ${muted ? 'fa-microphone-slash red':'fa-microphone'}"></i>`}
       return html`<div class="db pv0 flex items-center" title=${description}>
-          <div class="dib w4 v-mid pa1 " title=${description}>${label}  </div>
-          <div class="pa2" style="flex:1"><input type="range" class="w-100" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}></div>
+          <div class="dib w4 v-mid mr2" title=${description}>${label}  </div>
+          <div class="pa2" style="flex:1"><input type="range" class="w-100 v-mid" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}></div>
           <i class="pa2 pointer fas ${value==0 ?'fa-volume-mute':'fa-volume-up'}" onclick=${onmute}></i>
         </div>
       `
@@ -125,7 +125,7 @@ module.exports = class Audio extends Component {
       <div class="pb2" title="master volume">
         ${slider({
           description: "master output volume",
-          label: "output volume",
+          label: "Output volume",
           value: this.masterGain*100,
           oninput: (e) => {
             this.masterGain = e.target.value/100

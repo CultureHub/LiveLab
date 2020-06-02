@@ -219,19 +219,26 @@ module.exports = class Login extends Component {
         track: this.tracks.video,
         id: this.tracks.video === null ? null : this.tracks.video.id
       })}
-      <div class="fixed w-100 h-100 top-0 left-0 f2 ttu lh-title pa2" style="background:rgba(0, 0, 0, 0.3)">
-        <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
+      <div class="fixed w-100 h-100 top-0 left-0 f2 ttu lh-title pa2 flex justify-center" style="background:rgba(0, 0, 0, 0.3);font-size:5vmin;">
+        <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
           by CultureHub
-        </div>
-        <div class="fixed w-100 h-100">
-          <div style=""> LiveLab ...................</div>
-          <div style="">Browser-based<br>media router<br>for collaborative<br>performance </div>
-          <div class="mt4 w-100">
+        </div> -->
+        <div class="w-100 h-100" style="max-width:1200px">
+          <div style="">
+            <br>
+            <div style=""> LiveLab </div>
+            <br>
+            <div style="">A browser-based<br>media router<br>for collaborative<br>performance </div>
+            <div>by CultureHub</div>
+            <br>
+          </div>
+          <div class="mt0 w-100" style='font-size:3vmin'>
             ${dropdowns[0]}
             ${dropdowns[1]}
-            <div class="dim pointer" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
+            <div class="dim pointer" style="color:${state.style.colors.accent0}" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
+            <br>
             <input type="text" placeholder="name" value=${this.nickname} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.nickname = e.target.value} />
-            <div class="dim pointer" onclick=${() => {
+            <div class="dim pointer" style="color:${state.style.colors.accent0}" onclick=${() => {
                   var tracks = Object.values(this.tracks).filter((track) => track !== null)
                   emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
                 }}>${state.user.room? '>> Start': '>> Start'}</div>

@@ -20,7 +20,7 @@ const streamDetails = (info) => {
       class="mh1 fas ${info.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'}" title="">
     </i>`
   }
-  return html`<div class="mv1 pl2">${info.name} ${videoMute} ${videoSettings} ${mute} ${audioSettings}</div>`
+  return html`<div class="mv1">-- ${info.name} ${videoMute} ${videoSettings} ${mute} ${audioSettings}</div>`
 }
 
 

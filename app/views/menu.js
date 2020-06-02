@@ -21,7 +21,7 @@ module.exports = (state, emit) => {
 
   if(state.layout.collapsed === 0) {
     return html`
-    <div class="fixed bottom-0 right-0 pa2 " style="pointer-events:all;">
+    <div class="fixed bottom-0 right-0 pa2 " style="pointer-events:all;text-shadow:2px 2px 3px rgba(0, 0, 0, 1);color:${state.style.colors.text0}">
     ${menuIcon({
       icon:  'fa-chevron-up',
       title: "Show menu",
@@ -31,7 +31,7 @@ module.exports = (state, emit) => {
     `
   } else {
     return html`
-    <div class="flex flex-column justify-between flex-wrap-reverse" style="pointer-events:all;">
+    <div class="flex flex-column justify-between flex-wrap-reverse" style="pointer-events:all;color:${state.style.colors.text0}">
       <div class="flex flex-column-ns flex-row justify-center">
         ${state.multiPeer.defaultStream !== null ? html`${menuItem({
             icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isVideoMuted ?'fa-video red':'fa-video green',

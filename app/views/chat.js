@@ -66,14 +66,14 @@ module.exports = class Chat extends Component {
       })}
     </div>`
     var container =  html
-    `<div  id="scroll-container" class="overflow-y-auto" style="max-height:200px;">
+    `<div  id="scroll-container" class="overflow-y-auto" style="max-height:250px">
     ${scrollEl}
     </div>`
     this.container = container
     container.scrollTop = container.scrollHeight
 
       // ${container}
-    return html`  <div>
+    return html`  <div class="" style="">
           ${container}
           ${input('', 'send a message', {
             value: this.inputValue,

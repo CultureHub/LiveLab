@@ -42,13 +42,14 @@ function mainView (state, emit) {
   const settings = state.layout.settings
   // older layout
   //   <div class="pa4 bg-mid-gray w-100 ma2 shadow-2" style="pointer-events:all;flex:${settings.columnLayout?'1':'0'}">
-  const floating = (content, name, label, type = 'panels') => {
-    let showPanel = (state.layout[type][name] && (state.layout.collapsed !== 0 || name === 'chat'))
+  const floating = (content, {name, label, type = 'panels', flex='1'} ={}) => {
+//    let showPanel = (state.layout[type][name] && (state.layout.collapsed !== 0 || name === 'chat'))
+    let showPanel =  state.layout[type][name] && state.layout.collapsed !== 0
     let hidden = showPanel ? 'max-height:1000px;' :  "max-height:0px;overflow:hidden;border:none;"
     // if(showPanel) {
        const panel = html`
         <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba ma0 flex flex-column"
-         style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?'1':'0'};${hidden}">
+         style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?flex:'0'};${hidden}">
           <div class="flex justify-between pa1">
             <div class="ttu">   <!-- my title  -->  </div>
             <i
@@ -92,18 +93,18 @@ function mainView (state, emit) {
       return html`<div class="pa5 f-headline">bye .... :] </div>`
     } else {
       //console.log(state.multiPeer.streams)
-      return html`<div class="w-100 h-100 courier">
+      return html`<div class="w-100 h-100 courier" style="color:${state.style.colors.text1}">
           ${communication(state, emit)}
           <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
             ${menu(state, emit)}
             <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
               ${['a', 'b', 'c', 'd'].map((switcher) => floating(
-                state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), switcher, `switcher ${switcher}`, 'switchers')
+                state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), {name: switcher, label:`switcher ${switcher}`, type:'switchers'})
               )}
-              ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), 'audio', 'volume controls')}
-               ${floating(settingsPanel(state, emit), 'settings', 'settings')}
-              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), 'chat', 'chat')}
-              ${floating(peersList(state.multiPeer), 'users', 'participants currently in room')}
+              ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), {name:'audio', label:'volume controls'})}
+               ${floating(settingsPanel(state, emit), {name:'settings', label:'settings'})}
+              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), {name:'chat', label:'chat', flex:'1 400px'})}
+              ${floating(peersList(state.multiPeer), {name: 'users', label: 'participants currently in room'})}
               <div></div>
             </div>
 

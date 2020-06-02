@@ -206,7 +206,7 @@ module.exports = class AddMedia extends Component {
   let vidInfo = this.trackInfo.video.width? `${this.trackInfo.video.width}x${this.trackInfo.video.height}@${this.trackInfo.video.frameRate}fps`:''
 
   return html`
-  <div class="h-100 flex flex-column center overflow-y-auto ttu lh-title pa1 pa2-ns b">
+  <div class="h-100 flex flex-column flex-center overflow-y-auto ttu lh-title pa1 pa2-ns b">
     <!-- video settings -->
     <div class="flex flex-column mw6 w-100">
       <div>Video input</div>

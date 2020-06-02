@@ -135,7 +135,7 @@ module.exports = (state, emit) => {
      }
    }
 
-   return html`<div class="w-100 h-100 fixed top-0 left-0">${grid({
+   return html`<div class="w-100 h-100 fixed top-0 left-0" style="color:${state.style.colors.text0}">${grid({
      elements: elements,
      stretchToFit: state.layout.settings.stretchToFit,
      outerWidth: window.innerWidth - sideMargin,
