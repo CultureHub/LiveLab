@@ -4,7 +4,7 @@ const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
 <div class="relative pointer pa3 ${selected?"bg-mid-gray" : ""}" style="flex:0" title=${title} onclick= ${onclick}>
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
-${info?html`<div class="absolute light-gray right-0 top-0 b pa2">${info}</div>` : '' }
+${info?html`<div class="absolute ttu right-0 top-0 b pa2">${info}</div>` : '' }
 </div>
 `
 

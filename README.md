@@ -47,8 +47,11 @@ npm run watch
  - settings panel
  - setting to configure number of switchers
  - column layout
+ - overlay showing switcher value
+ - x to end stream
 
 ### Changed
+ - switcher can be toggled directly
 
 ## [1.3.4] - 2020-05-26
 ### Added

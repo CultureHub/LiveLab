@@ -74,7 +74,7 @@ module.exports = class Switcher extends Component {
 
   createElement(name, state) {
     this.name = name
-    this.label = `switcher ${name}`
+    this.label = `switcher ${name}`.toUpperCase()
     this.state = state
     const stream = state.layout.settings.switchers[name]
     if(stream !== this.stream) {
@@ -84,7 +84,7 @@ module.exports = class Switcher extends Component {
     return html`<div class="relative">
       <div class='relative bg-black' style='height:140px'>
         ${state.cache(Video, `video-${name}`).render(stream?stream.stream:null, {objectFit: 'contain', background:'black', opacity: this.opacity/100, position: 'absolute', width:'calc(100%-20px)'})}
-        <div class="absolute bottom-0 pa2">${stream ? `${stream.peer.nickname} -  ${stream.name}`: ''}</div>
+        <div class="absolute bottom-0 pa2">${stream ? `${stream.peer.nickname} ${stream.name.length > 0 ? `- ${stream.name}`: ''}`: ''}</div>
         <div class='slider-container'>
           <input type="range" orient="vertical" value=${this.opacity} min="1" max="100" class="slider" style='right:20px;top:0px;width:140px' oninput=${(e)=>{this.setOpacity(e.target.value)}}>
         </div>
