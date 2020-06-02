@@ -15,6 +15,8 @@ module.exports = class Switcher extends Component {
       console.log('MULTIPEER UPDATE RECEIVED', Date.now())
       this.update(state.multiPeer.streams)
     })
+
+    this.emit = emit
     //console.log('audio init', streams, emit)
   }
 
@@ -36,6 +38,7 @@ module.exports = class Switcher extends Component {
     console.log('setting switcher', this.name, this.state)
     this.state.layout.settings.switchers[this.name] = null
     this.rerender()
+    this.emit('render')
   }
 
   openWindow(title) {

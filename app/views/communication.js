@@ -67,16 +67,33 @@ module.exports = (state, emit) => {
           <span class="b mh2">${stream.peer.nickname}${stream.name !== ""? ` - ${stream.name}`:''}</span> ${videoMute} ${mute} ${windowOpen}
          </div>`
     }
+
+    // let switcherOverlay = html`<container class="absolute w-100 h-100 top-0 left-0" style="font-size:60vmin;line-height:100vh">A</container>`
+    let activeSwitchers = [];
+
+    ['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).forEach((switcher) => {
+      if(state.layout.settings.switchers[switcher] !== null && state.layout.settings.switchers[switcher].stream.id === stream.stream.id) {
+        console.log(' switch stream', state.layout.settings.switchers[switcher].stream, stream.stream)
+        activeSwitchers.push(switcher)
+      }
+    })
+
+    let switcherOverlay = html`
+    <container class="absolute h-100 w-100 top-0 left-0 flex" style="pointer-events:none"><svg viewBox="0 0 ${10*activeSwitchers.length} 10" class= "h-60 w-60 ttu" style="fill:rgba(255, 255, 255, 0.5);margin:auto">
+      <text x="0" y="10">${activeSwitchers}</text>
+    </svg></container>`
     //  state.user.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'
     // <div class="absolute top-0 right-0">
     // ${windowOpen}
     // </div>
       // <div class="absolute pa2 ph2 ma0 bottom-0 dark-gray" style="background:rgba(255, 255, 255, 0.5)">
       //background:rgba(213, 0, 143, 0.8);
+
     return html`<div class='w-100 h-100 video-container ${state.layout.settings.stretchToFit? '' : 'ba'}'>
       ${state.cache(Video, `video-${index}`).render(stream.stream, {objectFit: state.layout.settings.stretchToFit? 'cover': 'contain'})}
       ${info}
       ${endStream}
+      ${switcherOverlay}
      </div>`
    })
    //return html`<div>${elements}</div>`=
