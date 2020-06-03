@@ -231,7 +231,7 @@ module.exports = class AddMedia extends Component {
     <div class="flex flex-wrap mt4">
       ${this.isActive.audio || this.isActive.video ? html`
       ${opts.showLabel? html`<input type="text" placeholder="label" value=${this.label} class="mb4 pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.label = e.target.value} />` : '' }
-      <div class="f6 link dim ph3 pv2 mr2 white bg-dark-pink pointer" onclick=${() => {
+      <div class="f6 link dim ph3 pv2 mr2 white pointer" style="background-color:${opts.state.style.colors.accent0}" onclick=${() => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           // emit('user:addStream', new MediaStream(tracks), this.label)
           // emit('layout:toggleMenuItem', 'addMedia', 'panels')

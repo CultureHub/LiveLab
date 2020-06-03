@@ -30,6 +30,7 @@ module.exports = (state, emitter) => {
       text1: '#ccc', // nearly white
       text2: '#999', // gray
       accent0: '#FFD700', // yellow
+      accent1: '#00F',
       background0: '#333', // drak gray
       background1: '#555' // mid gray
     }

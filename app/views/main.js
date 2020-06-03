@@ -103,7 +103,7 @@ function mainView (state, emit) {
               )}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), {name:'audio', label:'volume controls'})}
                ${floating(settingsPanel(state, emit), {name:'settings', label:'settings'})}
-              ${floating(state.cache(Chat, 'chat-el').render(state.multiPeer), {name:'chat', label:'chat', flex:'1 400px'})}
+              ${floating(state.cache(Chat, 'chat-el').render(state), {name:'chat', label:'chat', flex:'1 400px'})}
               ${floating(peersList(state.multiPeer), {name: 'users', label: 'participants currently in room'})}
               <div></div>
             </div>
@@ -112,6 +112,7 @@ function mainView (state, emit) {
               saveText: "add media stream",
               onCancel: () => { emit('layout:toggleMenuItem', 'addMedia', 'panels')},
               showLabel: true,
+              state: state,
               onSave: ({ stream, mediaObj }) => {
                 emit('layout:toggleMenuItem', 'addMedia', 'panels')
                 emit('user:addStream', stream, mediaObj.label)

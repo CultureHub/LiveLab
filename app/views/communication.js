@@ -40,7 +40,8 @@ module.exports = (state, emit) => {
            return html
              `<i
                onclick=${()=> emit('layout:setSwitcher', switcher, stream)}
-               class="dim pointer ma2 b ttu ${isActive? 'dark-pink' :''}" title="send video to switcher a">${switcher}
+               class="dim pointer ma2 b ttu"
+               style=${isActive? `color:${state.style.colors.accent0}` :''} title="send video to switcher a">${switcher}
              </i>`
          })
          windowOpen =

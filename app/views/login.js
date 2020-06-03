@@ -249,6 +249,7 @@ module.exports = class Login extends Component {
           tracks: this.tracks,
           saveText: "save",
           showLabel: false,
+          state: state,
           onCancel: () => {this.settingsIsOpen = ! this.settingsIsOpen
           this.rerender()},
           onSave: ({stream, mediaObj})  => {
