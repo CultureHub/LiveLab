@@ -219,7 +219,7 @@ module.exports = class Login extends Component {
         track: this.tracks.video,
         id: this.tracks.video === null ? null : this.tracks.video.id
       })}
-      <div class="fixed w-100 h-100 top-0 left-0 f2 lh-title pa2 flex justify-center" style="background:rgba(0, 0, 0, 0.3);font-size:7vmin;">
+      <div class="fixed w-100 h-100 top-0 left-0 f2 lh-title pa2 flex justify-center ttu" style="background:rgba(0, 0, 0, 0.3);font-size:4vmin;">
         <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
           by CultureHub
         </div> -->
