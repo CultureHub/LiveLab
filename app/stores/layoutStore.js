@@ -18,7 +18,7 @@ module.exports = (state, emitter) => {
       stretchToFit: true,
       switchers: { a: null, b: null, c: null, d: null}, // stream values of each switcher
       numberOfSwitchers: 0, // number of switchers to display in ui
-      columnLayout: true,
+      columnLayout: false,
       showCommunicationInfo: true
     },
     collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,

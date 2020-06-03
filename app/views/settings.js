@@ -43,15 +43,7 @@ const dropdown = ({ onChange, label, value, opts}) => settingItem(label, html`
             emit('render')
         }
       })}
-      ${dropdown({
-        label: 'Aspect ratio',
-        value: state.layout.settings.numberOfSwitchers,
-        opts: opts,
-        onChange: (e) => {
-            state.layout.settings.numberOfSwitchers = e.target.value
-            emit('render')
-        }
-      })}
       ${toggle('Stretch to fit', 'stretchToFit')}
+      ${toggle('Column layout', 'columnLayout')}
   </div>`
 }

@@ -48,7 +48,7 @@ function mainView (state, emit) {
     let hidden = showPanel ? 'max-height:1000px;' :  "max-height:0px;overflow:hidden;border:none;"
     // if(showPanel) {
        const panel = html`
-        <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba ma0 flex flex-column"
+        <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba flex flex-column ${(settings.columnLayout || !showPanel)? 'ma0': 'ma2 shadow-2'}"
          style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?flex:'0'};${hidden}">
           <div class="flex justify-between pa1">
             <div class="ttu">   <!-- my title  -->  </div>
