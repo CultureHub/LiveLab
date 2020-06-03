@@ -232,10 +232,10 @@ module.exports = class Login extends Component {
           <div class="mt4 w-100" style='font-size:4vmin'>
             ${dropdowns[0]}
             ${dropdowns[1]}
-            <div class="dim pointer" style="color:${state.style.colors.accent0}" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
+            <div class="dim pointer mt2" style="color:${state.style.colors.accent0};width:fit-content" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
             <br>
             <input type="text" placeholder="name" value=${this.nickname} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.nickname = e.target.value} />
-            <div class="dim pointer" style="color:${state.style.colors.accent0}" onclick=${() => {
+            <div class="dim pointer mt2" style="color:${state.style.colors.accent0};width:fit-content" onclick=${() => {
                   var tracks = Object.values(this.tracks).filter((track) => track !== null)
                   emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
                 }}>${state.user.room? '>> Start': '>> Start'}</div>
