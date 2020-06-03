@@ -6,6 +6,10 @@ div {
 /* Tachyons extensions */
 .w5 { width: 16rem; }
 
+button, input, optgroup, select, textarea {
+  font-family: rektorant_light;
+}
+
 a {
   word-break: break-all;
 }

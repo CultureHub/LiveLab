@@ -40,6 +40,14 @@ npm run watch
 ```
 
 # Changelog
+## [1.3.7] - 2020-06-03
+### Added
+ - toggle between floating layout and column layout in settings
+ - colors as variables in layout
+
+### Changed
+ - label removed from initial 'add media' page
+
 ## [1.3.6] - 2020-05-28
 ### Added
  - dev and production builds to specify different server address

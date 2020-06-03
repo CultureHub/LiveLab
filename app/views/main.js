@@ -93,7 +93,7 @@ function mainView (state, emit) {
       return html`<div class="pa5 f-headline">bye .... :] </div>`
     } else {
       //console.log(state.multiPeer.streams)
-      return html`<div class="w-100 h-100 courier" style="color:${state.style.colors.text1}">
+      return html`<div class="w-100 h-100" style="color:${state.style.colors.text1}">
           ${communication(state, emit)}
           <div class="w-100 h-100 top-0 left-0 fixed flex flex-row-reverse-ns flex-column-reverse" style="pointer-events:none">
             ${menu(state, emit)}
