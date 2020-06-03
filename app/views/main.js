@@ -111,6 +111,7 @@ function mainView (state, emit) {
             ${modal(state.cache(AddMedia, 'add-audio').render({
               saveText: "add media stream",
               onCancel: () => { emit('layout:toggleMenuItem', 'addMedia', 'panels')},
+              showLabel: true,
               onSave: ({ stream, mediaObj }) => {
                 emit('layout:toggleMenuItem', 'addMedia', 'panels')
                 emit('user:addStream', stream, mediaObj.label)

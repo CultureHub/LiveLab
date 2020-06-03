@@ -219,20 +219,18 @@ module.exports = class Login extends Component {
         track: this.tracks.video,
         id: this.tracks.video === null ? null : this.tracks.video.id
       })}
-      <div class="fixed w-100 h-100 top-0 left-0 f2 ttu lh-title pa2 flex justify-center" style="background:rgba(0, 0, 0, 0.3);font-size:5vmin;">
+      <div class="fixed w-100 h-100 top-0 left-0 f2 ttu lh-title pa2 flex justify-center" style="background:rgba(0, 0, 0, 0.3);font-size:4vmin;">
         <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
           by CultureHub
         </div> -->
         <div class="w-100 h-100" style="max-width:1200px">
           <div style="">
-            <br>
-            <div style=""> LiveLab </div>
-            <br>
+            <div style="font-size:20vmin"> LiveLab </div>
             <div style="">A browser-based<br>media router<br>for collaborative<br>performance </div>
             <div>by CultureHub</div>
             <br>
           </div>
-          <div class="mt0 w-100" style='font-size:3vmin'>
+          <div class="mt0 w-100" style='font-size:4vmin'>
             ${dropdowns[0]}
             ${dropdowns[1]}
             <div class="dim pointer" style="color:${state.style.colors.accent0}" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
@@ -250,6 +248,7 @@ module.exports = class Login extends Component {
           isActive: this.isActive,
           tracks: this.tracks,
           saveText: "save",
+          showLabel: false,
           onCancel: () => {this.settingsIsOpen = ! this.settingsIsOpen
           this.rerender()},
           onSave: ({stream, mediaObj})  => {
