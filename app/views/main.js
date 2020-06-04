@@ -22,7 +22,7 @@ const AddMedia = require('./addMedia.js')
 const modal = (content, name, label, state, emit) => {
   if(state.layout.panels[name]) {
     return html`
-      <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(0, 0, 0, 0.8);">
+      <div class="pa2 pa4-ns fixed w-100 h-100 top-0 left-0" style="pointer-events:all;background:rgba(51, 51, 51, 0.8);">
       <i
               class="fas fa-times absolute top-0 right-0 ma1 ma4-ns fr f4 dim pointer"
               title="close ${label}"
@@ -48,7 +48,7 @@ function mainView (state, emit) {
     let hidden = showPanel ? 'max-height:1000px;' :  "max-height:0px;overflow:hidden;border:none;"
     // if(showPanel) {
        const panel = html`
-        <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba flex flex-column ${(settings.columnLayout || !showPanel)? 'ma0': 'ma2 shadow-2'}"
+        <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba flex flex-column ${(settings.columnLayout || !showPanel)? 'ma0': 'mv2 ma2-ns shadow-2'}"
          style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?flex:'0'};${hidden}">
           <div class="flex justify-between pa1">
             <div class="ttu">   <!-- my title  -->  </div>
