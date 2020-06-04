@@ -21,7 +21,8 @@ module.exports = (state, emitter) => {
       columnLayout: false,
       showCommunicationInfo: true
     },
-    collapsed: 2   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,
+    collapsed: false,   // collapsed state: 0--> closed, 1 --> basic menu, 2 --> advanced menu,
+    forceChatOpen: false // when a message is received, force chat to open until the user closes it
   }
 
   state.style = {
@@ -40,23 +41,33 @@ module.exports = (state, emitter) => {
     console.log('render was called')
   })
 
-  emitter.on('layout:collapseMenu', (val) => {
-    state.layout.collapsed = val
+  emitter.on('layout:collapseMenu', () => {
+    state.layout.collapsed = true
     emitter.emit('render')
   })
 
   emitter.on('layout:openMenu', () => {
     state.layout.collapsed = false
+    if(state.layout.forceChatOpen === true) {
+      state.layout.panels.chat = true
+      state.layout.forceChatOpen = false
+    }
     emitter.emit('render')
   })
 
   emitter.on('layout:openChat', () => {
-    state.layout.panels.chat = true
+    if(state.layout.collapsed === true) {
+      state.layout.forceChatOpen = true
+    } else {
+      state.layout.panels.chat = true
+    }
     emitter.emit('render')
   })
 
   emitter.on('layout:toggleMenuItem', (item, type) => {
     state.layout[type][item] = !state.layout[type][item]
+    // if user closes chat, no longer force to open
+    if(item === 'chat') state.layout.forceChatOpen = false
     emitter.emit('render')
   })
 

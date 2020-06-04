@@ -111,7 +111,7 @@ module.exports = (state, emit) => {
 
 
 
-   if(!(state.layout.collapsed === 0)) {
+   if(!state.layout.collapsed) {
      // if on small screen, make margin on bottom rather than side  @todo: use EM rather than pixels
      if(window.innerWidth < 480) {
        bottomMargin = 52*2

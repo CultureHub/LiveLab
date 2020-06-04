@@ -44,7 +44,8 @@ function mainView (state, emit) {
   //   <div class="pa4 bg-mid-gray w-100 ma2 shadow-2" style="pointer-events:all;flex:${settings.columnLayout?'1':'0'}">
   const floating = (content, {name, label, type = 'panels', flex='1'} ={}) => {
 //    let showPanel = (state.layout[type][name] && (state.layout.collapsed !== 0 || name === 'chat'))
-    let showPanel =  state.layout[type][name] && state.layout.collapsed !== 0
+    let showPanel =  state.layout[type][name] && !state.layout.collapsed
+    if(name === 'chat' && state.layout.forceChatOpen) showPanel = true // open chat even if menu is collapsed
     let hidden = showPanel ? 'max-height:1000px;' :  "max-height:0px;overflow:hidden;border:none;"
     // if(showPanel) {
        const panel = html`

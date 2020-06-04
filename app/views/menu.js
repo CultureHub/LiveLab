@@ -12,20 +12,21 @@ ${info?html`<div class="absolute ttu right-0 top-0 b pa2">${info}</div>` : '' }
 module.exports = (state, emit) => {
   const menuItem = (opts) => {
   //  console.log()
-    if(state.layout.collapsed === 1 && opts.advanced ) {
-      return ''
-    } else {
+    // if(state.layout.collapsed === 1 && opts.advanced ) {
+    //   return ''
+    // } else {
       return menuIcon(opts)
-    }
+  //  }
   }
 
-  if(state.layout.collapsed === 0) {
+  if(state.layout.collapsed == true) {
+    console.log('collapsed!!')
     return html`
-    <div class="fixed bottom-0 right-0 pa2 " style="pointer-events:all;text-shadow:2px 2px 3px rgba(0, 0, 0, 1);color:${state.style.colors.text0}">
+    <div class=" pa2 flex items-end" style="pointer-events:all;text-shadow:2px 2px 3px rgba(0, 0, 0, 1);color:${state.style.colors.text0}">
     ${menuIcon({
       icon:  'fa-chevron-up',
       title: "Show menu",
-      onclick: () => emit('layout:collapseMenu', 2)
+      onclick: () => emit('layout:openMenu')
     })}
     </div>
     `
@@ -107,7 +108,7 @@ module.exports = (state, emit) => {
             // classes: state.layout.panels.chat ? "bg-mid-gray": ""
           })}
           <br>
-          ${state.layout.collapsed === 2 ? menuItem({
+          ${!state.layout.collapsed ? menuItem({
             icon:  'fa-chevron-down',
             title: "Collapse menu",
             onclick: () => emit('layout:collapseMenu', 0)
