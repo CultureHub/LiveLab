@@ -7,6 +7,7 @@ const Video = require('./components/funvideocontainer.js')
 const enumerateDevices = require('enumerate-devices')
 // const MediaSettings = require('./mediaSettings.js')
 const AddMedia = require('./addMedia.js')
+const { button } = require('./formElements.js')
 
 
 // const audioDropdown = Dropdown()
@@ -195,7 +196,7 @@ module.exports = class Login extends Component {
     let self = this
     const dropdowns = ['audio', 'video'].map((kind) => html`
     <div class="flex items-center ba">
-      <i class="w1 fas mh2 ${kind==='video'?'fa-video' :'fa-microphone'}"></i>
+      <i class="w1 fas mh2 f3 ${kind==='video'?'fa-video' :'fa-microphone'}"></i>
     <select name=${kind} class="w-100 pa2 white ttu pointer bn" style="background:none;/*font-size:3vw*/" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
       if(this.selectedDevices[kind].deviceId === 'false') {
@@ -228,20 +229,24 @@ module.exports = class Login extends Component {
         </div> -->
         <div class="w-100 h-100 pt4 flex justify-center flex-column" style="max-width:1200px">
           <div class="flex flex-column justify-center">
-            <a style="font-size:20vmin;line-height:12vmin;margin-left: -0.08em;color:${state.style.colors.text0}" class="mt4 mb3 dim no-underline" title="more info" href="https://www.culturehub.org/livelab" target="_blank"> LiveLab </a>
-            <div style="font-size:4vmin">by  <a style="color:${state.style.colors.text0}" class="no-underline dim" href="https://www.culturehub.org" target="_blank">CultureHub</a></div>
-            <div style="" class="mt4">A browser-based<br>media router<br>for collaborative performance </div>
+            <a style="font-size:6vmin;line-height:6vmin;margin-left: -0.08em;color:${state.style.colors.text0}" class="mt4 dim no-underline" title="more info" href="https://www.culturehub.org/livelab" target="_blank"> LiveLab </a>
+            <div class="ttl" style="font-size:2vmin">v${state.user.version}beta |  by  <a style="color:${state.style.colors.text0}" class="no-underline dim  ttu" href="https://www.culturehub.org" target="_blank">CultureHub</a></div>
+            <div style="" class="mv5">A browser-based<br>media router<br>for collaborative performance </div>
           </div>
-          <div class="mt4 w-100" style='font-size:4vmin'>
+          <div class="w-100" style='font-size:4vmin'>
             ${dropdowns[1]}
             ${dropdowns[0]}
-            <div class="dim pointer mt2" style="color:${state.style.colors.accent0};width:fit-content" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
-            <br>
-            <input type="text" placeholder="name" value=${this.nickname} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.nickname = e.target.value} />
-            <div class="dim pointer mt2" style="color:${state.style.colors.accent0};width:fit-content" onclick=${() => {
+            <div class="ba flex items-center">
+              <i class="w1 fas mh2 f3 fa-user"></i>
+              <input type="text" placeholder="name" value=${this.nickname} class="ml1 pa2 bn w-100 white" style="background:none" onkeyup=${(e) => this.nickname = e.target.value} />
+            </div>
+            <div class="flex mt5">
+            ${button({ text: 'Start', title: 'join a call', onClick: () => {
                   var tracks = Object.values(this.tracks).filter((track) => track !== null)
                   emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
-                }}>${state.user.room? '>> Start': '>> Start'}</div>
+                }})}
+            ${button({text: 'Settings', onClick: this.openSettings.bind(this), classes: "dark-gray bg-near-white ml2"})}
+            </div>
           </div>
         </div>
       </div>

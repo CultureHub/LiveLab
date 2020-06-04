@@ -23,7 +23,7 @@ module.exports = (state, emit) => {
        if(stream.settings && stream.settings.video) {
          videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
          videoMute = html `<i
-           class="mh1 fas ${stream.isVideoMuted ? 'fa-video red':'fa-video'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
+           class="mh1 fas ${stream.isVideoMuted ? 'fa-video-slash dark-pink':'fa-video'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
              let tracks = stream.stream.getVideoTracks()
              tracks.forEach((track) => {
                track.enabled = stream.isVideoMuted
@@ -58,7 +58,7 @@ module.exports = (state, emit) => {
          audioSettings = `${Math.round(stream.settings.audio.sampleRate/1000)} khz`
          mute =
          html `<i
-           class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash red':'fa-microphone'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
+           class="mh1 fas ${stream.isAudioMuted ?'fa-microphone-slash dark-pink':'fa-microphone'} ${stream.isLocal ? "pointer" : ""}" title="" onclick=${stream.isLocal ? ()=>{
              let tracks = stream.stream.getAudioTracks()
              tracks.forEach((track) => {
                track.enabled = stream.isAudioMuted

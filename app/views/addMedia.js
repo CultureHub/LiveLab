@@ -5,6 +5,8 @@ const Component = require('choo/component')
 const input = require('./components/input.js')
 const enumerateDevices = require('enumerate-devices')
 const AudioVis = require('./components_new/audioVis.js')
+const { button } = require('./formElements.js')
+
 // const OldVideo = require('./components/funvideocontainer.js')
 
 
@@ -231,14 +233,16 @@ module.exports = class AddMedia extends Component {
     <div class="flex flex-wrap mt4">
       ${this.isActive.audio || this.isActive.video ? html`
       ${opts.showLabel? html`<input type="text" placeholder="label" value=${this.label} class="mb4 pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.label = e.target.value} />` : '' }
-      <div class="f6 link dim ph3 pv2 mr2 white pointer" style="background-color:${opts.state.style.colors.accent0}" onclick=${() => {
+      ${button({ text: opts.saveText, onClick: () => {
            var tracks = Object.values(this.tracks).filter((track) => track !== null)
           // emit('user:addStream', new MediaStream(tracks), this.label)
           // emit('layout:toggleMenuItem', 'addMedia', 'panels')
            opts.onSave({stream: new MediaStream(tracks), mediaObj: this})
-        }}>${opts.saveText}</div>
+        }})}
       ` :''}
-      <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${opts.onCancel}>Cancel</div>
+
+      ${button({ text: 'Cancel', onClick: opts.onCancel, classes: "dark-gray bg-near-white ml2"})}
+      <!-- <div class="f6 link dim ph3 pv2 dark-gray bg-white pointer" onclick=${opts.onCancel}>Cancel</div> -->
     </div>
     </div>
   </div>`

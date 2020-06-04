@@ -44,6 +44,8 @@ npm run watch
 ### Added
  - toggle between floating layout and column layout in settings
  - colors as variables in layout
+ - icons on landing page
+ - font rektorant
 
 ### Changed
  - label removed from initial 'add media' page

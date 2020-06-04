@@ -34,12 +34,12 @@ module.exports = (state, emit) => {
     <div class="flex flex-column justify-between flex-wrap-reverse" style="pointer-events:all;color:${state.style.colors.text0}">
       <div class="flex flex-column-ns flex-row justify-center">
         ${state.multiPeer.defaultStream !== null ? html`${menuItem({
-            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isVideoMuted ?'fa-video red':'fa-video green',
+            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isVideoMuted ?'fa-video-slash dark-pink':'fa-video',
             title: "Mute your video",
             onclick: () => emit('user:toggleVideoMute')
           })}
           ${menuItem({
-            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isAudioMuted ?'fa-microphone-slash red':'fa-microphone green',
+            icon:  state.multiPeer.user.streamInfo[state.multiPeer.defaultStream.id].isAudioMuted ?'fa-microphone-slash dark-pink':'fa-microphone',
             title: "Mute your microphone",
             onclick: () => emit('user:toggleAudioMute')
           })}` : ''}

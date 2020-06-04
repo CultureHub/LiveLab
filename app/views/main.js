@@ -102,8 +102,8 @@ function mainView (state, emit) {
                 state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), {name: switcher, label:`switcher ${switcher}`, type:'switchers'})
               )}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), {name:'audio', label:'volume controls'})}
-               ${floating(settingsPanel(state, emit), {name:'settings', label:'settings'})}
-              ${floating(state.cache(Chat, 'chat-el').render(state), {name:'chat', label:'chat', flex:'1 400px'})}
+              ${floating(settingsPanel(state, emit), {name:'settings', label:'settings'})}
+              ${floating(state.cache(Chat, 'chat-el').render(state), {name:'chat', label:'chat', flex:'1'})}
               ${floating(peersList(state.multiPeer), {name: 'users', label: 'participants currently in room'})}
               <div></div>
             </div>

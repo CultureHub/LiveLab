@@ -97,7 +97,7 @@ module.exports = class Switcher extends Component {
       </i>
        <i
          onclick=${()=> this.clear()}
-         class="fas fa-trash-alt dim pointer ma2" title="clear switcher">
+         class="fas fa-times-circle dim pointer ma2" title="clear switcher">
        </i>
       </div>`
   }

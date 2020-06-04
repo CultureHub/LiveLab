@@ -86,7 +86,7 @@ module.exports = class Chat extends Component {
               }
             }
           })}
-          <div class="f6 fr ma2 link ph3 pv2 mb2 white pointer" style="background-color:${state.style.colors.accent0}" onclick=${this.sendMessage.bind(this)}>Send</div>
+          <div class="f6 fr ma2 link ph3 pv2 mb2 white pointer dim" style="background-color:${state.style.colors.accent0}" onclick=${this.sendMessage.bind(this)}>Send</div>
         </div>
         `
   }
