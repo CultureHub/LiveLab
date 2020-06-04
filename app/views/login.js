@@ -193,7 +193,10 @@ module.exports = class Login extends Component {
     //  this.dropDownEl =
     //  console.log('creating element', this)
     let self = this
-    const dropdowns = ['audio', 'video'].map((kind) => html`<select name=${kind} class="w-100 pa2 white ttu ba b--white pointer" style="background:none;/*font-size:3vw*/" onchange=${(e)=>{
+    const dropdowns = ['audio', 'video'].map((kind) => html`
+    <div class="flex items-center ba">
+      <i class="w1 fas mh2 ${kind==='video'?'fa-video' :'fa-microphone'}"></i>
+    <select name=${kind} class="w-100 pa2 white ttu pointer bn" style="background:none;/*font-size:3vw*/" onchange=${(e)=>{
       this.selectedDevices[kind] = this.devices[kind].filter((device) => device.deviceId === e.target.value)[0]
       if(this.selectedDevices[kind].deviceId === 'false') {
         this.isActive[kind] = false
@@ -203,11 +206,11 @@ module.exports = class Login extends Component {
       this.getMedia(kind)
     }}>
     ${dropdown(
-      this.devices[kind].map((device, index) => (  { value: device.deviceId,  label:  device.label })),
+      this.devices[kind].map((device, index) => (  { value: device.deviceId,  label: device.label })),
       this.selectedDevices[kind].deviceId,
-
     )}
-    </select>`)
+    </select>
+    </div>`)
 
     return html`<div class="fixed w-100 h-100 top-0 left-0">
       ${Video({
@@ -223,15 +226,15 @@ module.exports = class Login extends Component {
         <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
           by CultureHub
         </div> -->
-        <div class="w-100 h-100 pt4 flex flex-column" style="max-width:1200px">
+        <div class="w-100 h-100 pt4 flex justify-center flex-column" style="max-width:1200px">
           <div class="flex flex-column justify-center">
             <a style="font-size:20vmin;line-height:12vmin;margin-left: -0.08em;color:${state.style.colors.text0}" class="mt4 mb3 dim no-underline" title="more info" href="https://www.culturehub.org/livelab" target="_blank"> LiveLab </a>
             <div style="font-size:4vmin">by  <a style="color:${state.style.colors.text0}" class="no-underline dim" href="https://www.culturehub.org" target="_blank">CultureHub</a></div>
             <div style="" class="mt4">A browser-based<br>media router<br>for collaborative performance </div>
           </div>
           <div class="mt4 w-100" style='font-size:4vmin'>
-            ${dropdowns[0]}
             ${dropdowns[1]}
+            ${dropdowns[0]}
             <div class="dim pointer mt2" style="color:${state.style.colors.accent0};width:fit-content" onclick=${this.openSettings.bind(this)}>${'>> Settings'}</div>
             <br>
             <input type="text" placeholder="name" value=${this.nickname} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${(e) => this.nickname = e.target.value} />
