@@ -40,15 +40,20 @@ npm run watch
 ```
 
 # Changelog
-## [1.3.7] - 2020-06-03
+## [1.3.8] - 2020-06-03
 ### Added
  - toggle between floating layout and column layout in settings
  - colors as variables in layout
  - icons on landing page
  - font rektorant
+ - button class
+ - info to login page
+ - buttons to login page
+ - chat pops out when closed
 
 ### Changed
  - label removed from initial 'add media' page
+ - accent color
 
 ## [1.3.6] - 2020-05-28
 ### Added
