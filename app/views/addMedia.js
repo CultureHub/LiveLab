@@ -148,7 +148,6 @@ module.exports = class AddMedia extends Component {
       .then((stream) => {
         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
         this.streams[kind] = stream
-        window.stream = stream
         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
         this.applyConstraints(kind)
       }).catch((err) => {

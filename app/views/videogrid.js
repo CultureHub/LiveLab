@@ -1,4 +1,3 @@
-const Video = require('./components_new/Video.js')
 const html = require('choo/html')
 
 

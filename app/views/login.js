@@ -24,10 +24,10 @@ const modal = (content, isOpen, onClose) => {
     return html`
       <div class="pa0 pa4-ns fixed w-100 h-100 top-0 left-0 bg-dark-gray" style="pointer-events:all;/*background:rgba(213, 0, 143, 1)*/">
       <i
-              class="fas fa-times absolute top-0 right-0 ma1 ma2-ns fr f4 dim pointer"
-              title="close settings"
-              aria-hidden="true"
-              onclick=${onClose} >
+        class="fas fa-times absolute top-0 right-0 ma1 ma2-ns fr f4 dim pointer"
+        title="close settings"
+        aria-hidden="true"
+        onclick=${onClose} >
       </i>
         ${content}
       </div>
@@ -40,7 +40,6 @@ const modal = (content, isOpen, onClose) => {
 module.exports = class Login extends Component {
   constructor(id, state, emit) {
     super(id)
-    //  console.log('loading login', state, emit)
     this.previewVideo = new Video()
     this.nickname = state.user.nickname
     this.room = state.user.room
@@ -48,30 +47,17 @@ module.exports = class Login extends Component {
     this.state = state
     this.emit = emit
     this.isActive = { audio: false, video: false}
-    this.devices = {
-      audio: [],
-      video: []
-    }
+    this.devices = { audio: [], video: [] }
     this.selectedDevices = {
-      audio: {
-        label: 'initial',
-        deviceId: ''
-      },
-      video: {
-        label: 'initial',
-        deviceId: ''
-      }
+      audio: { label: 'initial', deviceId: ''},
+      video: { label: 'initial', deviceId: '' }
     }
     this.tracks = {  audio: null,  video: null}
     this.streams = { audio: null, video: null }
     this.trackInfo = {  audio: {},  video: {} }
     this.settingsIsOpen = false
-    // this.mediaSettings = new AddMedia({
-    //   onSave: this.updateMedia.bind(this),
-    //   onClose: this.closeSettings.bind(this)
-    // })
+
     enumerateDevices().then((devices) => {
-      console.log('devicces', devices)
       this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
       this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
       this.devices.audio.push({
@@ -91,20 +77,12 @@ module.exports = class Login extends Component {
         this.getMedia('video')
       }
       this.rerender()
-  //    this.createElement(state, emit)
-      //  console.log(this, this.devices.audio)
     }).catch((err) => emit('log:error', err))
   }
 
-  load(element) {
-    //  console.log('loading')
-
-  }
-
   updateMedia(mediaObj) {
-    console.log('UPDATING', this, mediaObj)
-    //    console.log(this.mediaSettings)
     this.tracks = Object.assign({}, mediaObj.tracks)
+    this.streams = Object.assign({}, mediaObj.streams)
     this.trackInfo = Object.assign({}, mediaObj.trackInfo)
     this.selectedDevices = Object.assign({}, mediaObj.selectedDevices)
     this.devices = Object.assign({}, mediaObj.devices)
@@ -132,7 +110,6 @@ module.exports = class Login extends Component {
   }
 
   getMedia(kind) {
-    console.log('active', this.isActive)
     let initialConstraints = { audio: false, video: false}
     initialConstraints[kind] = {
           deviceId: this.selectedDevices[kind].deviceId
@@ -145,7 +122,6 @@ module.exports = class Login extends Component {
         window.stream = stream
         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
         this.rerender()
-      //  this.applyConstraints(kind)
       }).catch((err) => {
         this.log('error', err)
       })
@@ -157,9 +133,6 @@ module.exports = class Login extends Component {
   }
 
   createElement(state, emit) {
-    //  this.local.center = center
-    //  this.dropDownEl =
-    //  console.log('creating element', this)
     let self = this
     const dropdowns = ['audio', 'video'].map((kind) => html`
     <div class="flex items-center ba">
@@ -180,22 +153,9 @@ module.exports = class Login extends Component {
     </select>
     </div>`)
 
-    // ${Video({
-    //   htmlProps: {
-    //     class: 'w-100 h-100',
-    //     style: 'object-fit:cover'
-    //   },
-    //   index: "login",
-    //   track: this.tracks.video,
-    //   id: this.tracks.video === null ? null : this.tracks.video.id
-    // })}
-
     return html`<div class="fixed w-100 h-100 top-0 left-0" style="font-family:rektorant_light">
       ${this.previewVideo.render(this.streams.video, { objectPosition: 'center', objectFit: 'cover' })}
       <div class="fixed w-100 h-100 top-0 left-0 f2 lh-title pa2 flex justify-center ttu" style="background:rgba(0, 0, 0, 0.3);font-size:4vmin;">
-        <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
-          by CultureHub
-        </div> -->
         <div class="w-100 h-100 pt4 flex justify-center flex-column" style="max-width:1200px">
           <div class="flex flex-column justify-center">
             <a style="width:fit-content;font-size:8vmin;line-height:6vmin;margin-left: -0.08em;color:${state.style.colors.text0}" class="mt4 dim no-underline" title="more info" href="https://www.culturehub.org/livelab" target="_blank"> LiveLab </a>
@@ -229,7 +189,6 @@ module.exports = class Login extends Component {
           onCancel: () => {this.settingsIsOpen = ! this.settingsIsOpen
           this.rerender()},
           onSave: ({stream, mediaObj})  => {
-            console.log('saving', this, mediaObj)
             this.updateMedia(mediaObj)
           }
         }), this.settingsIsOpen, () => {
@@ -241,76 +200,3 @@ module.exports = class Login extends Component {
     `
   }
 }
-
-// <div class="">
-// <input type="text" value=${this.nickname} class="pa2 ba b--white white w-100" style="background:none" onkeyup=${this.nickname = e.target.value }> </input>
-// </div>
-//
-// return html `
-// <div>
-//   <div>
-//   ${Video({
-//     htmlProps: {
-//       class: 'w-100 h-100'
-//     },
-//     index: "login",
-//     track: this.tracks.video,
-//     id: this.tracks.video === null ? null : this.tracks.video.id
-//   })}
-//   </div>
-//
-//   <div class="vh-100 dt w-100 fixed top-0 left-0 ttu f0">
-//   <!--initation content outside transparent block-->
-//     <div> LiveLab ......</div>
-//     <div> An Experimental <br> Interface <br> For Web-based <br> Performance <div>
-//      <!-- //hide the version
-//      <legend class="mb3">v${state.user.version}</legend>
-//      -->
-//
-//      ${input('Name', 'Your name', {  value: this.nickname,  onkeyup: (e) => { this.nickname = e.target.value } })}
-//      <!-- //hide room options
-//      ${input('Room', 'Room name', { value: this.room, onkeyup: (e) => { this.room = e.target.value } })}
-//      -->
-//      <!-- // hide the signalling server options
-//      ${input('Signalling server', 'e.g. http://server.glitch.me', { value: this.server, onkeyup: (e) => { this.server = e.target.value} })}
-//      -->
-//      </div>
-//
-//      <legend class="f4 fw6 ph0 mh0">Select Input Devices
-//       <i class="fas fa-cog ma2 dim pointer" aria-hidden="true" onclick=${this.openSettings.bind(this)} ></i>
-//      </legend>
-//
-//      <div id="dropdownMenuInit">
-//        <article>
-//         ${this.audioDropdown}
-//         <div class="mv0 ml1 fl"><i class="fas fa-microphone-slash icon-24px-red ma2 dim pointer"></i></div>
-//        </article>
-//        <article>
-//         ${this.videoDropdown}
-//         <div class="mv0 ml1 fl"><i class="fas fa-video icon-24px-green ma2 dim pointer"></i></div>
-//       </article>
-//
-//      </div>
-//
-//     <!-- restyle the join button
-//      <div class="f6 link dim ph3 pv2 mb2 dib white bg-dark-pink pointer" onclick=${() => {
-//       var tracks = Object.values(this.tracks).filter((track) => track !== null)
-//       emit('devices:startCall',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
-// }}>Join</div>
-//      -->
-//      <div class="w-25 font-Inter fs-normal f4 b pv3 ph4 link dim mv3 dib white bg-livelab-orange pointer br4" id="joinButton" onclick=${() => {
-//        var tracks = Object.values(this.tracks).filter((track) => track !== null)
-//        emit('user:join',  {room: this.room, server: this.server, stream: new MediaStream(tracks), nickname: this.nickname, requestMedia: true})
-//      }}>${state.user.room? 'Join': 'Start'}</div>
-//      <div> ${state.user.statusMessage} </div>
-//     </div>
-//   </div>
-// </div>
-//   ${this.mediaSettings.render(this.settingsIsOpen, {
-//     selectedDevices: this.selectedDevices,
-//     tracks: this.tracks
-//   })}
-// </div>
-// `
-
-//   <!--  ${MediaSettings(state.devices, emit, { showElement: state.devices.default.constraints.isOpen})} --->
