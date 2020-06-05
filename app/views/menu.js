@@ -7,7 +7,7 @@ const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
 ${info
-  ? html`<div class="courier b absolute ttu right-0 top-0 b pa1 pr2">${info}</div>`
+  ? html`<div class="b absolute ttu right-0 top-0 b pa1 pr2">${info}</div>`
   : ''}
 </div>
 `
