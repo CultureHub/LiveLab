@@ -5,19 +5,10 @@ var Peer = require('./Peer.js')
 var EventEmitter = require('events').EventEmitter
 const shortid = require('shortid')
 
-function log (...message) {
-  console.log(...message)
-}
-
-function warn (...message) {
-  console.warn(...message)
-}
-
 class MultiPeer extends EventEmitter {
   constructor () {
     super()
     this.peers = {}
-    //  this.messenger = new Messenger(this)
     this.isOnline = true
     this._localStreams = {}
 
@@ -81,7 +72,7 @@ class MultiPeer extends EventEmitter {
     // when socket is reconnecting,
     this.signaller.on('reconnect', e => {
       this.signaller.emit('join', this._room, this.user)
-      warn('socket reconnected!')
+      console.warn('socket reconnected!')
     })
 
     this.checkConnectivity = setInterval(
@@ -189,19 +180,18 @@ class MultiPeer extends EventEmitter {
         streams.push(streamObj)
       })
     )
-    log('streams', streams, this.peers)
     this.streams = streams
     this.emit('update')
   }
 
   onDisconnect () {
     this.emit('disconnect')
-    warn('disconnected from internet')
+    console.warn('disconnected from internet')
   }
 
   onReconnect () {
     this.emit('reconnect')
-    warn('internet reconnected')
+    console.warn('internet reconnected')
     this.signaller.emit('getPeers')
   }
 

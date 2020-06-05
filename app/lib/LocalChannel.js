@@ -15,18 +15,16 @@ const EventEmitter = require('events').EventEmitter
  1) right now local info is duplicated for each peer -- how to have central way of sending to all
 */
 // opts can be tag and localData
-
 // @todo: what happens when send is called before connection is initiated
-
 class LocalChannel extends EventEmitter {
-  constructor(opts, peers) {
+  constructor (opts, peers) {
     super()
     this.opts = opts
     this.tag = opts.tag
-    if(opts.localData !== undefined) this.localData = opts.localData
+    if (opts.localData !== undefined) this.localData = opts.localData
     Object.entries(peers).forEach(([id, peer]) => {
-      let channel = peer.addChannel(opts)
-      channel.on('update', (data) => {
+      const channel = peer.addChannel(opts)
+      channel.on('update', data => {
         this.emit('update', data, id)
       })
     })
@@ -35,36 +33,34 @@ class LocalChannel extends EventEmitter {
   }
 
   // forward event listeners from individual peers
-  on(address, callback) {
+  on (address, callback) {
     Object.entries(this.peers).forEach(([id, peer]) => {
       peer.channels[this.tag].on(address, (...args) => {
-        console.log('RECEIVED A MESSAGE', address, args)
         callback(...args, peer)
       })
     })
-    this.listeners.push({
-      address: address,
-      callback: callback
-    })
+    this.listeners.push({ address: address, callback: callback })
   }
 
-  updateLocalData(newData) {
+  updateLocalData (newData) {
     this.localData = newData
     Object.entries(this.peers).forEach(([id, peer]) => {
       peer.channels[this.tag].send('update', newData)
     })
   }
 
-  send(address, message) {
-    console.log('sending', 'address', 'message', this.peers)
+  send (address, message) {
     Object.entries(this.peers).forEach(([id, peer]) => {
       peer.channels[this.tag].send(address, message)
     })
   }
-  //
-  attachEvents(peerChannel) {
-    this.listeners.forEach((listener) => {
-      peerChannel.on(listener.address, (...args) => listener.callback(...args, peerChannel.peer))
+
+  attachEvents (peerChannel) {
+    this.listeners.forEach(listener => {
+      peerChannel.on(
+        listener.address,
+        (...args) => listener.callback(...args, peerChannel.peer)
+      )
     })
   }
 }

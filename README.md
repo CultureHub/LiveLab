@@ -40,6 +40,12 @@ npm run dev
 ```
 
 # Changelog
+## [1.3.9] - 2020-06-05
+### Changed
+ - added linter
+ - cleaned up code
+ - different range slider styling
+ 
 ## [1.3.8] - 2020-06-03
 ### Added
  - toggle between floating layout and column layout in settings

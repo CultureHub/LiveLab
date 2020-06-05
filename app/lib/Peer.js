@@ -61,7 +61,7 @@ class Peer extends EventEmitter {
       this.signaller.emit('signal', { id: id, signal: signal })
     })
     p.on('stream', stream => {
-      console.log('got stream', stream, 'background: #00ffff; color: #fff')
+      // console.log('got stream', stream, 'background: #00ffff; color: #fff')
       stream.getTracks().forEach(track => {
         track.onended = e => {
           warn('stream ended', stream)
@@ -75,12 +75,12 @@ class Peer extends EventEmitter {
     })
 
     p.on('connect', () => {
-      console.log(
-        `%c connected to ${id}`,
-        'background: #222; color: #bada55; margin: 2px',
-        p,
-        this.channels
-      )
+      // console.log(
+      //   `%c connected to ${id}`,
+      //   'background: #222; color: #bada55; margin: 2px',
+      //   p,
+      //   this.channels
+      // )
       Object.values(this.channels).forEach(channel => {
         channel.initialSync()
       })

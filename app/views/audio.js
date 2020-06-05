@@ -75,7 +75,7 @@ module.exports = class Audio extends Component {
     ) => {
       return html`<div class="db pv0 flex items-center" title=${description}>
           <div class="dib w4 v-mid mr2" title=${description}>${label}  </div>
-          <div class="pa2" style="flex:1"><input type="range" class="w-100 v-mid" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}></div>
+          <div class="pa2" style="flex:1"><input type="range" class="w-100 v-mid slider" title=${description} min="0" max="100" value="${value}" step="1" oninput=${oninput}></div>
           <i class="pa2 pointer fas ${value === 0
           ? 'fa-volume-mute'
           : 'fa-volume-up'}" onclick=${onmute}></i>

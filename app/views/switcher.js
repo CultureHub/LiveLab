@@ -94,7 +94,7 @@ module.exports = class Switcher extends Component {
         : ''}`
       : ''}</div>
         <div class='slider-container'>
-          <input type="range" orient="vertical" value=${this.opacity} min="1" max="100" class="slider" style='right:20px;top:0px;width:140px' oninput=${e => {
+          <input type="range" orient="vertical" value=${this.opacity} min="1" max="100" class="slider vertical" style='right:20px;top:0px;width:140px' oninput=${e => {
             this.setOpacity(e.target.value)
           }}>
         </div>
