@@ -213,7 +213,7 @@ module.exports = class Login extends Component {
     </select>
     </div>`)
 
-    return html`<div class="fixed w-100 h-100 top-0 left-0">
+    return html`<div class="fixed w-100 h-100 top-0 left-0" style="font-family:rektorant_light">
       ${Video({
         htmlProps: {
           class: 'w-100 h-100',

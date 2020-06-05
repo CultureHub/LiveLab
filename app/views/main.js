@@ -50,7 +50,7 @@ function mainView (state, emit) {
     // if(showPanel) {
        const panel = html`
         <div class="${showPanel?'w-100 ':'pv0'} panel bg-dark-gray ba flex flex-column ${(settings.columnLayout || !showPanel)? 'ma0': 'mv2 ma2-ns shadow-2'}"
-         style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?flex:'0'};${hidden}">
+         style="border:1px solid #555;pointer-events:all;flex:${settings.columnLayout?flex:'0'};${hidden};">
           <div class="flex justify-between pa1">
             <div class="ttu">   <!-- my title  -->  </div>
             <i
