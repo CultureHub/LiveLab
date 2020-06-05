@@ -121,7 +121,7 @@ module.exports = class Audio extends Component {
       `
     }
 
-    return html`<div>
+    return html`<div class="ttl">
       <div class="pb2" title="master volume">
         ${slider({
           description: "master output volume",

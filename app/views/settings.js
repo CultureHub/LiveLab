@@ -33,7 +33,7 @@ const dropdown = ({ onChange, label, value, opts}) => settingItem(label, html`
   `)
 
   let opts = [0, 1, 2, 3, 4].map((num) => ({ label: num, value: num }))
-  return html`<div class="mw6">
+  return html`<div class="mw6 ttl">
       ${dropdown({
         label: 'Number of output switchers',
         value: state.layout.settings.numberOfSwitchers,

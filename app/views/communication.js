@@ -83,7 +83,7 @@ module.exports = (state, emit) => {
 
     let switcherOverlay = html`
     <container class="absolute h-100 w-100 top-0 left-0 flex" style="pointer-events:none">
-      <svg viewBox="0 0 ${10*activeSwitchers.length} 10" class= "h-60 w-60 ttu" style="fill:rgba(255, 255, 255, 0.5);margin:auto;overflow:visible">
+      <svg viewBox="0 0 ${10*activeSwitchers.length} 10" class= "h-60 w-60 ttu" style="fill:rgba(255, 255, 255, 0.5);margin:auto;overflow:visible;height:50%">
         <text x="0" y="10">${activeSwitchers}</text>
       </svg>
     </container>`
