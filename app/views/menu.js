@@ -23,7 +23,6 @@ module.exports = (state, emit) => {
   `
 
   if (state.layout.collapsed === true) {
-    console.log('collapsed!!')
     return html`
     <div class=" pa2 flex items-end" style="pointer-events:all;text-shadow:2px 2px 3px rgba(0, 0, 0, 1);color:${state.style.colors.text0}">
     ${menuIcon({

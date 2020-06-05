@@ -163,7 +163,6 @@ function openWindow (stream, title, settings) {
   var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
   var win = window.open('', JSON.stringify(Date.now()), windowSettings)
   // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
-  // var win = window.open('', 'hey', windowSettings)
   win.document.body.style.background = 'black'
   win.document.title = title
   if (stream) {

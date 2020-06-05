@@ -1,19 +1,19 @@
 var devtools = require('choo-devtools')
 const choo = require('choo')
 
-const app = choo({hash: true})
+const app = choo({ hash: true })
 
 /* uncomment for debugging */
-//localStorage.setItem('logLevel', 'warn')
-//localStorage.setItem('debug', null)
-//localStorage.setItem('debug', 'simple-peer')
+// localStorage.setItem('logLevel', 'warn')
+// localStorage.setItem('debug', null)
+// localStorage.setItem('debug', 'simple-peer')
 if (process.env.NODE_ENV !== 'production') {
   app.use(devtools())
 }
 
 localStorage.setItem('logLevel', 'debug')
 
-if(typeof nw === 'object'){
+if (typeof nw === 'object') {
   const WIN_WIDTH = 1280
   const WIN_HEIGHT = 720
   // if in dev mode, show logging in console and expose global app object
@@ -41,11 +41,9 @@ app.use(require('./stores/layoutStore.js'))
 // Routing
 // base URL is different for nw.js, gh-pages, and local versions
 // @todo: how to make this more concise / not repeat routes?
-
 app.route('/', require('./views/main.js'))
 // app.route('#sendOnly', require('./views/sendOnly/landing.js'))
 // app.route('#sendonly', require('./views/sendOnly/landing.js'))
-
 // routes for nw.js
 app.route('/public/index.html', require('./views/main.js'))
 
@@ -53,5 +51,4 @@ app.route('/public/index.html', require('./views/main.js'))
 app.route('/LiveLab', require('./views/main.js'))
 // app.route('/LiveLab#sendonly', require('./views/sendOnly/landing.js'))
 // app.route('/LiveLab/sendonly', require('./views/sendOnly/landing.js'))
-
 app.mount('body div')
