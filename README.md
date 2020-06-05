@@ -45,7 +45,8 @@ npm run dev
  - added linter
  - cleaned up code
  - different range slider styling
- 
+ - added screen share icon
+
 ## [1.3.8] - 2020-06-03
 ### Added
  - toggle between floating layout and column layout in settings
