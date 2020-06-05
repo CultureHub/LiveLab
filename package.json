@@ -52,6 +52,9 @@
     "socket.io-client": "^2.3.0",
     "tachyons": "^4.11.1"
   },
+  "prettier": {
+    "printWidth": 120
+  },
   "build": {
     "nwVersion": "0.44.5"
   }
