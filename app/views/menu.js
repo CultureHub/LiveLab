@@ -1,10 +1,10 @@
 const html = require('choo/html')
 
 const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
-<div class="relative pointer pa3 ${selected?"bg-mid-gray" : ""}" style="flex:0" title=${title} onclick= ${onclick}>
+<div class="tc relative pointer pa3 ${selected?"bg-mid-gray" : ""}" style="flex:0" title=${title} onclick= ${onclick}>
 <i class="fas ${icon} dim pointer" style="display:block;" title=${title}
  ></i>
-${info?html`<div class="absolute ttu right-0 top-0 b pa2">${info}</div>` : '' }
+${info?html`<div class="courier b absolute ttu right-0 top-0 b pa1 pr2">${info}</div>` : '' }
 </div>
 `
 
@@ -18,6 +18,14 @@ module.exports = (state, emit) => {
       return menuIcon(opts)
   //  }
   }
+
+  const screenIcon = ({ title, onclick, icon, selected = false, info }) => html`
+  <div class="relative pointer pa3 ${selected?"bg-mid-gray" : ""}" style="flex:0" title=${title} onclick= ${onclick}>
+  <i class=" fas ${icon} dim pointer f4" style="display:block;" title=${title}
+   ></i>
+  ${info?html`<div class="w-100 h-100 pt3 absolute ttu right-0 top-0 tc b courier" style="padding-top:1.03rem">${info}</div>` : '' }
+  </div>
+  `
 
   if(state.layout.collapsed == true) {
     console.log('collapsed!!')
@@ -45,18 +53,18 @@ module.exports = (state, emit) => {
             onclick: () => emit('user:toggleAudioMute')
           })}` : ''}
 
-        ${menuItem({
+        ${screenIcon({
           icon: 'fa-desktop',
           title: "Add screen share",
           onclick: () => emit('user:shareScreen'),
-          // info: '+'
+          info: '+'
         })}
         ${menuItem({
           icon: 'fa-plus-circle',
           title: "Add media stream",
           onclick: () =>  emit('layout:toggleMenuItem', 'addMedia', 'panels'),
           advanced: true,
-          // info: '+'
+          //info: '+'
         })}
 
         ${menuItem({
@@ -67,7 +75,7 @@ module.exports = (state, emit) => {
         })}
         </div>
         <div class="flex flex-column-ns flex-row justify-center">
-          ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) => menuItem({
+          ${['a', 'b', 'c', 'd'].splice(0, state.layout.settings.numberOfSwitchers).map((switcher) =>menuIcon({
               icon: 'fa-desktop',
               title: `Open switcher ${switcher}`,
               onclick: () => emit('layout:toggleMenuItem', switcher, 'switchers'),
