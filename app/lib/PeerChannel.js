@@ -15,44 +15,37 @@ const EventEmitter = require('events').EventEmitter
  1) right now local info is duplicated for each peer -- how to have central way of sending to all
 */
 class PeerChannel extends EventEmitter {
-  constructor({ localChannel, peer, tag } = {}) {
+  constructor ({ localChannel, peer, tag } = {}) {
     super()
-    // if(localData !== undefined) this.localData = localData
     this.tag = tag
     this._peer = peer._peer
     this.peer = peer
     this.log = []
-//    console.log('initial data', this.localData)
     this.localChannel = localChannel
     this.value = null
     this.isConnected = false
     this.outbox = [] // messages that cannot be sent yet
   }
 
-  initialSync() {
-  //  console.log('syncing', this)
+  initialSync () {
     this.isConnected = true
-    if(this.localChannel.localData !== undefined) this.send('update', this.localChannel.localData)
-    this.outbox.forEach((msg) => {
+    if (this.localChannel.localData !== undefined) {
+      this.send('update', this.localChannel.localData)
+    }
+    this.outbox.forEach(msg => {
       this.send(msg.address, msg.data)
     })
     this.outbox = []
   }
 
-  receivedMessage(msg) {
-  //  console.log('RECEIVED', msg)
+  receivedMessage (msg) {
     this.emit(msg.address, msg.data)
     this.value = msg.data
     this.log.push(msg)
   }
 
-  send(address, message) {
-    let msg = {
-      tag: this.tag,
-      data: message,
-      address: address
-    }
-  //  console.log('SENDING', msg)
+  send (address, message) {
+    const msg = { tag: this.tag, data: message, address: address }
     if (this.isConnected) {
       this._peer.send(JSON.stringify(msg))
     } else {

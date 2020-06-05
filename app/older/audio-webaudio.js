@@ -1,6 +1,6 @@
 var html = require('choo/html')
 var Component = require('choo/component')
-const input = require('./components/input.js')
+// const input = require('./components/input.js')
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
 

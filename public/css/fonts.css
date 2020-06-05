@@ -1,0 +1,159 @@
+@font-face {
+    font-family: 'rektorant_regular';
+    src: url('./../webfonts/rektorant/nnrektorattrial-regular-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_light';
+    src: url('./../webfonts/rektorant/nnrektorattrial-light-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*
+@font-face {
+    font-family: 'rektorant_thin';
+    src: url('./../webfonts/rektorant/nnrektorattrial-thin-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-thin-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_bold';
+    src: url('./../webfonts/rektorant/nnrektorattrial-bold-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_bold_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-boldre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-boldre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_hairline';
+    src: url('./../webfonts/rektorant/nnrektorattrial-hairline-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-hairline-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_hairline_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-hairlinere-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-hairlinere-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'rektorant_heavy_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-heavyre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-heavyre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_heavy';
+    src: url('./../webfonts/rektorant/nnrektorattrial-heavy-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-heavy-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_light';
+    src: url('./../webfonts/rektorant/nnrektorattrial-light-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_light_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-lightre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-lightre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_medium_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-mediumre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-mediumre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_medium';
+    src: url('./../webfonts/rektorant/nnrektorattrial-medium-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'rektorant_regular_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-regularre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-regularre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+@font-face {
+    font-family: 'rektorant_thin_re';
+    src: url('./../webfonts/rektorant/nnrektorattrial-thinre-webfont.woff2') format('woff2'),
+         url('./../webfonts/rektorant/nnrektorattrial-thinre-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+ */

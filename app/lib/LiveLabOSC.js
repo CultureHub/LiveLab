@@ -15,7 +15,8 @@ var inherits = require('inherits')
 var LiveLabOSC = function (options) {
   // this.udp_client
   this.receivers = {}
-  this.emitter = dgram.createSocket('udp4', function (msg, rinfo) {})
+  this.emitter = dgram.createSocket('udp4', function (msg, rinfo) {
+  })
 }
 
 inherits(LiveLabOSC, events)
@@ -35,7 +36,7 @@ LiveLabOSC.prototype.stopListening = function (port) {
 LiveLabOSC.prototype.listenOnPort = function (port) {
   // to do: check whether port in use
   this.receivers[port] = dgram.createSocket('udp4')
-  this.receivers[port].on('error', (err) => {
+  this.receivers[port].on('error', err => {
     console.log(`server error:\n${err.stack}`)
     // server.close()
   })
@@ -45,10 +46,7 @@ LiveLabOSC.prototype.listenOnPort = function (port) {
       // turns datagram to javascript
       var message = osc.fromBuffer(msg)
 
-      this.emit('received osc', {
-        port: port,
-        message: message
-      })
+      this.emit('received osc', { port: port, message: message })
     } catch (error1) {
       // error = error1
       console.log('invalid OSC packet', error1)
@@ -57,8 +55,6 @@ LiveLabOSC.prototype.listenOnPort = function (port) {
   })
 
   this.receivers[port].on('listening', () => {
-    // const address = server.address()
-    // console.log(`server listening ${address.address}:${address.port}`)
   })
 
   this.receivers[port].bind(port)
@@ -71,6 +67,5 @@ LiveLabOSC.prototype.listenOnPort = function (port) {
   //   console.log("RECEIVED ", address, args)
   // })
 }
-
 
 module.exports = LiveLabOSC
