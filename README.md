@@ -26,7 +26,7 @@ The repo contains a desktop version built using nw.js, and a browser-based versi
 
 Run the browser version:
 ```
-npm run start-local
+npm run start
 ```
 
 To run the desktop version:
@@ -34,9 +34,9 @@ To run the desktop version:
 npm run start-nw
 ```
 
-To develop either version, open a separate command line and type
+To develop either version, type
 ```
-npm run watch
+npm run dev
 ```
 
 # Changelog

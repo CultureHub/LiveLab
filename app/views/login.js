@@ -1,9 +1,10 @@
 // @todo: how to select no media
 var html = require('choo/html')
 var Component = require('choo/component')
-const input = require('./components/input.js')
+const Video = require('./components_new/VideoObj.js')
+// const input = require('./components/input.js')
 // const Dropdown = require('./components/dropdown.js')
-const Video = require('./components/funvideocontainer.js')
+// const Video = require('./components/funvideocontainer.js')
 const enumerateDevices = require('enumerate-devices')
 // const MediaSettings = require('./mediaSettings.js')
 const AddMedia = require('./addMedia.js')
@@ -40,7 +41,7 @@ module.exports = class Login extends Component {
   constructor(id, state, emit) {
     super(id)
     //  console.log('loading login', state, emit)
-    this.previewVideo = null
+    this.previewVideo = new Video()
     this.nickname = state.user.nickname
     this.room = state.user.room
     this.server = state.user.server
@@ -61,14 +62,9 @@ module.exports = class Login extends Component {
         deviceId: ''
       }
     }
-    this.tracks = {
-      audio: null,
-      video: null
-    }
-    this.trackInfo = {
-      audio: {},
-      video: {}
-    }
+    this.tracks = {  audio: null,  video: null}
+    this.streams = { audio: null, video: null }
+    this.trackInfo = {  audio: {},  video: {} }
     this.settingsIsOpen = false
     // this.mediaSettings = new AddMedia({
     //   onSave: this.updateMedia.bind(this),
@@ -135,35 +131,6 @@ module.exports = class Login extends Component {
     console[type](message)
   }
 
-
-  // getMedia(kind, value) {
-  //   this.selectedDevices[kind] = this.devices[kind][value]
-  //   console.log('getting', this.selectedDevices[kind])
-  //   const initialConstraints = {
-  //     audio: false,
-  //     video: false
-  //   }
-  //   if (this.selectedDevices[kind].deviceId !== false) {
-  //     initialConstraints[kind] = {
-  //       deviceId: this.selectedDevices[kind].deviceId
-  //     }
-  //     console.log(initialConstraints)
-  //     navigator.mediaDevices.getUserMedia(initialConstraints)
-  //       .then((stream) => {
-  //         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #fff', stream.getTracks())
-  //         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
-  //         this.trackInfo[kind] = this.tracks[kind].getSettings()
-  //         this.rerender()
-  //       }).catch((err) => {
-  //         //this.emit('log:error', err)
-  //         this.log('error', err)
-  //       })
-  //   } else {
-  //     this.tracks[kind] = null
-  //     this.rerender()
-  //   }
-  // }
-
   getMedia(kind) {
     console.log('active', this.isActive)
     let initialConstraints = { audio: false, video: false}
@@ -174,7 +141,7 @@ module.exports = class Login extends Component {
       navigator.mediaDevices.getUserMedia(initialConstraints)
       .then((stream) => {
         this.tracks[kind] = stream.getTracks().filter((track) => track.kind == kind)[0]
-      //  this.streams[kind] = stream
+        this.streams[kind] = stream
         window.stream = stream
         console.log(`%c got user media (${kind})`, 'background: #0044ff; color: #f00', stream.getTracks(), this.tracks)
         this.rerender()
@@ -184,7 +151,7 @@ module.exports = class Login extends Component {
       })
     } else {
       this.tracks[kind] = null
-  //    this.streams[kind] = null
+      this.streams[kind] = null
       this.rerender()
     }
   }
@@ -213,16 +180,18 @@ module.exports = class Login extends Component {
     </select>
     </div>`)
 
+    // ${Video({
+    //   htmlProps: {
+    //     class: 'w-100 h-100',
+    //     style: 'object-fit:cover'
+    //   },
+    //   index: "login",
+    //   track: this.tracks.video,
+    //   id: this.tracks.video === null ? null : this.tracks.video.id
+    // })}
+
     return html`<div class="fixed w-100 h-100 top-0 left-0" style="font-family:rektorant_light">
-      ${Video({
-        htmlProps: {
-          class: 'w-100 h-100',
-          style: 'object-fit:cover'
-        },
-        index: "login",
-        track: this.tracks.video,
-        id: this.tracks.video === null ? null : this.tracks.video.id
-      })}
+      ${this.previewVideo.render(this.streams.video, { objectPosition: 'center', objectFit: 'cover' })}
       <div class="fixed w-100 h-100 top-0 left-0 f2 lh-title pa2 flex justify-center ttu" style="background:rgba(0, 0, 0, 0.3);font-size:4vmin;">
         <!-- <div class="absolute right-0 bottom-0" style="transform: rotate(-90deg) translate(100%, 0);transform-origin:right bottom;">
           by CultureHub

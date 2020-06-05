@@ -2,7 +2,7 @@
 const html = require('choo/html')
 const Video = require('./components_new/VideoObj.js')
 const Component = require('choo/component')
-const input = require('./components/input.js')
+// const input = require('./components/input.js')
 const enumerateDevices = require('enumerate-devices')
 const AudioVis = require('./components_new/audioVis.js')
 const { button } = require('./formElements.js')
@@ -30,7 +30,6 @@ const constraintNames = { 'echoCancellation': 'echo cancellation', 'autoGainCont
 module.exports = class AddMedia extends Component {
   constructor (opts) {
     super(opts)
-    this.previewVideo = null
     this.onSave = opts.onSave
     this.onClose = opts.onClose
     this.previewVideo = new Video()

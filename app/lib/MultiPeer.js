@@ -4,9 +4,7 @@ var io = require('socket.io-client')
 var Peer = require('./Peer.js')
 var EventEmitter = require('events').EventEmitter
 //var Messenger = require('./PeerMessenger.js')
-const assert = require('assert')
 const shortid = require('shortid')
-const merge = require('deepmerge')
 
 function log(...message){console.log(...message)}
 function makeError(...message) { console.error(...message)}
