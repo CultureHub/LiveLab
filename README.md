@@ -1,43 +1,23 @@
-### LiveLab
 
-[demo (right now only works in Chrome)](https://livelab.glitch.me/)
+### About LiveLab
+LiveLab is a browser-based media routing software designed for collaborative performance by [CultureHub](https://culturehub.org), a global art & technology community founded by SeoulArts & La MaMa.
 
-### Desktop capture
-To use screen capture or a browser tab as an input source, you must first install the chrome extension for screensharing, and restart chrome.
+LiveLab is a new tool that empowers artists  and arts presenters to meet, create, collaborate, rehearse, and ultimately produce multi-location performances from virtually anywhere in the world. This innovative video collaboration software expands the current field of offerings by allowing users to customize media in ways that best suit their needs. 
 
-To install, go to chrome://extensions/
-Click "Load unpacked extension", and select the "extensions" folder in "screen-capture-extension" in this repo. Restart chrome. The extension should work from now on without needing to reinstall.
+More info about LiveLab and how it is used in performance production by CultureHub, its creating organization: https://www.culturehub.org/livelab
 
-### Running locally
+### 🎉🎉 LiveLab 1.3.9 beta LAUNCHED!
+LiveLab is open-source and free to use. To access: 
 
-To run locally, you must have nodejs and npm installed. Install from: https://nodejs.org/en/
+1. go to https://livelab.app using Chrome Browser or Android tablet devices 
+2. Ensure the appropriate video and audio sources are selected 
+3. Click 'start' to join a room with a randomly generated room name
+4. Share the URL with other people in order to add them to the session
 
-Download the repository, open terminal, and enter directory
-```
-cd LiveLab
-```
 
-install dependencies:
-```
-npm install -d
-```
+### LiveLab Resources 
 
-The repo contains a desktop version built using nw.js, and a browser-based version. Some features, such as broadcast and relaying OSC channels, are only available in the desktop version.
-
-Run the browser version:
-```
-npm run start-local
-```
-
-To run the desktop version:
-```
-npm run start-nw
-```
-
-To develop either version, open a separate command line and type
-```
-npm run watch
-```
+--- 
 
 # Changelog
 ## [1.3.4] - 2020-05-26
