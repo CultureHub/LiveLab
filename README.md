@@ -1,5 +1,5 @@
 
-### About LiveLab
+### About LiveLab | https://livelab.app
 LiveLab is a browser-based media routing software designed for collaborative performance by [CultureHub](https://culturehub.org), a global art & technology community founded by SeoulArts & La MaMa.
 
 LiveLab is a new tool that empowers artists  and arts presenters to meet, create, collaborate, rehearse, and ultimately produce multi-location performances from virtually anywhere in the world. This innovative video collaboration software expands the current field of offerings by allowing users to customize media in ways that best suit their needs. 
@@ -16,6 +16,9 @@ LiveLab is open-source and free to use. To access:
 
 
 ### LiveLab Resources 
+- Tutorials 
+- Common issues when using LiveLab 
+- To build and modify your own LiveLab signalling server, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
 
 --- 
 
