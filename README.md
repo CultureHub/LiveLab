@@ -1,6 +1,5 @@
 ### LiveLab
-
-[demo (right now only works in Chrome)](https://livelab.glitch.me/)
+demo (Chrome environment only) (https://livelab.app)
 
 ### Desktop capture
 To use screen capture or a browser tab as an input source, you must first install the chrome extension for screensharing, and restart chrome.
