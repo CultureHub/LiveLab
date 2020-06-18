@@ -1,9 +1,9 @@
-const shortid = require('shortid')
+const nanoid = require('nanoid').nanoid
 const MultiPeer = require('./../lib/MultiPeer.js')
 
 module.exports = (state, emitter) => {
   state.user = {
-    uuid: shortid.generate(),
+    uuid: nanoid(20),
     // for dev purposes, always regenerate id
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
@@ -31,7 +31,7 @@ module.exports = (state, emitter) => {
     if (state.query.room) {
       state.user.room = state.query.room
     } else {
-      state.user.room = shortid.generate()
+      state.user.room = nanoid(16)
     }
     state.user.server = server
     state.user.nickname = nickname

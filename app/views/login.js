@@ -3,17 +3,9 @@ var Component = require('choo/component')
 const Video = require('./components_new/VideoObj.js')
 const enumerateDevices = require('enumerate-devices')
 const AddMedia = require('./addMedia.js')
-<<<<<<< HEAD
 const { button } = require('./formElements.js')
 
 const dropdown = (options, selected) => html`
-=======
-const {
-  button
-} = require('./formElements.js')
-
-const dropdown = (options, selected) => html `
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
   ${options.map(
   opt => html`
     <option class="dark-gray" value=${opt.value} ${opt.value === selected
@@ -24,11 +16,7 @@ const dropdown = (options, selected) => html `
 `
 const modal = (content, isOpen, onClose) => {
   if (isOpen) {
-<<<<<<< HEAD
     return html`
-=======
-    return html `
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
       <div class="pa0 pa4-ns fixed w-100 h-100 top-0 left-0 bg-dark-gray" style="pointer-events:all;/*background:rgba(213, 0, 143, 1)*/">
         <i
           class="fas fa-times absolute top-0 right-0 ma1 ma2-ns fr f4 dim pointer"
@@ -40,16 +28,12 @@ const modal = (content, isOpen, onClose) => {
       </div>
     `
   } else {
-<<<<<<< HEAD
     return html`<div style="display:none"></div>`
-=======
-    return html `<div style="display:none"></div>`
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
   }
 }
 
 module.exports = class Login extends Component {
-  constructor(id, state, emit) {
+  constructor (id, state, emit) {
     super(id)
     this.previewVideo = new Video()
     this.nickname = state.user.nickname
@@ -57,7 +41,6 @@ module.exports = class Login extends Component {
     this.server = state.user.server
     this.state = state
     this.emit = emit
-<<<<<<< HEAD
     this.isActive = { audio: false, video: false }
     this.devices = { audio: [], video: [] }
     this.selectedDevices = {
@@ -67,57 +50,14 @@ module.exports = class Login extends Component {
     this.tracks = { audio: null, video: null }
     this.streams = { audio: null, video: null }
     this.trackInfo = { audio: {}, video: {} }
-=======
-    this.isActive = {
-      audio: false,
-      video: false
-    }
-    this.devices = {
-      audio: [],
-      video: []
-    }
-    this.selectedDevices = {
-      audio: {
-        label: 'initial',
-        deviceId: ''
-      },
-      video: {
-        label: 'initial',
-        deviceId: ''
-      }
-    }
-    this.tracks = {
-      audio: null,
-      video: null
-    }
-    this.streams = {
-      audio: null,
-      video: null
-    }
-    this.trackInfo = {
-      audio: {},
-      video: {}
-    }
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
     this.settingsIsOpen = false
 
     enumerateDevices()
       .then(devices => {
-        this.devices.audio = devices.filter(elem => elem.kind == 'audioinput')
-        this.devices.video = devices.filter(elem => elem.kind == 'videoinput')
-<<<<<<< HEAD
+        this.devices.audio = devices.filter(elem => elem.kind === 'audioinput')
+        this.devices.video = devices.filter(elem => elem.kind === 'videoinput')
         this.devices.audio.push({ label: 'no audio', deviceId: 'false' })
         this.devices.video.push({ label: 'no video', deviceId: 'false' })
-=======
-        this.devices.audio.push({
-          label: 'no audio',
-          deviceId: 'false'
-        })
-        this.devices.video.push({
-          label: 'no video',
-          deviceId: 'false'
-        })
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
         if (this.devices.audio.length > 0) {
           this.isActive.audio = true
           this.getMedia('audio')
@@ -131,11 +71,7 @@ module.exports = class Login extends Component {
       .catch(err => emit('log:error', err))
   }
 
-<<<<<<< HEAD
   updateMedia (mediaObj) {
-=======
-  updateMedia(mediaObj) {
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
     this.tracks = Object.assign({}, mediaObj.tracks)
     this.streams = Object.assign({}, mediaObj.streams)
     this.trackInfo = Object.assign({}, mediaObj.trackInfo)
@@ -155,29 +91,17 @@ module.exports = class Login extends Component {
     this.rerender()
   }
 
-  update(center) {
+  update (center) {
     //
     return true
   }
 
-<<<<<<< HEAD
   log (type, message) {
     console[type](message)
   }
 
   getMedia (kind) {
     let initialConstraints = { audio: false, video: false }
-=======
-  log(type, message) {
-    console[type](message)
-  }
-
-  getMedia(kind) {
-    let initialConstraints = {
-      audio: false,
-      video: false
-    }
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
     initialConstraints[kind] = {
       deviceId: this.selectedDevices[kind].deviceId
     }
@@ -196,26 +120,6 @@ module.exports = class Login extends Component {
             stream.getTracks(),
             this.tracks
           )
-<<<<<<< HEAD
-=======
-          // ----------------- rerender media list on 
-          enumerateDevices().then((devices) => {
-            //console.log('devicces', devices)
-            this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
-            this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
-            this.devices.audio.push({
-              label: 'no audio',
-              deviceId: 'false'
-            })
-            this.devices.video.push({
-              label: 'no video',
-              deviceId: 'false'
-            })
-            this.rerender()
-
-          }).catch((err) => emit('log:error', err))
-          //---------------- rerender media list off 
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
           this.rerender()
         })
         .catch(err => {
@@ -228,17 +132,9 @@ module.exports = class Login extends Component {
     }
   }
 
-<<<<<<< HEAD
   createElement (state, emit) {
-    let self = this
     const dropdowns = [ 'audio', 'video' ].map(
       kind => html`
-=======
-  createElement(state, emit) {
-    let self = this
-    const dropdowns = ['audio', 'video'].map(
-      kind => html `
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
     <div class="flex items-center ba">
       <i class="w1 fas mh2 f3 ${kind === 'video'
         ? 'fa-video'
@@ -265,11 +161,7 @@ module.exports = class Login extends Component {
     </div>`
     )
 
-<<<<<<< HEAD
     return html`<div class="fixed w-100 h-100 top-0 left-0" style="font-family:rektorant_light">
-=======
-    return html `<div class="fixed w-100 h-100 top-0 left-0" style="font-family:rektorant_light">
->>>>>>> 879427b41a205c1606684f3434d2937ffd9861ad
       ${this.previewVideo.render(this.streams.video, {
         objectPosition: 'center',
         objectFit: 'cover'

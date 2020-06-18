@@ -6,7 +6,7 @@ It is a new tool that empowers artists  and arts presenters to meet, create, col
 
 **Feature highlights:**
 - add multiple cameras, audio streams, and screen shares to the same session from one laptop
-- dynamically add and remove audio and video feeds 
+- dynamically add and remove audio and video feeds
 - send video feeds to separate windows
 - use audio mixer to control the master volume as well as the output volume of individual feeds
 - video switcher to switch between video feeds
@@ -37,6 +37,11 @@ npm run dev
 ```
 
 # Changelog
+## [1.3.10] - 2020-06-18
+### Changed
+ - switched to nanoid and randomIds rather than sequential
+ - absolute path for preview images
+
 ## [1.3.9] - 2020-06-05
 ### Changed
  - added linter

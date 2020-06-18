@@ -3,7 +3,7 @@ const LocalChannel = require('./LocalChannel.js')
 var io = require('socket.io-client')
 var Peer = require('./Peer.js')
 var EventEmitter = require('events').EventEmitter
-const shortid = require('shortid')
+const nanoid = require('nanoid').nanoid
 
 class MultiPeer extends EventEmitter {
   constructor () {
@@ -33,7 +33,7 @@ class MultiPeer extends EventEmitter {
     this.user = Object.assign(
       {},
       {
-        uuid: shortid.generate(),
+        uuid: nanoid(24),
         nickname: '',
         sendOnly: sendOnly,
         streamInfo: {},
