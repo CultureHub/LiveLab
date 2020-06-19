@@ -183,7 +183,7 @@ module.exports = class AddMedia extends Component {
 
   createElement (opts) {
     this.parentOpts = opts
-    var self = this
+    const self = this
     const dropdowns = [ 'audio', 'video' ].map(
       kind =>
         html`<select name=${kind} class="w-100 pa2 white ttu ba b--white pointer" style="background:none" onchange=${e => {
