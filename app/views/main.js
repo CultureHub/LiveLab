@@ -40,7 +40,7 @@ function mainView (state, emit) {
     content,
     { name, label, type = 'panels', flex = '1' } = {}
   ) => {
-    let showPanel = state.layout[type][name] && !state.layout.collapsed
+    const showPanel = state.layout[type][name] && !state.layout.collapsed
     if (name === 'chat' && state.layout.forceChatOpen) showPanel = true
     // open chat even if menu is collapsed
     const hidden = showPanel

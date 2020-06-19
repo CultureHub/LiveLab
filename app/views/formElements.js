@@ -1,4 +1,4 @@
-var html = require('choo/html')
+const html = require('choo/html')
 
 module.exports = {
   button: (

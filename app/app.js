@@ -1,4 +1,4 @@
-var devtools = require('choo-devtools')
+const devtools = require('choo-devtools')
 const choo = require('choo')
 
 const app = choo({ hash: true })
@@ -22,12 +22,12 @@ if (typeof nw === 'object') {
   nw.Screen.Init()
   console.log('screens', nw.Screen.screens)
 
-  var screenPos = nw.Screen.screens[0].work_area
+  const screenPos = nw.Screen.screens[0].work_area
 
-  var winX = screenPos.x + (screenPos.width - WIN_WIDTH) / 2
-  var winY = screenPos.y + (screenPos.height - WIN_HEIGHT) / 2
+  const winX = screenPos.x + (screenPos.width - WIN_WIDTH) / 2
+  const winY = screenPos.y + (screenPos.height - WIN_HEIGHT) / 2
 
-  var win = nw.Window.get()
+  const win = nw.Window.get()
   win.width = WIN_WIDTH
   win.height = WIN_HEIGHT
   // console.log(win)

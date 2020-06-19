@@ -97,7 +97,7 @@ module.exports = class AddMedia extends Component {
         opts.selectedDevices
       )
       if (opts.isActive != this.isActive) {
-        console.log('REREMDERING', opts.isActive, this.isActive)
+        console.log('RERENDERING', opts.isActive, this.isActive)
         this.isActive = Object.assign({}, this.isActive, opts.isActive)
         // @ todo: only update if new information
         if (opts.isActive.video && opts.isActive.video !== this.isActive.video) {
@@ -211,7 +211,7 @@ module.exports = class AddMedia extends Component {
       objectPosition: 'center'
     })
 
-    var audioSettings = Object.keys(this.constraints.audio).map(
+    const audioSettings = Object.keys(this.constraints.audio).map(
       constraint => html`<div class="flex w-100 justify-between">
     <div class="">${constraintNames[constraint]}</div>
     <input type="checkbox" id=${constraint} name=${constraint} checked=${this.constraints.audio[constraint]}
@@ -221,7 +221,7 @@ module.exports = class AddMedia extends Component {
     }}>
     </div>`
     )
-    var videoSettings = Object.keys(this.constraints.video).map(
+    const videoSettings = Object.keys(this.constraints.video).map(
       constraint => html`
   <div class="flex-auto w3 mt2">
   <div>${constraint === 'frameRate' ? 'fps' : constraint}</div>
@@ -235,7 +235,7 @@ module.exports = class AddMedia extends Component {
   </div>`
     )
 
-    let vidInfo = this.trackInfo.video.width
+    const vidInfo = this.trackInfo.video.width
       ? `${this.trackInfo.video.width}x${this.trackInfo.video.height}@${this.trackInfo.video.frameRate}fps`
       : ''
 
@@ -279,7 +279,7 @@ module.exports = class AddMedia extends Component {
       ${button({
         text: opts.saveText,
         onClick: () => {
-          var tracks = Object
+          const tracks = Object
             .values(this.tracks)
             .filter(track => track !== null)
           opts.onSave({ stream: new MediaStream(tracks), mediaObj: this })

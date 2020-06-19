@@ -1,5 +1,5 @@
 const html = require('choo/html')
-var Component = require('choo/component')
+const Component = require('choo/component')
 const Video = require('./components_new/VideoObj.js')
 const enumerateDevices = require('enumerate-devices')
 const AddMedia = require('./addMedia.js')
@@ -154,7 +154,7 @@ module.exports = class Login extends Component {
           )
           // ----------------- rerender media list on 
           enumerateDevices().then((devices) => {
-            //console.log('devicces', devices)
+            //console.log('devices', devices)
             this.devices.audio = devices.filter((elem) => elem.kind == 'audioinput')
             this.devices.video = devices.filter((elem) => elem.kind == 'videoinput')
             this.devices.audio.push({
@@ -236,7 +236,7 @@ module.exports = class Login extends Component {
               text: 'Start',
               title: 'join a call',
               onClick: () => {
-                var tracks = Object.values(this.tracks).filter(track => track !== null)
+                const tracks = Object.values(this.tracks).filter(track => track !== null)
                 emit('user:join', {
                   room: this.room,
                   server: this.server,

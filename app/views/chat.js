@@ -1,5 +1,5 @@
-var html = require('choo/html')
-var Component = require('choo/component')
+const html = require('choo/html')
+const Component = require('choo/component')
 const anchorme = require('anchorme').default
 const { button } = require('./formElements.js')
 
@@ -42,7 +42,7 @@ module.exports = class Chat extends Component {
   }
 
   createElement (state) {
-    var scrollEl = html`<div id="testScroll" style="bottom:0px">
+    const scrollEl = html`<div id="testScroll" style="bottom:0px">
       ${this.messages.map(obj => {
         const msg = html`<span class="pa1"></span>`
         msg.innerHTML = anchorme({
@@ -60,7 +60,7 @@ module.exports = class Chat extends Component {
         `
       })}
     </div>`
-    var container = html`<div  id="scroll-container" class="overflow-y-auto" style="max-height:250px">
+    const container = html`<div  id="scroll-container" class="overflow-y-auto" style="max-height:250px">
       ${scrollEl}
     </div>`
 

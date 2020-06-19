@@ -1,5 +1,5 @@
-var html = require('choo/html')
-var Component = require('choo/component')
+const html = require('choo/html')
+const Component = require('choo/component')
 
 module.exports = class AudioVis extends Component {
   constructor () {
@@ -39,18 +39,17 @@ module.exports = class AudioVis extends Component {
     this.analyser.getByteFrequencyData(this.dataArray)
     this.animation = requestAnimationFrame(this.visualize.bind(this))
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    var bufferLength = this.analyser.frequencyBinCount
-    var barWidth = (this.canvas.width / bufferLength) ;
-    var barHeight;
-    var x = 0
-    for(var i = 0; i < bufferLength; i++) {
-            barHeight = this.dataArray[i]/2;
+    const bufferLength = this.analyser.frequencyBinCount
+    const barWidth = (this.canvas.width / bufferLength) ;
+    // var barHeight;
+    let x = 0
+    for(let i = 0; i < bufferLength; i++) {
+      const barHeight = this.dataArray[i]/2;
+      this.ctx.fillStyle = 'rgb(' + (barHeight+100) + ',250,250)';
+      this.ctx.fillRect(x,this.canvas.height-barHeight/2,barWidth,barHeight);
 
-            this.ctx.fillStyle = 'rgb(' + (barHeight+100) + ',250,250)';
-            this.ctx.fillRect(x,this.canvas.height-barHeight/2,barWidth,barHeight);
-
-            x += barWidth + 1;
-      }
+      x += barWidth + 1;
+    }
   }
 
   createElement(stream) {
@@ -62,7 +61,7 @@ module.exports = class AudioVis extends Component {
     this.canvas = html`<canvas></canvas>`
     this.canvas.height = 100
     this.ctx = this.canvas.getContext('2d')
-    var bufferLength = this.analyser.frequencyBinCount;
+    const bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(bufferLength)
     this.isActive = false
     this.setStream(stream)

@@ -28,7 +28,7 @@ module.exports = (state, emitter) => {
       text2: '#999', // gray
       accent0: '#D5008F', // yellow
       accent1: '#00F',
-      background0: '#333', // drak gray
+      background0: '#333', // dark gray
       background1: '#555'
     }
   }

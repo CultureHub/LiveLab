@@ -1,5 +1,5 @@
-var html = require('choo/html')
-var Component = require('choo/component')
+const html = require('choo/html')
+const Component = require('choo/component')
 
 module.exports = class Audio extends Component {
   constructor (id, state, emit) {
@@ -53,7 +53,7 @@ module.exports = class Audio extends Component {
   }
 
   addStreamSource (stream) {
-    var audio = document.createElement('audio')
+    const audio = document.createElement('audio')
     audio.autoplay = true
     audio.srcObject = stream.stream
     audio.volume = this.defaultGain * this.masterGain

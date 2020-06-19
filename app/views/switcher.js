@@ -1,5 +1,5 @@
-var html = require('choo/html')
-var Component = require('choo/component')
+const html = require('choo/html')
+const Component = require('choo/component')
 const Video = require('./components_new/VideoObj.js')
 
 module.exports = class Switcher extends Component {
@@ -39,14 +39,14 @@ module.exports = class Switcher extends Component {
 
   openWindow (title) {
     const settings = { width: 1280, height: 720 }
-    var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
-    var win = window.open('', title, windowSettings)
+    const windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
+    const win = window.open('', title, windowSettings)
     // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
     // var win = window.open('', 'hey', windowSettings)
     win.document.body.style.background = 'black'
     win.document.title = title
     win.document.body.innerHTML = ''
-    var vid = win.document.createElement('video')
+    const vid = win.document.createElement('video')
     vid.autoplay = 'autoplay'
     vid.loop = 'loop'
     vid.muted = 'muted'
