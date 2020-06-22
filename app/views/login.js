@@ -77,8 +77,8 @@ module.exports = class Login extends Component {
 
     enumerateDevices()
       .then(devices => {
-        this.devices.audio = devices.filter(elem => elem.kind == 'audioinput')
-        this.devices.video = devices.filter(elem => elem.kind == 'videoinput')
+        this.devices.audio = devices.filter(elem => elem.kind === 'audioinput')
+        this.devices.video = devices.filter(elem => elem.kind === 'videoinput')
         this.devices.audio.push({
           label: 'no audio',
           deviceId: 'false'
@@ -169,6 +169,7 @@ module.exports = class Login extends Component {
 
           }).catch((err) => emit('log:error', err))
           //---------------- rerender media list off 
+
           this.rerender()
         })
         .catch(err => {
@@ -182,7 +183,6 @@ module.exports = class Login extends Component {
   }
 
   createElement(state, emit) {
-    let self = this
     const dropdowns = ['audio', 'video'].map(
       kind => html `
     <div class="flex items-center ba">
@@ -220,7 +220,7 @@ module.exports = class Login extends Component {
         <div class="w-100 h-100 pt4 flex justify-center flex-column" style="max-width:1200px">
           <div class="flex flex-column justify-center">
             <a style="width:fit-content;font-size:8vmin;line-height:6vmin;margin-left: -0.08em;color:${state.style.colors.text0}" class="mt4 dim no-underline" title="more info" href="https://www.culturehub.org/livelab" target="_blank"> LiveLab </a>
-            <div class="ttl" style="font-size:2.3vmin">v${state.user.version}beta |  by  <a style="color:${state.style.colors.text0}" class="no-underline dim  ttu" href="https://www.culturehub.org" target="_blank">CultureHub</a></div>
+            <div class="ttl" style="font-size:2.3vmin">v${state.user.version} beta |  by  <a style="color:${state.style.colors.text0}" class="no-underline dim  ttu" href="https://www.culturehub.org" target="_blank">CultureHub</a></div>
             <div style="" class="mv5">A browser-based<br>media router<br>for collaborative performance </div>
           </div>
           <div class="w-100" style='font-size:4vmin'>

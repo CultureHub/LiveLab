@@ -1,9 +1,9 @@
-const shortid = require('shortid')
+const nanoid = require('nanoid').nanoid
 const MultiPeer = require('./../lib/MultiPeer.js')
 
 module.exports = (state, emitter) => {
   state.user = {
-    uuid: shortid.generate(),
+    uuid: nanoid(20),
     // for dev purposes, always regenerate id
     nickname: localStorage.getItem('livelab-nickname') || '',
     muted: false,
@@ -12,9 +12,10 @@ module.exports = (state, emitter) => {
     isOnline: true,
     // room: state.query.room || localStorage.getItem('livelab-room') || 'zebra',
     room: state.query.room,
-    server: process.env.NODE_ENV === 'production'
-      ? 'https://livelab.app:6643'
-      : 'https://live-lab-v1.glitch.me',
+    // server: process.env.NODE_ENV === 'production'
+    //   ? 'https://livelab.app:6643'
+    //   : 'https://live-lab-v1.glitch.me',
+    server: 'https://livelab.app:6643',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,
@@ -25,21 +26,24 @@ module.exports = (state, emitter) => {
   state.multiPeer = new MultiPeer({}, emitter)
   window.audioCtx = new AudioContext()
 
-  emitter.on('user:join', function (
-    { room, server, nickname, stream, requestMedia }
-  ) {
+  emitter.on('user:join', function ({
+    room,
+    server,
+    nickname,
+    stream,
+    requestMedia
+  }) {
     if (state.query.room) {
       state.user.room = state.query.room
     } else {
-      state.user.room = shortid.generate()
+      state.user.room = nanoid(16)
     }
     state.user.server = server
     state.user.nickname = nickname
 
     localStorage.setItem('livelab-nickname', state.user.nickname)
     localStorage.setItem('livelab-room', state.user.room)
-    window.history.pushState(
-      {},
+    window.history.pushState({},
       'room',
       '?room=' + state.user.room + window.location.hash
     )
@@ -47,9 +51,15 @@ module.exports = (state, emitter) => {
     state.multiPeer.init({
       room: state.user.room,
       server: state.user.server,
-      userData: { uuid: state.user.uuid, nickname: state.user.nickname },
+      userData: {
+        uuid: state.user.uuid,
+        nickname: state.user.nickname
+      },
       peerOptions: {
-        offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true }
+        offerOptions: {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true
+        }
       },
       stream: stream
     })
@@ -64,8 +74,9 @@ module.exports = (state, emitter) => {
           track.enabled = streamInfo.isAudioMuted
         })
         state.multiPeer.updateLocalStreamInfo(
-          state.multiPeer.defaultStream.id,
-          { isAudioMuted: !streamInfo.isAudioMuted }
+          state.multiPeer.defaultStream.id, {
+            isAudioMuted: !streamInfo.isAudioMuted
+          }
         )
       }
     }
@@ -78,8 +89,9 @@ module.exports = (state, emitter) => {
           track.enabled = streamInfo.isVideoMuted
         })
         state.multiPeer.updateLocalStreamInfo(
-          state.multiPeer.defaultStream.id,
-          { isVideoMuted: !streamInfo.isVideoMuted }
+          state.multiPeer.defaultStream.id, {
+            isVideoMuted: !streamInfo.isVideoMuted
+          }
         )
       }
     }
@@ -130,12 +142,14 @@ module.exports = (state, emitter) => {
 
   emitter.on('user:addStream', (stream, label = '') => {
     if (stream) {
-      state.multiPeer.addStream(stream, { name: label })
+      state.multiPeer.addStream(stream, {
+        name: label
+      })
       emitter.emit('render')
     }
   })
 
-  async function startCapture (displayMediaOptions) {
+  async function startCapture(displayMediaOptions) {
     let stream = null
     try {
       stream = await navigator.mediaDevices.getDisplayMedia(

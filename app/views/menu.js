@@ -1,6 +1,12 @@
 const html = require('choo/html')
 
-const menuIcon = ({ title, onclick, icon, selected = false, info }) => html`
+const menuIcon = ({
+  title,
+  onclick,
+  icon,
+  selected = false,
+  info
+}) => html `
 <div class="tc relative pointer pa3 ${selected
   ? 'bg-mid-gray'
   : ''}" style="flex:0" title=${title} onclick= ${onclick}>
@@ -13,7 +19,13 @@ ${info
 `
 
 module.exports = (state, emit) => {
-  const screenIcon = ({ title, onclick, icon, selected = false, info }) => html`
+  const screenIcon = ({
+    title,
+    onclick,
+    icon,
+    selected = false,
+    info
+  }) => html `
   <div class="relative pointer pa3 ${selected ? 'bg-mid-gray' : ''}" style="flex:0" title=${title} onclick= ${onclick}>
     <i class=" fas ${icon} dim pointer f4" style="display:block;" title=${title}></i>
   ${info
@@ -23,7 +35,7 @@ module.exports = (state, emit) => {
   `
 
   if (state.layout.collapsed === true) {
-    return html`
+    return html `
     <div class=" pa2 flex items-end" style="pointer-events:all;text-shadow:2px 2px 3px rgba(0, 0, 0, 1);color:${state.style.colors.text0}">
     ${menuIcon({
       icon: 'fa-chevron-up',
@@ -33,7 +45,7 @@ module.exports = (state, emit) => {
     </div>
     `
   } else {
-    return html`
+    return html `
     <div class="flex flex-column justify-between flex-wrap-reverse" style="pointer-events:all;color:${state.style.colors.text0}">
       <div class="flex flex-column-ns flex-row justify-center">
         ${state.multiPeer.defaultStream !== null
@@ -81,7 +93,7 @@ module.exports = (state, emit) => {
               title: `Open switcher ${switcher}`,
               onclick: () => emit('layout:toggleMenuItem', switcher, 'switchers'),
               advanced: true,
-              selected: state.layout.switchers[switcher],
+              selected: state.layout.settings.numberOfSwitchers,
               info: switcher
             })
           )}
