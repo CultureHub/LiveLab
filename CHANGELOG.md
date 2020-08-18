@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0] - 2020-08-18
+
+### Added
+- rooms specified on each signalling call
+- Updated to work with v0.0.2 of signalling server
+
+### Fixed
+- this._room renamed to this.room on reconnect
+
 ## [1.3.10] - 2020-06-18
 
 ### Changed
