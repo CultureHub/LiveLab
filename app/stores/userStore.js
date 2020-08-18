@@ -16,6 +16,7 @@ module.exports = (state, emitter) => {
     //   ? 'https://livelab.app:6643'
     //   : 'https://live-lab-v1.glitch.me',
     server: 'https://livelab.app:6643',
+    // server: 'https://localhost:8001',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,
