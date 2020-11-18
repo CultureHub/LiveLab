@@ -31,9 +31,33 @@ LiveLab is open-source and free to use. To access:
 ### Signalling server
    To build and modify your own LiveLab signalling server that runs locally, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
 
-To develop either version, type
+### To Run locally (must have nodejs and npm installed)
+1. clone this repo
+2. install dependencies
+```
+npm install -d
+```
+3. generate locally-signed ssl certificates
+a. create a folder called 'certs' in the main directory
+b. generate certificate and public key:
+```
+openssl req -x509 -out certs/fullchain.pem -keyout certs/privkey.pem \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=localhost' -extensions EXT -config <( \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+```
+
+4. To run a development server and automatically re-build as files are changed:
 ```
 npm run dev
+```
+5. To build a production version:
+```
+npm run build
+```
+6. To run the server:
+```
+npm run start
 ```
 
 See the [changelog](CHANGELOG.md) for most recent updates.
