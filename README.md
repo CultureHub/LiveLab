@@ -31,7 +31,7 @@ LiveLab is open-source and free to use. To access:
 ### Signalling server
    To build and modify your own LiveLab signalling server that runs locally, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
 
-### To Run locally (must have nodejs and npm installed)
+### To run locally (must have nodejs and npm installed)
 1. clone this repo
 2. install dependencies
 ```
@@ -51,13 +51,18 @@ openssl req -x509 -out certs/fullchain.pem -keyout certs/privkey.pem \
 ```
 npm run dev
 ```
+The development server uses a dev signalling server hosted at 'https://live-lab-v1.glitch.me'.
+
 5. To build a production version:
 ```
 npm run build
 ```
+Make sure to specify your own signalling server in the file 'app/stores/userStore.js'.
+
 6. To run the server:
 ```
 npm run start
 ```
+7. go to https://localhost:8000 to show application. Note: you may need to 'hard refresh'
 
 See the [changelog](CHANGELOG.md) for most recent updates.

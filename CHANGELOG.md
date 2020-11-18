@@ -1,4 +1,9 @@
 # Changelog
+## [1.3.11] - 2020-11-18
+### Added
+ - instructions for running locally to README
+ - "start" script automatically rebuilds for production
+
 ## [1.3.10] - 2020-06-18
 ### Changed
  - switched to nanoid and randomIds rather than sequential
