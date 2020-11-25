@@ -15,7 +15,7 @@ It is a new tool that empowers artists and arts presenters to meet, create, coll
 
 More info about LiveLab and how it is used in performance production by CultureHub, its creating organization: https://www.culturehub.org/livelab
 
-## 🎉🎉 LiveLab 1.3.9 beta LAUNCHED!
+## 🎉🎉 LiveLab beta LAUNCHED!
 
 LiveLab is open-source and free to use. To access:
 
