@@ -1,9 +1,16 @@
 # Changelog
-<<<<<<< HEAD
-## [1.3.11] - 2020-11-18
+## [1.4.1] - 2020-11-18
 ### Added
  - instructions for running locally to README
  - "start" script automatically rebuilds for production
+
+## [1.4.0] - 2020-08-18
+### Added
+- rooms specified on each signalling call
+- Updated to work with v0.0.2 of signalling server
+
+### Fixed
+- this._room renamed to this.room on reconnect
 
 ## [1.3.10] - 2020-06-18
 ### Changed
@@ -142,6 +149,15 @@
 ## [1.1.0] - 2020-02-12
 ### Added
 =======
+
+## [1.4.0] - 2020-08-18
+
+### Added
+- rooms specified on each signalling call
+- Updated to work with v0.0.2 of signalling server
+
+### Fixed
+- this._room renamed to this.room on reconnect
 
 ## [1.3.10] - 2020-06-18
 
@@ -344,14 +360,8 @@ Major refactor
 ## [1.0.1] - 2020-02-11
 
 ### Added
-
->>>>>>> 8fe96c53791f7d90f56a65b11bc3a1b919d42cc0
 - Version number on login page
 - Changelog
 
 ### Fixed
-<<<<<<< HEAD
-=======
-
->>>>>>> 8fe96c53791f7d90f56a65b11bc3a1b919d42cc0
 - Audio turning off when show control open
