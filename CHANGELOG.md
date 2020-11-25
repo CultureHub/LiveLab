@@ -1,14 +1,22 @@
 # Changelog
-## [1.3.12] - 2020-11-25
+## [1.4.2] - 2020-11-25
 ### Fixed
 - typo in room reconnection
 - checks for local socket id before trying to reconnect
 - rejoins room when connection is lost
 
-## [1.3.11] - 2020-11-18
+## [1.4.1] - 2020-11-18
 ### Added
  - instructions for running locally to README
  - "start" script automatically rebuilds for production
+
+## [1.4.0] - 2020-08-18
+### Added
+- rooms specified on each signalling call
+- Updated to work with v0.0.2 of signalling server
+
+### Fixed
+- this._room renamed to this.room on reconnect
 
 ## [1.3.10] - 2020-06-18
 ### Changed
@@ -147,6 +155,15 @@
 ## [1.1.0] - 2020-02-12
 ### Added
 =======
+
+## [1.4.0] - 2020-08-18
+
+### Added
+- rooms specified on each signalling call
+- Updated to work with v0.0.2 of signalling server
+
+### Fixed
+- this._room renamed to this.room on reconnect
 
 ## [1.3.10] - 2020-06-18
 
