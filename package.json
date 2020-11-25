@@ -1,6 +1,6 @@
 {
   "name": "LiveLab",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "description": "browser-based media router for collaborative performance",
   "main": "nw.js",
   "scripts": {
