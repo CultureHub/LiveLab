@@ -4,8 +4,11 @@ var app = express()
 var browserify = require('browserify-middleware')
 var https = require('https')
 
-var privateKey  = fs.readFileSync(__dirname + '/certs/privkey.pem', 'utf8')
-var certificate = fs.readFileSync(__dirname +'/certs/fullchain.pem', 'utf8')
+//require('dotenv').config();
+
+var privateKey = fs.readFileSync(__dirname + '/certs/privkey.pem', 'utf8')
+var certificate = fs.readFileSync(__dirname + '/certs/fullchain.pem', 'utf8')
+
 
 var credentials = {
   key: privateKey,

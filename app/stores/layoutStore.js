@@ -9,10 +9,20 @@ module.exports = (state, emitter) => {
       addMedia: false,
       settings: false
     },
-    switchers: { a: false, b: false, c: false, d: false }, // whether switcher panels are open
+    switchers: {
+      a: false,
+      b: false,
+      c: false,
+      d: false
+    }, // whether switcher panels are open
     settings: {
       stretchToFit: true,
-      switchers: { a: null, b: null, c: null, d: null }, // stream values of each switcher
+      switchers: {
+        a: null,
+        b: null,
+        c: null,
+        d: null
+      }, // stream values of each switcher
       numberOfSwitchers: 0, // number of switchers to display in ui
       columnLayout: false,
       showCommunicationInfo: true
@@ -71,7 +81,7 @@ module.exports = (state, emitter) => {
   emitter.on('layout:setSwitcher', (item, value) => {
     if (
       state.layout.settings.switchers[item] !== null &&
-        state.layout.settings.switchers[item].stream.id === value.stream.id
+      state.layout.settings.switchers[item].stream.id === value.stream.id
     ) {
       state.layout.settings.switchers[item] = null
     } else {

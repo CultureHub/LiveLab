@@ -25,9 +25,13 @@ module.exports = (state, emitter) => {
   state.multiPeer = new MultiPeer({}, emitter)
   window.audioCtx = new AudioContext()
 
-  emitter.on('user:join', function (
-    { room, server, nickname, stream, requestMedia }
-  ) {
+  emitter.on('user:join', function ({
+    room,
+    server,
+    nickname,
+    stream,
+    requestMedia
+  }) {
     if (state.query.room) {
       state.user.room = state.query.room
     } else {
@@ -38,8 +42,7 @@ module.exports = (state, emitter) => {
 
     localStorage.setItem('livelab-nickname', state.user.nickname)
     localStorage.setItem('livelab-room', state.user.room)
-    window.history.pushState(
-      {},
+    window.history.pushState({},
       'room',
       '?room=' + state.user.room + window.location.hash
     )
@@ -47,9 +50,15 @@ module.exports = (state, emitter) => {
     state.multiPeer.init({
       room: state.user.room,
       server: state.user.server,
-      userData: { uuid: state.user.uuid, nickname: state.user.nickname },
+      userData: {
+        uuid: state.user.uuid,
+        nickname: state.user.nickname
+      },
       peerOptions: {
-        offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true }
+        offerOptions: {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true
+        }
       },
       stream: stream
     })
@@ -64,8 +73,9 @@ module.exports = (state, emitter) => {
           track.enabled = streamInfo.isAudioMuted
         })
         state.multiPeer.updateLocalStreamInfo(
-          state.multiPeer.defaultStream.id,
-          { isAudioMuted: !streamInfo.isAudioMuted }
+          state.multiPeer.defaultStream.id, {
+            isAudioMuted: !streamInfo.isAudioMuted
+          }
         )
       }
     }
@@ -78,8 +88,9 @@ module.exports = (state, emitter) => {
           track.enabled = streamInfo.isVideoMuted
         })
         state.multiPeer.updateLocalStreamInfo(
-          state.multiPeer.defaultStream.id,
-          { isVideoMuted: !streamInfo.isVideoMuted }
+          state.multiPeer.defaultStream.id, {
+            isVideoMuted: !streamInfo.isVideoMuted
+          }
         )
       }
     }
@@ -130,12 +141,14 @@ module.exports = (state, emitter) => {
 
   emitter.on('user:addStream', (stream, label = '') => {
     if (stream) {
-      state.multiPeer.addStream(stream, { name: label })
+      state.multiPeer.addStream(stream, {
+        name: label
+      })
       emitter.emit('render')
     }
   })
 
-  async function startCapture (displayMediaOptions) {
+  async function startCapture(displayMediaOptions) {
     let stream = null
     try {
       stream = await navigator.mediaDevices.getDisplayMedia(
