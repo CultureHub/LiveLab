@@ -9,7 +9,7 @@
     "start": "npm run build & node server.js",
     "dev": "npm run watch & node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish-ojack": "git subtree push --prefix public secondOrigin gh-pages",
+    "publish-ojack": "git subtree push --prefix public ojack gh-pages",
     "dist-nw": "node_modules/.bin/build --tasks win-x86,win-x64,mac-x64 .",
     "start-nw": "node_modules/.bin/run ."
   },
