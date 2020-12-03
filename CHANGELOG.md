@@ -1,4 +1,8 @@
 # Changelog
+## [1.4.3] - 2020-12-3
+### Changed
+- Restart audio stream before applying constraints (should improve audio checkbox issue)
+
 ## [1.4.2] - 2020-11-25
 ### Fixed
 - typo in room reconnection
