@@ -163,7 +163,9 @@ module.exports = class AddMedia extends Component {
 
   /* Inconsistent behavior between audio and video for applying constraints.
   For video, appears to work better to apply constraints once stream is received.
-  For audio, seems to work better to apply constraints when get user media is called */
+  For audio, seems to work better to apply constraints when get user media is called
+  bug is here: https://bugs.chromium.org/p/chromium/issues/detail?id=796964
+  */
   getMedia (kind) {
     let initialConstraints = { audio: false, video: false }
     if (this.isActive[kind]) {
@@ -177,6 +179,10 @@ module.exports = class AddMedia extends Component {
           this.constraints[kind],
           { latency: 0, channelCount: 2 }
         )
+        if (this.tracks.audio !== null) {
+          this.tracks.audio.stop()
+          this.tracks.audio = null
+        }
       }
       navigator.mediaDevices
         .getUserMedia(initialConstraints)
