@@ -66,9 +66,24 @@ class Peer extends EventEmitter {
   //   // senders correspond to local streams being sent to peer
   //     console.log(this._parent._localStreams, this._parent.user.streamInfo)
   //
-  // const params = sender[0].getParameters()
+
+
     if(this.checkStats) clearInterval(this.checkStats)
     this.checkStats = setInterval(() => {
+        const senders = this._peer._pc.getSenders()
+         senders.forEach((sender) => {
+           console.log(sender.getParameters())
+           // sender.getStats().then(res => {
+           //   console.log(res)
+           //   res.forEach(report => {
+           //     console.log(report.type)
+           //     if (report.type === 'outbound-rtp') {
+           //       console.log(report)
+           //     }
+           //   })
+           // })
+         })
+
         // const senders = this._peer._pc.getSenders()
         //  senders.forEach((sender) => {
         //    sender.getStats().then(res => {
@@ -95,8 +110,7 @@ class Peer extends EventEmitter {
         //     })
         //   })
 
-        const pair = this._peer._pc.sctp.transport.iceTransport.getSelectedCandidatePair()
-        console.log(pair)
+      
           // const stats = this._peer._pc.getStats().then((stats) => {
           //   stats.forEach((report) => {
           //     console.log(report.type)

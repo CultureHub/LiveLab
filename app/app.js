@@ -6,7 +6,7 @@ const app = choo({ hash: true })
 /* uncomment for debugging */
 // localStorage.setItem('logLevel', 'warn')
 // localStorage.setItem('debug', null)
-// localStorage.setItem('debug', 'simple-peer')
+ localStorage.setItem('debug', 'simple-peer')
 if (process.env.NODE_ENV !== 'production') {
   app.use(devtools())
 }

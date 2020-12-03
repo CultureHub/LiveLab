@@ -136,7 +136,11 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('user:shareScreen', () => {
-    startCapture({})
+    startCapture({ audio: {
+      noiseSuppression: false,
+      autoGainControl: false,
+      echoCancellation: false
+    }, video: true})
   })
 
   emitter.on('user:addStream', (stream, label = '') => {
@@ -154,6 +158,8 @@ module.exports = (state, emitter) => {
       stream = await navigator.mediaDevices.getDisplayMedia(
         displayMediaOptions
       )
+      console.log(stream, stream)
+      window.track = stream.getAudioTracks()[0]
       state.multiPeer.addStream(stream)
       emitter.emit('render')
     } catch (err) {

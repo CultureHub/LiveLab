@@ -47,7 +47,14 @@ class MultiPeer extends EventEmitter {
 
     this.addChannel('userInfo', { localData: this.user })
     // options for signalling server
-    this._peerOptions = peerOptions
+    this._peerOptions = Object.assign({},
+   { sdpTransform: ( sdp) => {
+    //   console.log('editing sdp', sdp)
+      return sdp.replace('useinbandfec=1', 'useinbandfec=1; stereo=1; maxaveragebitrate=510000')
+      // return sdp.replace('useinbandfec=1', 'useinbandfec=1; stereo=1; maxaveragebitrate=256000')
+  //  return sdp
+  }}
+    , peerOptions)
 
     this.defaultStream = null
     if (stream) {
