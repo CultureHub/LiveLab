@@ -178,13 +178,13 @@ module.exports = class AddMedia extends Component {
           initialConstraints[kind],
           this.constraints[kind],
           {
-          //  latency: 0, channelCount: 2 
+            latency: 0, channelCount: 2
           }
         )
-        if (this.tracks.audio !== null) {
-          this.tracks.audio.stop()
-          this.tracks.audio = null
-        }
+        // if (this.tracks.audio !== null) {
+        //   this.tracks.audio.stop()
+        //   this.tracks.audio = null
+        // }
       }
       navigator.mediaDevices
         .getUserMedia(initialConstraints)
@@ -197,7 +197,7 @@ module.exports = class AddMedia extends Component {
           if(kind === 'video') {
             this.applyConstraints(kind)
           } else {
-            this.audioEl.srcObject = stream
+            //this.audioEl.srcObject = stream
           }
           this.rerender()
         })
@@ -274,7 +274,7 @@ module.exports = class AddMedia extends Component {
       : ''
 
     // audio element for debugging
-    this.audioEl = html`<audio controls class="h2"></audio>`
+    // this.audioEl = html`<audio controls class="h2"></audio>`
     return html`
   <div class="h-100 flex flex-column flex-center overflow-y-auto ttu lh-title pa1 pa2-ns b">
     <!-- video settings -->
@@ -300,7 +300,7 @@ module.exports = class AddMedia extends Component {
         this.streams.audio,
         this.isOpen
       )}</div>
-      ${this.audioEl}
+
           <div class="mt4 flex flex-column">
             <div class="flex flex-wrap">${audioSettings}</div>
           </div>`
