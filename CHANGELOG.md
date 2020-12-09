@@ -1,4 +1,12 @@
 # Changelog
+## [1.4.4] - 2020-12-9
+### Added
+- higher max bandwidth for audio
+- user feedback for audio settings
+- audio preview of currently selected stream
+- show actual settings of selected stream and device, in red when they are not accurate
+- share audio of chrome tab
+
 ## [1.4.3] - 2020-12-3
 ### Changed
 - Restart audio stream before applying constraints (should improve audio checkbox issue)

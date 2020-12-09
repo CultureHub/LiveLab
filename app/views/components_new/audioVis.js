@@ -20,7 +20,7 @@ module.exports = class AudioVis extends Component {
     this.ctx = this.canvas.getContext('2d')
     var bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(bufferLength)
-    this.setStream(stream)
+    this.setStream(this.stream)
     this.visualize()
 
   }
@@ -30,11 +30,8 @@ module.exports = class AudioVis extends Component {
   }
 
   setStream(stream) {
-    console.log('STREAM', stream, this.stream)
-    //  this.audioCtx.resume()
-      window.audio = this.audioCtx
     if(stream !== this.stream) {
-      this.updateSettings(stream)
+      this.updateSettings(stream, this.parent)
       if(this.source) this.source.disconnect()
       if(stream !== null) {
        this.audioEl.srcObject = stream
@@ -50,17 +47,33 @@ module.exports = class AudioVis extends Component {
     }
   }
 
-  updateSettings(stream) {
+  updateSettings(stream, parent) {
     let details = null
     this.details.innerHTML = ''
     if(stream !== null){
+      console.log('selected', parent.selectedDevices)
       const track = stream.getAudioTracks()[0]
       if(track) {
         const settings = track.getSettings()
-        console.log('SETTINGs', settings)
+        const constraints = track.getConstraints()
+
         const keys = ['echoCancellation', 'autoGainControl', 'noiseSuppression', 'channelCount', 'latency', 'sampleRate', 'sampleSize']
-        details = html`<div>${keys.map((key) => html`<div>${key} : ${settings[key]}</div>`)}</div>`
-          this.details.appendChild(details)
+        details = html`<div>${keys.map((key) => {
+          let color = ""
+          if(key in constraints && constraints[key] !== settings[key] && key !== 'latency') color = "red"
+          console.log( constraints[key], settings[key], color)
+          return html`<div
+          class="${color}">${key} : ${settings[key]}</div>`
+        })}</div>`
+        this.details.appendChild(details)
+
+        // show details of selected device
+        const device = parent.devices.audio.filter((device) => device.deviceId === settings.deviceId)[0]
+        if(device) {
+          this.details.appendChild(html`<div
+            class="${constraints.deviceId && constraints.deviceId !== settings.deviceId ? 'red': ''}"
+            >device: ${device.label}</div>`)
+        }
       }
     }
 
@@ -87,11 +100,14 @@ module.exports = class AudioVis extends Component {
       }
   }
 
-  createElement(stream) {
+  createElement(stream, parent) {
     this.audioCtx = window.audioCtx
 
     this.canvas = html`<canvas></canvas>`
     this.canvas.height = 100
+
+    this.stream = stream
+    this.parent = parent
 
     this.isActive = false
 
@@ -100,7 +116,7 @@ module.exports = class AudioVis extends Component {
 
     return html`<div class="relative">${this.canvas}
           ${this.audioEl}
-        <div class="absolute f7 silver top-0 right-0 ttn">
+        <div class="absolute f7 silver top-0 right-0 ttn" style="width:12rem">
           ${this.details}
         </div>
       </div>`

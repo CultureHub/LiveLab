@@ -299,7 +299,7 @@ module.exports = class AddMedia extends Component {
       html`<div class="mt4">Audio meter</div>
           <div class="ba b--white">${this.audioVis.render(
         this.streams.audio,
-        this.isOpen
+        this
       )}</div>
 
           <div class="mt4 flex flex-column">
