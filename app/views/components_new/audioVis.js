@@ -42,7 +42,8 @@ module.exports = class AudioVis extends Component {
           console.log('setting stream', stream, this.analyser, this.source)
           this.source.connect(this.analyser)
           this.stream = stream
-          this.source.connect(this.audioCtx.destination)
+          // debug
+        //  this.source.connect(this.audioCtx.destination)
         }
       }
     }

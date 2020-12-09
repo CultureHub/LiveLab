@@ -178,7 +178,8 @@ module.exports = class AddMedia extends Component {
           initialConstraints[kind],
           this.constraints[kind],
           {
-            latency: 0, channelCount: 2
+            latency: 0,
+            //channelCount: 2
           }
         )
         // if (this.tracks.audio !== null) {
