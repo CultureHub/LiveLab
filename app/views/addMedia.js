@@ -182,10 +182,10 @@ module.exports = class AddMedia extends Component {
             //channelCount: 2
           }
         )
-        // if (this.tracks.audio !== null) {
-        //   this.tracks.audio.stop()
-        //   this.tracks.audio = null
-        // }
+        if (this.tracks.audio !== null) {
+          this.tracks.audio.stop()
+          this.tracks.audio = null
+        }
       }
       navigator.mediaDevices
         .getUserMedia(initialConstraints)

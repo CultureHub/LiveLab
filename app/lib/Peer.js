@@ -54,7 +54,7 @@ class Peer extends EventEmitter {
       this._peer.addStream(stream)
     }
     // debugging sender params
-    this.getSenderParams()
+  //  this.getSenderParams()
   }
 
   getSenderParams () {
@@ -110,7 +110,7 @@ class Peer extends EventEmitter {
         //     })
         //   })
 
-      
+
           // const stats = this._peer._pc.getStats().then((stats) => {
           //   stats.forEach((report) => {
           //     console.log(report.type)
@@ -146,7 +146,7 @@ class Peer extends EventEmitter {
       this.streams[stream.id] = stream
       this._parent._updateStreamsList()
       this._parent.emit('stream', id, stream)
-      this.getSenderParams()
+    //  this.getSenderParams()
     })
 
     p.on('connect', () => {

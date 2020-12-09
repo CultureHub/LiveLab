@@ -7,6 +7,9 @@
 - show actual settings of selected stream and device, in red when they are not accurate
 - share audio of chrome tab
 
+### Fixed
+- stop audio stream before changing params
+
 ## [1.4.3] - 2020-12-3
 ### Changed
 - Restart audio stream before applying constraints (should improve audio checkbox issue)
