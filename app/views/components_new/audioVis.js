@@ -34,6 +34,7 @@ module.exports = class AudioVis extends Component {
     //  this.audioCtx.resume()
       window.audio = this.audioCtx
     if(stream !== this.stream) {
+      this.updateSettings(stream)
       if(this.source) this.source.disconnect()
       if(stream !== null) {
        this.audioEl.srcObject = stream
@@ -47,6 +48,24 @@ module.exports = class AudioVis extends Component {
         }
       }
     }
+  }
+
+  updateSettings(stream) {
+    let details = null
+    this.details.innerHTML = ''
+    if(stream !== null){
+      const track = stream.getAudioTracks()[0]
+      if(track) {
+        const settings = track.getSettings()
+        console.log('SETTINGs', settings)
+        const keys = ['echoCancellation', 'autoGainControl', 'noiseSuppression', 'channelCount', 'latency', 'sampleRate', 'sampleSize']
+        details = html`<div>${keys.map((key) => html`<div>${key} : ${settings[key]}</div>`)}</div>`
+          this.details.appendChild(details)
+      }
+    }
+
+
+
   }
 
   visualize() {
@@ -76,9 +95,14 @@ module.exports = class AudioVis extends Component {
 
     this.isActive = false
 
+    this.details = html`<div></div>`
     this.audioEl = html`<audio controls class="h2"></audio>`
 
-    return html`<div>${this.canvas}
-      ${this.audioEl}</div>`
+    return html`<div class="relative">${this.canvas}
+          ${this.audioEl}
+        <div class="absolute f7 silver top-0 right-0 ttn">
+          ${this.details}
+        </div>
+      </div>`
   }
 }
