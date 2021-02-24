@@ -1,4 +1,10 @@
 # Changelog
+## [1.4.2] - 2020-11-25
+### Fixed
+- typo in room reconnection
+- checks for local socket id before trying to reconnect
+- rejoins room when connection is lost
+
 ## [1.4.1] - 2020-11-18
 ### Added
  - instructions for running locally to README
@@ -338,21 +344,15 @@ Major refactor
 ## [1.1.0] - 2020-02-12
 
 ### Added
-
->>>>>>> 8fe96c53791f7d90f56a65b11bc3a1b919d42cc0
 - Interface for sending media without receiving, with separate route at #sendonly
 - Flag for each peer 'requestMedia', indicating whether that peer should receive media
 - Peers no longer send media by default, only when requested. (breaking change / not compatible with earlier versions)
 
 ## [1.0.2] - 2020-02-11
-<<<<<<< HEAD
 ### Changed
 - Updated choo devtools
 
 ## [1.0.1] - 2020-02-11
-### Added
-=======
-
 ### Changed
 
 - Updated choo devtools

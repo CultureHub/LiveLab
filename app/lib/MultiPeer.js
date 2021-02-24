@@ -61,15 +61,10 @@ class MultiPeer extends EventEmitter {
 
     this.signaller.on('signal', this._handleSignal.bind(this))
 
-    // updated list of peers when loss of connection is suspected
-    this.signaller.on('peers', peers => {
-      self._connectToPeers(null, peers, self.servers)
-    })
-
     // emit 'join' event to signalling server
     this.signaller.emit('join', this.room, this.user)
 
-    // when socket is reconnecting,
+    // when socket is reconnecting (is this ever called?)
     this.signaller.on('reconnect', e => {
       this.signaller.emit('join', this.room, this.user)
       console.warn('socket reconnected!')
@@ -192,7 +187,8 @@ class MultiPeer extends EventEmitter {
   onReconnect () {
     this.emit('reconnect')
     console.warn('internet reconnected')
-    this.signaller.emit('getPeers', this.room)
+  //  this.signaller.emit('getPeers', this.room)
+    this.signaller.emit('join', this.room, this.user)
   }
 
   _handleSignal (data) {
@@ -211,8 +207,7 @@ class MultiPeer extends EventEmitter {
     this.peers[data.id]._peer.signal(data.signal)
   }
 
-  _connectToPeers (_t, peers, servers) {
-    console.log('peers', peers)
+  _connectToPeers (socketId, peers, servers) {
     // If client receives a list of STUN and TURN servers from the server, use in signalling process.
     if (servers) {
       this._peerOptions.config = {
@@ -227,8 +222,9 @@ class MultiPeer extends EventEmitter {
       }
       this.servers = servers
     }
+
     peers
-      .filter(id => id !== this.user.uuid)
+      .filter(id => id !== socketId)
       .forEach(id => {
         if (this.peers[id]) {
           // peer is still connected; do nothing
