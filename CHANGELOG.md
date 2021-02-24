@@ -1,4 +1,23 @@
 # Changelog
+## [1.4.5] - 2020-02-25
+### Changed
+- Temporarily removed max audio bandwidth until there is a ui
+
+## [1.4.4] - 2020-12-9
+### Added
+- higher max bandwidth for audio (sdp transform in MultiPeer.js)
+- user feedback for audio settings
+- audio preview of currently selected stream
+- show actual settings of selected stream and device, in red when they are not accurate
+- share audio of chrome tab
+
+### Fixed
+- stop audio stream before changing params
+
+## [1.4.3] - 2020-12-3
+### Changed
+- Restart audio stream before applying constraints (should improve audio checkbox issue)
+
 ## [1.4.2] - 2020-11-25
 ### Fixed
 - typo in room reconnection

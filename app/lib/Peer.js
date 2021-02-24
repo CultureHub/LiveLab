@@ -53,6 +53,80 @@ class Peer extends EventEmitter {
       this._parent.channels.userInfo.updateLocalData(this._parent.user)
       this._peer.addStream(stream)
     }
+    // debugging sender params
+  //  this.getSenderParams()
+  }
+
+  getSenderParams () {
+  //   const senders = this._peer._pc.getSenders()
+  //   const receivers = this._peer._pc.getReceivers()
+  //   receivers[0].getStats().then((stats) => console.log(stats))
+  //   console.log()
+  //   console.log(senders, receivers)
+  //   // senders correspond to local streams being sent to peer
+  //     console.log(this._parent._localStreams, this._parent.user.streamInfo)
+  //
+
+
+    if(this.checkStats) clearInterval(this.checkStats)
+    this.checkStats = setInterval(() => {
+        const senders = this._peer._pc.getSenders()
+         senders.forEach((sender) => {
+           console.log(sender.getParameters())
+           // sender.getStats().then(res => {
+           //   console.log(res)
+           //   res.forEach(report => {
+           //     console.log(report.type)
+           //     if (report.type === 'outbound-rtp') {
+           //       console.log(report)
+           //     }
+           //   })
+           // })
+         })
+
+        // const senders = this._peer._pc.getSenders()
+        //  senders.forEach((sender) => {
+        //    sender.getStats().then(res => {
+        //      console.log(res)
+        //      res.forEach(report => {
+        //        console.log(report.type)
+        //        if (report.type === 'outbound-rtp') {
+        //          console.log(report)
+        //        }
+        //      })
+        //    })
+        //  })
+        //
+        //  const receivers = this._peer._pc.getReceivers()
+        //   receivers.forEach((receiver) => {
+        //     receiver.getStats().then(res => {
+        //       console.log(res)
+        //       res.forEach(report => {
+        //         console.log(report.type)
+        //         if (report.type === 'inbound-rtp') {
+        //           console.log(report)
+        //         }
+        //       })
+        //     })
+        //   })
+
+
+          // const stats = this._peer._pc.getStats().then((stats) => {
+          //   stats.forEach((report) => {
+          //     console.log(report.type)
+          //     if(report.type === 'candidate-pair') {
+          //       console.log(report)
+          //     }
+          //   })
+          // })
+
+      // receivers[1].getStats().then((stats) => console.log(stats))
+      // senders[1].getStats().then((stats) => console.log(stats.packetsLost))
+      // console.log(receivers[1].getParameters())
+      // console.log(senders[1].getParameters())
+    }, 1000)
+  //  this.checkStats()
+  //  console.log('sender map', tracks, this._peer._senderMap.entries())
   }
 
   _attachEvents (id) {
@@ -72,6 +146,7 @@ class Peer extends EventEmitter {
       this.streams[stream.id] = stream
       this._parent._updateStreamsList()
       this._parent.emit('stream', id, stream)
+    //  this.getSenderParams()
     })
 
     p.on('connect', () => {
