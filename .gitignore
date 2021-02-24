@@ -61,5 +61,4 @@ typings/
 # dotenv environment variables file
 .env
 
-certs/fullchain.pem
-certs/privkey.pem
+certs
