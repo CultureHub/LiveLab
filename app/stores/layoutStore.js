@@ -7,7 +7,8 @@ module.exports = (state, emitter) => {
       audio: false,
       users: false,
       addMedia: false,
-      settings: false
+      settings: false,
+      browserglue: true
     },
     switchers: {
       a: false,

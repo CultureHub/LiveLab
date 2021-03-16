@@ -105,6 +105,7 @@ function mainView (state, emit) {
               ${floating(settingsPanel(state, emit), { name: 'settings', label: 'settings' })}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), { name: 'audio', label: 'volume controls' })}
               ${floating(state.cache(Chat, 'chat-el').render(state), { name: 'chat', label: 'chat', flex: '1' })}
+              ${floating(state.cache(Browserglue, 'browserglue-el').render(state), { name: 'browserglue', label: 'OSC channels', flex: '1' })}
               ${floating(peersList(state.multiPeer), { name: 'users', label: 'participants currently in room' })}
               <div></div>
             </div>
