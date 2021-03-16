@@ -98,6 +98,12 @@ module.exports = (state, emit) => {
             })
           )}
           ${menuIcon({
+            icon: 'fa-exchange-alt',
+            title: 'OSC channels',
+            selected: state.layout.panels.browserglue,
+            onclick: () => emit('layout:toggleMenuItem', 'browserglue', 'panels')
+          })}
+          ${menuIcon({
             icon: 'fa-cog',
             title: 'Settings',
             selected: state.layout.panels.settings,
