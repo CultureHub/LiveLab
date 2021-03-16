@@ -6,7 +6,7 @@ var https = require('https')
 
 require('dotenv').config();
 
-//switch between localhost and website SSL credentials using environment variables 
+//switch between localhost and website SSL credentials using environment variables
 var privateKey = process.env.NODE_ENV === 'localrun' ?
   fs.readFileSync(__dirname + '/certs/localhost-key.pem', 'utf8') :
   fs.readFileSync(__dirname + '/certs/privkey.pem', 'utf8');
@@ -22,7 +22,7 @@ var credentials = {
 
 var httpsServer = https.createServer(credentials, app)
 
-var portNumber = process.env.PORT;
+var portNumber = process.env.PORT || 8000;
 
 httpsServer.listen(portNumber, function () {
   console.log("server available at port " + portNumber)
