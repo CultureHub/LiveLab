@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const Component = require('choo/component')
 const browserglue = require('browserglue')
+const { button } = require('./formElements.js')
 
 module.exports = class Browserglue extends Component {
   constructor (id, state, emit) {
@@ -31,11 +32,25 @@ module.exports = class Browserglue extends Component {
     return false
   }
 
+  async addChannel({name = 'test', port = '54321'}) {
+    const thisChannel = await this.bg.addChannel(name, port)
 
+    thisChannel.on('message', async blob => {
+      const text = await blob.text();
+      console.log("[/bar]", text);
+    });
+  }
 
   createElement (state) {
     return html`<div>
-      ${this.isConnected ? `connected to browserglue at ${this.bg.url}` : `browserglue not connected`}
+      ${this.isConnected ? html`<div>connected to browserglue at ${this.bg.url}
+      ${button({
+        text: 'add channel',
+        onClick: this.addChannel.bind(this),
+        classes: 'bg-dark-pink b fr mv2'
+      })}
+        </div>`
+      : `browserglue not connected`}
     </div>`
   }
 }
