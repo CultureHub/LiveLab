@@ -102,10 +102,10 @@ function mainView (state, emit) {
             <div class="flex flex-column flex-wrap-reverse-ns flex-wrap justify-end w-100 w6-ns">
               ${['a', 'b', 'c', 'd']
                 .map(switcher => floating(state.cache(Switcher, `switcher-${switcher}`).render(switcher, state), { name: switcher, label: `switcher ${switcher}`, type: 'switchers' }))}
+              ${floating(state.cache(Browserglue, 'browserglue-el').render(state), { name: 'browserglue', label: 'OSC channels', flex: '1' })}
               ${floating(settingsPanel(state, emit), { name: 'settings', label: 'settings' })}
               ${floating(state.cache(Audio, 'audio-el').render(state.multiPeer.streams), { name: 'audio', label: 'volume controls' })}
               ${floating(state.cache(Chat, 'chat-el').render(state), { name: 'chat', label: 'chat', flex: '1' })}
-              ${floating(state.cache(Browserglue, 'browserglue-el').render(state), { name: 'browserglue', label: 'OSC channels', flex: '1' })}
               ${floating(peersList(state.multiPeer), { name: 'users', label: 'participants currently in room' })}
               <div></div>
             </div>
