@@ -12,6 +12,7 @@ const Chat = require('./chat.js')
 const Audio = require('./audio.js')
 const Switcher = require('./switcher.js')
 const AddMedia = require('./addMedia.js')
+const Browserglue = require('./browserglue.js')
 
 const modal = (content, name, label, state, emit) => {
   if (state.layout.panels[name]) {
