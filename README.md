@@ -4,7 +4,7 @@ LiveLab is a browser-based media routing software designed for collaborative per
 
 It is a new tool that empowers artists and arts presenters to meet, create, collaborate, rehearse, and ultimately produce multi-location performances from virtually anywhere in the world. This innovative video collaboration software expands the current field of offerings by allowing users to customize media in ways that best suit their needs.
 
-**Feature highlights:**
+## Feature highlights:
 
 - add multiple cameras, audio streams, and screen shares to the same session from one laptop
 - dynamically add and remove audio and video feeds
@@ -13,9 +13,10 @@ It is a new tool that empowers artists and arts presenters to meet, create, coll
 - video switcher to switch between video feeds
 - chat, who doesn't like?
 
-More info about LiveLab and how it is used in performance production by CultureHub, its creating organization: https://www.culturehub.org/livelab
+More info about LiveLab and how it is used in performance production by CultureHub, its creating organization: https://www.culturehub.org/livelab <br>
+See the [changelog](CHANGELOG.md) for most recent updates.
 
-## 🎉🎉 LiveLab beta LAUNCHED!
+## How to use livelab
 
 LiveLab is open-source and free to use. To access:
 
@@ -25,21 +26,33 @@ LiveLab is open-source and free to use. To access:
 4. Share the URL with other people in order to add them to the session
 
 ## LiveLab Resources
+
 ### Tutorials
-- [First Things to Know about LiveLab](https://github.com/CultureHub/LiveLab/issues/6)
+
+[Learn & Support: Video Tutorials by CultureHub](https://www.culturehub.org/livelab/#livelab-learn-support)
 
 ### Signalling server
-   To build and modify your own LiveLab signalling server that runs locally, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
+
+To build and modify your own LiveLab signalling server that runs locally, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
 
 ### To run locally (must have nodejs and npm installed)
+
 1. clone this repo
+
+```
+git clone https://github.com/CultureHub/LiveLab.git
+```
+
 2. install dependencies
+
 ```
 npm install -d
 ```
+
 3. generate locally-signed ssl certificates
-a. create a folder called 'certs' in the main directory
-b. generate certificate and public key:
+   a. create a folder called `certs` in the main directory
+   b. generate certificate and public key:
+
 ```
 openssl req -x509 -out certs/fullchain.pem -keyout certs/privkey.pem \
   -newkey rsa:2048 -nodes -sha256 \
@@ -48,21 +61,25 @@ openssl req -x509 -out certs/fullchain.pem -keyout certs/privkey.pem \
 ```
 
 4. To run a development server and automatically re-build as files are changed:
+
 ```
 npm run dev
 ```
+
 The development server uses a test signalling server hosted at 'https://live-lab-v1.glitch.me'.
 
 5. To build a production version:
+
 ```
 npm run build
 ```
+
 Make sure to specify your own signalling server in the file 'app/stores/userStore.js'.
 
 6. To run the server:
+
 ```
 npm run start
 ```
-7. go to https://localhost:8000 to show application. Note: you may need to 'hard refresh'
 
-See the [changelog](CHANGELOG.md) for most recent updates.
+7. go to https://localhost:8000 to show application. Note: you may need to `hard refresh`
