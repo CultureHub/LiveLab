@@ -4,7 +4,7 @@ LiveLab is a browser-based media routing software designed for collaborative per
 
 It is a new tool that empowers artists and arts presenters to meet, create, collaborate, rehearse, and ultimately produce multi-location performances from virtually anywhere in the world. This innovative video collaboration software expands the current field of offerings by allowing users to customize media in ways that best suit their needs.
 
-## Feature highlights:
+## Feature Highlights:
 
 - add multiple cameras, audio streams, and screen shares to the same session from one laptop
 - dynamically add and remove audio and video feeds
@@ -16,7 +16,7 @@ It is a new tool that empowers artists and arts presenters to meet, create, coll
 More info about LiveLab and how it is used in performance production by CultureHub, its creating organization: https://www.culturehub.org/livelab <br>
 See the [changelog](CHANGELOG.md) for most recent updates.
 
-## How to use livelab
+## How to Use livelab
 
 LiveLab is open-source and free to use. To access:
 
@@ -31,7 +31,7 @@ LiveLab is open-source and free to use. To access:
 
 [Learn & Support: Video Tutorials by CultureHub](https://www.culturehub.org/livelab/#livelab-learn-support)
 
-### Signalling server
+### Signalling Server
 
 To build and modify your own LiveLab signalling server that runs locally, check out our Github repo about [LiveLab Signalling Server](https://github.com/CultureHub/LiveLab_server)
 
