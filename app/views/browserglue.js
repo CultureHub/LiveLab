@@ -38,6 +38,7 @@ module.exports = class Browserglue extends Component {
     thisChannel.on('message', async blob => {
       const text = await blob.text();
       console.log("[/bar]", text);
+      // how to parse to an object?
     });
   }
 
