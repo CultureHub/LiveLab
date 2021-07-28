@@ -127,7 +127,10 @@ class MultiPeer extends EventEmitter {
     Object.values(this.peers).forEach(peer => {
       peer.addStream(stream)
     })
+    //this.updateLocalStreamInfo
+    
     this._updateStreamsList()
+    this.channels.userInfo.updateLocalData(this.user)
   }
 
   removeStream (streamObj) {
@@ -144,24 +147,25 @@ class MultiPeer extends EventEmitter {
         peer._peer.removeStream(streamObj.stream)
       })
       this._updateStreamsList()
+      this.channels.userInfo.updateLocalData(this.user)
     } else {
       console.warn('trying to remove non-local stream')
     }
   }
 
-  updateLocalStreamInfo (streamId, updateObj) {
-    this.user.streamInfo[streamId] = Object.assign(
-      {},
-      this.user.streamInfo[streamId],
-      updateObj
-    )
+  // updateLocalStreamInfo (streamId, updateObj) {
+  //   this.user.streamInfo[streamId] = Object.assign(
+  //     {},
+  //     this.user.streamInfo[streamId],
+  //     updateObj
+  //   )
 
-    // share local updates with peers
-    this.channels.userInfo.updateLocalData(this.user)
-    console.log('updated local', this._localStreams)
+  //   // share local updates with peers
+  //   this.channels.userInfo.updateLocalData(this.user)
+  //   console.log('updated local', this._localStreams)
 
-    this._updateStreamsList()
-  }
+  //   this._updateStreamsList()
+  // }
 
   // @to do: attach peer info to stream, contain in object
   // order by uuid
@@ -180,8 +184,14 @@ class MultiPeer extends EventEmitter {
         var streamObj = { peer: peer, stream: stream, isLocal: false }
         if (peer.streamInfo[stream.id]) {
           streamObj = Object.assign({}, streamObj, peer.streamInfo[stream.id])
+          streams.push(streamObj)
+        } else {
+          console.warn('stream found with no corresponding info, ignoring', streamObj, stream.active)
+          if(!stream.active) {
+            console.warn('deleting inactive stream', stream.id)
+            delete peer.streams[stream.id]
+          }
         }
-        streams.push(streamObj)
       })
     )    
     this.streams = streams
