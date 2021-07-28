@@ -153,19 +153,17 @@ class MultiPeer extends EventEmitter {
     }
   }
 
-  // updateLocalStreamInfo (streamId, updateObj) {
-  //   this.user.streamInfo[streamId] = Object.assign(
-  //     {},
-  //     this.user.streamInfo[streamId],
-  //     updateObj
-  //   )
+  updateLocalStreamInfo (streamId, updateObj) {
+    this.user.streamInfo[streamId] = Object.assign(
+      {},
+      this.user.streamInfo[streamId],
+      updateObj
+    )
 
-  //   // share local updates with peers
-  //   this.channels.userInfo.updateLocalData(this.user)
-  //   console.log('updated local', this._localStreams)
-
-  //   this._updateStreamsList()
-  // }
+    // share local updates with peers
+    this.channels.userInfo.updateLocalData(this.user)
+    this._updateStreamsList()
+  }
 
   // @to do: attach peer info to stream, contain in object
   // order by uuid
