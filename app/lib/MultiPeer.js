@@ -158,6 +158,8 @@ class MultiPeer extends EventEmitter {
 
     // share local updates with peers
     this.channels.userInfo.updateLocalData(this.user)
+    console.log('updated local', this._localStreams)
+
     this._updateStreamsList()
   }
 
@@ -181,7 +183,7 @@ class MultiPeer extends EventEmitter {
         }
         streams.push(streamObj)
       })
-    )
+    )    
     this.streams = streams
     this.emit('update')
   }
