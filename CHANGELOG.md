@@ -1,4 +1,9 @@
 # Changelog
+## [1.4.6] - 2021-07-28
+### Fixed
+- streams removed on remote peers when removed locally
+
+
 ## [1.4.5] - 2020-02-25
 ### Changed
 - Temporarily removed max audio bandwidth until there is a ui
