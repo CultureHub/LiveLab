@@ -58,11 +58,8 @@ module.exports = (state, emit) => {
          <span class="mh2"> | </span>
          <i
            onclick=${() =>
-          openWindow(
-            stream.stream,
-            stream.peer.nickname,
-            stream.settings.video
-          )}
+          openWindow(stream)
+        }
            class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
          </i>
          ${switcherControls}
@@ -159,13 +156,17 @@ module.exports = (state, emit) => {
   )}</div>`
 }
 
-function openWindow (stream, title, settings) {
-  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
+function openWindow (stream) {
+  console.log('opening', stream)
+  
+  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${stream.settings.width},height=${stream.settings.height}`
   var win = window.open('', JSON.stringify(Date.now()), windowSettings)
   // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
   win.document.body.style.background = 'black'
-  win.document.title = title
-  if (stream) {
+  win.document.title = stream.title
+  if (stream.stream) {
+    const videoTrack = stream.stream.getVideoTracks()[0].clone()
+    const streamCopy = new MediaStream([videoTrack])
     var vid = win.document.createElement('video')
     vid.autoplay = 'autoplay'
     vid.loop = 'loop'
@@ -176,6 +177,6 @@ function openWindow (stream, title, settings) {
     win.document.body.style.padding = '0px'
     win.document.body.style.margin = '0px'
     win.document.body.appendChild(vid)
-    vid.srcObject = stream
+    vid.srcObject = streamCopy
   }
 }
