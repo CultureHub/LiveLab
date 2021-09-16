@@ -1,5 +1,10 @@
 const nanoid = require('nanoid').nanoid
 const MultiPeer = require('./../lib/MultiPeer.js')
+var AudioContext = window.AudioContext // Default
+    || window.webkitAudioContext // Safari and old versions of Chrome
+    || false; 
+
+if(!AudioContext) console.warn('this browser does not support WebAudio')
 
 module.exports = (state, emitter) => {
   state.user = {

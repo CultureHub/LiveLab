@@ -58,11 +58,8 @@ module.exports = (state, emit) => {
          <span class="mh2"> | </span>
          <i
            onclick=${() =>
-          openWindow(
-            stream.stream,
-            stream.peer.nickname,
-            stream.settings.video
-          )}
+          openWindow(stream)
+        }
            class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
          </i>
          ${switcherControls}
@@ -159,16 +156,24 @@ module.exports = (state, emit) => {
   )}</div>`
 }
 
-function openWindow (stream, title, settings) {
-  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
+function openWindow (stream) {
+  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${stream.settings.video.width},height=${stream.settings.video.height}`
   var win = window.open('', JSON.stringify(Date.now()), windowSettings)
   // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
   win.document.body.style.background = 'black'
+  const title = `${stream.peer.nickname}${stream.name !== ''
+  ? ` - ${stream.name}`:``}`
+  console.log(stream, 'stream', title)
+
   win.document.title = title
-  if (stream) {
+  if (stream.stream) {
+    // clone only video tracks (when audio tracks are cloned and muted, seems to mute all instances of that audio track in the call)
+    const tracks = stream.stream.getVideoTracks().map((track) =>track.clone())
+    const streamCopy = new MediaStream(tracks)
     var vid = win.document.createElement('video')
     vid.autoplay = 'autoplay'
     vid.loop = 'loop'
+    // vid.controls = true
     vid.muted = 'muted'
     vid.style.width = '100%'
     vid.style.height = '100%'
@@ -176,6 +181,6 @@ function openWindow (stream, title, settings) {
     win.document.body.style.padding = '0px'
     win.document.body.style.margin = '0px'
     win.document.body.appendChild(vid)
-    vid.srcObject = stream
+    vid.srcObject = streamCopy
   }
 }
