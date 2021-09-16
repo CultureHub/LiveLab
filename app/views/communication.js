@@ -157,19 +157,23 @@ module.exports = (state, emit) => {
 }
 
 function openWindow (stream) {
-  console.log('opening', stream)
-  
-  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${stream.settings.width},height=${stream.settings.height}`
+  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${stream.settings.video.width},height=${stream.settings.video.height}`
   var win = window.open('', JSON.stringify(Date.now()), windowSettings)
   // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
   win.document.body.style.background = 'black'
-  win.document.title = stream.title
+  const title = `${stream.peer.nickname}${stream.name !== ''
+  ? ` - ${stream.name}`:``}`
+  console.log(stream, 'stream', title)
+
+  win.document.title = title
   if (stream.stream) {
-    const videoTrack = stream.stream.getVideoTracks()[0].clone()
-    const streamCopy = new MediaStream([videoTrack])
+    // clone only video tracks (when audio tracks are cloned and muted, seems to mute all instances of that audio track in the call)
+    const tracks = stream.stream.getVideoTracks().map((track) =>track.clone())
+    const streamCopy = new MediaStream(tracks)
     var vid = win.document.createElement('video')
     vid.autoplay = 'autoplay'
     vid.loop = 'loop'
+    // vid.controls = true
     vid.muted = 'muted'
     vid.style.width = '100%'
     vid.style.height = '100%'

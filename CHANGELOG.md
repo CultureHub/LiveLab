@@ -1,4 +1,8 @@
 # Changelog
+## [1.4.7] - 2021-09-16
+### Fixed 
+- audio not interrupted when window popped out
+
 ## [1.4.6] - 2021-07-28
 ### Fixed
 - streams removed on remote peers when removed locally
