@@ -24,13 +24,6 @@ module.exports = class Switcher extends Component {
 
   setWindowVideo () {
     if(this.popout) this.popout.setVideo(this.stream? this.stream.stream : null)
-    // if (this.windowVideo) {
-    //   if (this.stream) {
-    //     this.windowVideo.srcObject = this.stream.stream
-    //   } else {
-    //     this.windowVideo.srcObject = null
-    //   }
-    // }
   }
 
   clear () {
@@ -43,34 +36,12 @@ module.exports = class Switcher extends Component {
     const settings = { width: 1280, height: 720 }
     this.popout = openWindow({ title: title, id: title, width: 1280, height: 720 })
     this.setWindowVideo()
-    this.setOpacity(this.opacity)
-    // var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
-    // var win = window.open('', title, windowSettings)
-    // // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
-    // // var win = window.open('', 'hey', windowSettings)
-    // win.document.body.style.background = 'black'
-    // win.document.title = title
-    // win.document.body.innerHTML = ''
-    // var vid = win.document.createElement('video')
-    // vid.autoplay = 'autoplay'
-    // vid.loop = 'loop'
-    // vid.muted = 'muted'
-    // vid.style.width = '100%'
-    // vid.style.height = '100%'
-    // vid.style.objectFit = 'contain'
-    // vid.style.opacity = this.opacity / 100
-    // win.document.body.style.padding = '0px'
-    // win.document.body.style.margin = '0px'
-    // win.document.body.appendChild(vid)
-    // this.window = win
-    // this.windowVideo = vid
-    // this.setWindowVideo()
+    this.setOpacity(this.opacity)  
   }
 
   setOpacity (opacity) {
     this.opacity = opacity
     if (this.popout) this.popout.setOpacity(opacity)
-    // if (this.windowVideo) this.windowVideo.style.opacity = this.opacity / 100
     this.rerender()
   }
 
@@ -78,6 +49,7 @@ module.exports = class Switcher extends Component {
     this.name = name
     this.label = `switcher ${name}`.toUpperCase()
     this.state = state
+    console.log('switcher state', state)
     const stream = state.layout.settings.switchers[name]
     if (stream !== this.stream) {
       this.stream = stream
@@ -108,7 +80,7 @@ module.exports = class Switcher extends Component {
       ${this.label}
       <span class="mh2"> | </span>
       <i
-        onclick=${() => this.openWindow(`Live Lab - ${this.label}`)}
+        onclick=${() => this.openWindow(`Live Lab - ${state.user.room} - ${this.label}`)}
         class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
       </i>
        <i
