@@ -20,19 +20,13 @@ module.exports = {
 
   openWindow: ({ stream = null, title = '', id = Date.now(), width = 1280, height = 720 }) => {
     var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${width},height=${height}`
-    // var win = window.open('', JSON.stringify(Date.now()), windowSettings)
   
     // if id is the same as an existing window, will access an existing window with that name
     var win = window.open('', id, windowSettings)
-    // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
     win.document.body.style.background = 'black'
-
-
     win.document.title = title
 
     const existingVid = win.document.querySelector('video')
-    console.log('stream vid', existingVid)
-
     var vid = existingVid === null ? win.document.createElement('video') : existingVid
     vid.autoplay = 'autoplay'
     vid.loop = 'loop'
@@ -61,10 +55,9 @@ module.exports = {
     function setOpacity(opacity) {
       vid.style.opacity = opacity / 100
     }
-    //if (stream !== null) {
-      // clone only video tracks (when audio tracks are cloned and muted, seems to mute all instances of that audio track in the call)
-      setVideo(stream)
-    //}
+    
+    setVideo(stream)
+    
     return { vid: vid, setVideo: setVideo, setOpacity: setOpacity }
   }
 }

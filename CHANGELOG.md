@@ -1,4 +1,13 @@
 # Changelog
+## [1.4.8] - 2021-09-20
+### Fixed
+- Switcher popping out does not interrupt audio
+
+### Changed
+- Window popup code in `utils.js` file
+- room id added to popout window title and id
+- window associated to a specific stream id (does not recreate window when adding a new window with the same id)
+
 ## [1.4.7] - 2021-09-16
 ### Fixed 
 - audio not interrupted when window popped out

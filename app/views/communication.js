@@ -64,7 +64,6 @@ module.exports = (state, emit) => {
             if(stream.stream && stream.settings.video) {
               openWindow({ stream: stream.stream, id: stream.stream.id, title: title, width: stream.settings.video.width, height: stream.settings.video.height })
             }
-            // openWindow(stream)
            }
           
         }
@@ -91,7 +90,6 @@ module.exports = (state, emit) => {
           } : ''}>
          </i>`
       }
-      // text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);
       endStream = stream.isLocal ? html` <div class="absolute top-0 right-0"><i
          onclick=${() => emit('user:endStream', stream)}
          class="fas fa-times dim pointer f3 pa3" title="end stream" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);">
@@ -163,32 +161,3 @@ module.exports = (state, emit) => {
     emit
   )}</div>`
 }
-
-// function openWindow (stream) {
-//   var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${stream.settings.video.width},height=${stream.settings.video.height}`
-//   var win = window.open('', JSON.stringify(Date.now()), windowSettings)
-//   // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
-//   win.document.body.style.background = 'black'
-//   const title = `${stream.peer.nickname}${stream.name !== ''
-//   ? ` - ${stream.name}`:``}`
-//   console.log(stream, 'stream', title)
-
-//   win.document.title = title
-//   if (stream.stream) {
-//     // clone only video tracks (when audio tracks are cloned and muted, seems to mute all instances of that audio track in the call)
-//     const tracks = stream.stream.getVideoTracks().map((track) =>track.clone())
-//     const streamCopy = new MediaStream(tracks)
-//     var vid = win.document.createElement('video')
-//     vid.autoplay = 'autoplay'
-//     vid.loop = 'loop'
-//     // vid.controls = true
-//     vid.muted = 'muted'
-//     vid.style.width = '100%'
-//     vid.style.height = '100%'
-//     vid.style.objectFit = 'contain'
-//     win.document.body.style.padding = '0px'
-//     win.document.body.style.margin = '0px'
-//     win.document.body.appendChild(vid)
-//     vid.srcObject = streamCopy
-//   }
-// }
