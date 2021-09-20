@@ -18,10 +18,12 @@ module.exports = {
     }
   },
 
-  openWindow: ({ stream = null, title = '', width = 1280, height = 720 }) => {
+  openWindow: ({ stream = null, title = '', id = Date.now(), width = 1280, height = 720 }) => {
     var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${width},height=${height}`
     // var win = window.open('', JSON.stringify(Date.now()), windowSettings)
-    var win = window.open('', title, windowSettings)
+  
+    // if id is the same as an existing window, will access an existing window with that name
+    var win = window.open('', id, windowSettings)
     // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
     win.document.body.style.background = 'black'
 

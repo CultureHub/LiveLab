@@ -41,7 +41,7 @@ module.exports = class Switcher extends Component {
 
   openWindow (title) {
     const settings = { width: 1280, height: 720 }
-    this.popout = openWindow({ title: title, width: 1280, height: 720 })
+    this.popout = openWindow({ title: title, id: title, width: 1280, height: 720 })
     this.setWindowVideo()
     this.setOpacity(this.opacity)
     // var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`

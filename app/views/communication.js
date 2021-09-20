@@ -62,7 +62,7 @@ module.exports = (state, emit) => {
             const title = `${stream.peer.nickname}${stream.name !== ''
             ? ` - ${stream.name}`:``}`
             if(stream.stream && stream.settings.video) {
-              openWindow({ stream: stream.stream, title: title, width: stream.settings.video.width, height: stream.settings.video.height })
+              openWindow({ stream: stream.stream, id: stream.stream.id, title: title, width: stream.settings.video.width, height: stream.settings.video.height })
             }
             // openWindow(stream)
            }
