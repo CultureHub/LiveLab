@@ -3,6 +3,7 @@ const Video = require('./components_new/VideoObj.js')
 
 const html = require('choo/html')
 const grid = require('./videogrid.js')
+const { openWindow } = require('./../lib/utils.js')
 
 // @todo : use videoWidth rather than settings
 // @todo: close popups on close
@@ -57,12 +58,15 @@ module.exports = (state, emit) => {
         windowOpen = html`
          <span class="mh2"> | </span>
          <i
-           onclick=${() =>
-          openWindow(
-            stream.stream,
-            stream.peer.nickname,
-            stream.settings.video
-          )}
+           onclick=${() => {
+            const title = `${stream.peer.nickname}${stream.name !== ''
+            ? ` - ${stream.name}`:``}`
+            if(stream.stream && stream.settings.video) {
+              openWindow({ stream: stream.stream, id: stream.stream.id, title: title, width: stream.settings.video.width, height: stream.settings.video.height })
+            }
+           }
+          
+        }
            class="fas fa-external-link-alt dim pointer ma2" title="open video into it's own window">
          </i>
          ${switcherControls}
@@ -86,7 +90,6 @@ module.exports = (state, emit) => {
           } : ''}>
          </i>`
       }
-      // text-shadow: 2px 2px 3px rgba(213, 0, 143, 1);
       endStream = stream.isLocal ? html` <div class="absolute top-0 right-0"><i
          onclick=${() => emit('user:endStream', stream)}
          class="fas fa-times dim pointer f3 pa3" title="end stream" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);">
@@ -157,25 +160,4 @@ module.exports = (state, emit) => {
     },
     emit
   )}</div>`
-}
-
-function openWindow (stream, title, settings) {
-  var windowSettings = `popup=yes,menubar=no,titlebar=no,location=no,scrollbars=no,status=no,toolbar=no,location=no,chrome=yes,width=${settings.width},height=${settings.height}`
-  var win = window.open('', JSON.stringify(Date.now()), windowSettings)
-  // specifying a name for the second setting returns a reference to the same window, could be useful for setting output
-  win.document.body.style.background = 'black'
-  win.document.title = title
-  if (stream) {
-    var vid = win.document.createElement('video')
-    vid.autoplay = 'autoplay'
-    vid.loop = 'loop'
-    vid.muted = 'muted'
-    vid.style.width = '100%'
-    vid.style.height = '100%'
-    vid.style.objectFit = 'contain'
-    win.document.body.style.padding = '0px'
-    win.document.body.style.margin = '0px'
-    win.document.body.appendChild(vid)
-    vid.srcObject = stream
-  }
 }
