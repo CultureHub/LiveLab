@@ -36,15 +36,12 @@ module.exports = (state, emit) => {
             })
           } : ''}>
          </i>`
-        videoMirror = html`<i
+        videoMirror = html`
+        <span class="mh2"> | </span>
+        <i
          class="mh1 fas ${stream.isVideoMirrored
-        ? 'fa-video-slash dark-pink'
-        : 'fa-video'} ${stream.isLocal ? 'pointer' : ''}" title=${stream.isLocal ? 'mirror your video' : ''} onclick=${stream.isLocal ? () => {
-          // const tracks = stream.stream.getVideoTracks()
-          // tracks.forEach(track => {
-          //   track.enabled = stream.isVideoMuted
-          // })
-          // stream.isVideoMirrored: !stream.isVideoMirrored
+        ? 'fa-exchange-alt'
+        : 'fa-exchange-alt dark-pink'} ${stream.isLocal ? 'pointer' : ''}" title=${stream.isLocal ? 'mirror your video' : ''} onclick=${stream.isLocal ? () => {
           state.multiPeer.updateLocalStreamInfo(stream.stream.id, {
             isVideoMirrored: !stream.isVideoMirrored
           })
@@ -71,8 +68,8 @@ module.exports = (state, emit) => {
              </i>`
           })
         windowOpen = html`
-         <span class="mh2"> | </span>
-         <i
+        <span class="mh2"> | </span>
+        <i
            onclick=${() => {
             const title = `${stream.peer.nickname}${stream.name !== ''
             ? ` - ${stream.name}`:``}`
@@ -113,7 +110,7 @@ module.exports = (state, emit) => {
       info = html`  <div class="f4 absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);/*mix-blend-mode:difference*/">
           <span class="b mh2">${stream.peer.nickname}${stream.name !== ''
         ? ` - ${stream.name}`
-        : ''}</span> ${videoMute} ${stream.isLocal? videoMirror: null} ${mute} ${windowOpen}
+        : ''}</span> ${videoMute} ${mute} ${stream.isLocal? videoMirror: null} ${windowOpen}
          </div>`
     }
 

@@ -114,7 +114,7 @@ class MultiPeer extends EventEmitter {
 
   addStream (
     stream,
-    { isAudioMuted = false, isVideoMuted = false, isVideoMirrored = false, name = '' } = {}
+    { isAudioMuted = false, isVideoMuted = false, isVideoMirrored = true, name = '' } = {}
   ) {
     var settings = getSettingsFromStream(stream)
     this._localStreams[stream.id] = stream
