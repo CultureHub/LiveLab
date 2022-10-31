@@ -43,7 +43,7 @@
     "debug": "^4.1.1",
     "enumerate-devices": "^1.1.1",
     "express": "^4.17.1",
-    "nanoid": "^3.1.10",
+    "nanoid": "^3.1.31",
     "on-load": "^4.0.2",
     "osc-js": "^2.1.0",
     "osc-min": "^1.1.2",
