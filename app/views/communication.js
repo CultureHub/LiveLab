@@ -19,6 +19,7 @@ module.exports = (state, emit) => {
       let windowOpen = ''
       let mute = ''
       let videoMute = ''
+      let videoMirror = ''
       let switcherControls = ''
       if (stream.settings && stream.settings.video) {
         videoSettings = `${stream.settings.video.width}x${stream.settings.video.height} ${stream.settings.video.frameRate}fps`
@@ -35,6 +36,17 @@ module.exports = (state, emit) => {
             })
           } : ''}>
          </i>`
+        videoMirror = html`
+        <span class="mh2"> | </span>
+        <i
+         class="mh1 fas ${stream.isVideoMirrored
+        ? 'fa-exchange-alt'
+        : 'fa-exchange-alt dark-pink'} ${stream.isLocal ? 'pointer' : ''}" title=${stream.isLocal ? 'mirror your video' : ''} onclick=${stream.isLocal ? () => {
+          state.multiPeer.updateLocalStreamInfo(stream.stream.id, {
+            isVideoMirrored: !stream.isVideoMirrored
+          })
+        } : ''}>
+       </i>`
         switcherControls = ['a', 'b', 'c', 'd']
           .splice(0, state.layout.settings.numberOfSwitchers)
           .map(switcher => {
@@ -56,8 +68,8 @@ module.exports = (state, emit) => {
              </i>`
           })
         windowOpen = html`
-         <span class="mh2"> | </span>
-         <i
+        <span class="mh2"> | </span>
+        <i
            onclick=${() => {
             const title = `${stream.peer.nickname}${stream.name !== ''
             ? ` - ${stream.name}`:``}`
@@ -98,7 +110,7 @@ module.exports = (state, emit) => {
       info = html`  <div class="f4 absolute pa2 ph2 ma2 bottom-0 video-info" style="text-shadow: 2px 2px 3px rgba(0, 0, 0, 1);/*mix-blend-mode:difference*/">
           <span class="b mh2">${stream.peer.nickname}${stream.name !== ''
         ? ` - ${stream.name}`
-        : ''}</span> ${videoMute} ${mute} ${windowOpen}
+        : ''}</span> ${videoMute} ${mute} ${stream.isLocal? videoMirror: null} ${windowOpen}
          </div>`
     }
 
@@ -117,7 +129,8 @@ module.exports = (state, emit) => {
       ${state
       .cache(Video, `video-${index}`)
       .render(stream.stream, {
-        objectFit: state.layout.settings.stretchToFit ? 'cover' : 'contain'
+        objectFit: state.layout.settings.stretchToFit ? 'cover' : 'contain',
+        transform: stream.isLocal && stream.isVideoMirrored? 'scale(-1, 1)': ''
       })}
       ${info}
       ${endStream}

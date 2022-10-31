@@ -1,4 +1,12 @@
 # Changelog
+## [1.4.9] - 2022-10-27
+### Fixed
+- 
+
+### Changed
+- Adds the ability to mirror your local video and turns this on by default
+
+
 ## [1.4.8] - 2021-09-20
 ### Fixed
 - Switcher popping out does not interrupt audio

@@ -24,6 +24,7 @@ module.exports = (state, emitter) => {
     requestMedia: true,
     isAudioMuted: false,
     isVideoMuted: false,
+    isVideoMirrored: false,
     callEnded: false
   }
 
