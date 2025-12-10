@@ -19,7 +19,7 @@ module.exports = (state, emitter) => {
     room: state.query.room,
     server: process.env.NODE_ENV === 'production'
       ? 'https://livelab.app:6643'
-      : 'https://live-lab-v1.glitch.me',
+      : 'https://localhost:8001',
     statusMessage: '',
     requestMedia: true,
     isAudioMuted: false,

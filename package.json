@@ -27,6 +27,7 @@
   "devDependencies": {
     "browserify": "^16.5.1",
     "cross-env": "^6.0.3",
+    "dotenv": "^17.2.3",
     "envify": "^4.1.0",
     "nwjs": "^1.4.4",
     "nwjs-builder-phoenix": "1.15.0",
